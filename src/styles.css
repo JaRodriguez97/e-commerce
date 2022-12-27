@@ -53,3 +53,14 @@ footer {
 .btn:hover {
   background: var(--pink);
 }
+
+@media (max-width: 991px) {
+  html {
+    font-size: 55%;
+  }
+
+  section,
+  footer {
+    padding: 2rem;
+  }
+}

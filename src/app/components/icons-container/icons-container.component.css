@@ -22,3 +22,13 @@
   color: #555;
   font-size: 1.3rem;
 }
+
+@media (max-width: 768px) {
+  .icons h3 {
+    font-size: 2rem;
+  }
+
+  .icons span {
+    font-size: 1.7rem;
+  }
+}
