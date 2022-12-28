@@ -57,6 +57,7 @@ footer {
   padding: 0.9rem 3.5rem;
   cursor: pointer;
   font-size: 1.7rem;
+  white-space: nowrap;
 }
 
 .btn:hover {
