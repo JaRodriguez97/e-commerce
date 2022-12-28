@@ -18,7 +18,7 @@
   left: 1rem;
   padding: 0.7rem 1rem;
   font-size: 2rem;
-  color: var(--pink);
+  color: var(--golden);
   background: rgba(255, 51, 153, 0.05);
   z-index: 1;
   border-radius: 0.5rem;
@@ -56,7 +56,7 @@
   line-height: 5rem;
   font-size: 2rem;
   width: 50%;
-  background: var(--pink);
+  background: var(--golden);
   color: #fff;
 }
 
@@ -67,7 +67,7 @@
 }
 
 .box-container .box .image .icons a:hover {
-  background: #333;
+  background: var(--black);
 }
 
 .box-container .box .content {
@@ -77,12 +77,12 @@
 
 .box-container .box .content h3 {
   font-size: 2.5rem;
-  color: #333;
+  color: var(--black);
 }
 
 .box-container .box .content .price {
   font-size: 2.5rem;
-  color: var(--pink);
+  color: var(--golden);
   font-weight: bolder;
   padding-top: 1rem;
 }

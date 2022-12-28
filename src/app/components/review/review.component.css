@@ -22,7 +22,7 @@
 }
 
 .box-container .box .stars i {
-  color: var(--pink);
+  color: var(--golden);
   font-size: 2rem;
 }
 
@@ -49,7 +49,7 @@
 
 .box-container .box .user h3 {
   font-size: 2rem;
-  color: #333;
+  color: var(--black);
 }
 
 .box-container .box .user span {

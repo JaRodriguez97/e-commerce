@@ -1,16 +1,15 @@
-
 .content {
   max-width: 50rem;
 }
 
 .content h3 {
-  font-size: 6rem;
-  color: #333;
+  font-size: 5.5rem;
+  color: var(--white);
 }
 
 .content span {
   font-size: 3.5rem;
-  color: var(--pink);
+  color: var(--golden);
   padding: 1rem 0;
   line-height: 1.5;
 }
@@ -20,4 +19,12 @@
   color: #999;
   padding: 1rem 0;
   line-height: 1.5;
+}
+
+.contentImg {
+  position: relative;
+}
+
+.contentImg img {
+  border-radius: 50%;
 }

@@ -4,7 +4,7 @@ header {
   top: 0;
   left: 0;
   right: 0;
-  background: #fff;
+  background: var(--black);
   padding: 2rem 9%;
   display: flex;
   align-items: center;
@@ -15,32 +15,59 @@ header {
 
 header .logo {
   font-size: 3rem;
-  color: #333;
+  color: var(--smoke);
   font-weight: bolder;
+  /* text-transform: lowercase; */
+}
+
+header.active .logo {
+  color: var(--golden);
 }
 
 header .logo span {
-  color: var(--pink);
+  color: var(--golden);
+}
+
+header.active .logo span {
+  color: var(--smoke);
 }
 
 header .navbar a {
   font-size: 2rem;
   padding: 0 1.5rem;
-  color: #666;
+  color: var(--smoke);
+}
+
+header.active .navbar a {
+  color: var(--golden);
 }
 
 header .navbar a:hover {
-  color: var(--pink);
+  color: var(--golden);
 }
 
-header .icons a {
+header.active .navbar a:hover {
+  color: var(--gray);
+}
+
+header .icons fa-icon {
   font-size: 2.5rem;
-  color: #333;
+  color: var(--smoke);
   margin-left: 1.5rem;
+  cursor: pointer;
 }
 
-header .icons a:hover {
-  color: var(--pink);
+header.active .icons fa-icon {
+  color: var(--golden);
+}
+
+header .icons fa-icon:hover {
+  color: var(--golden);
+  transition: 0s;
+}
+
+header.active .icons fa-icon:hover {
+  color: var(--smoke);
 }
 
 header #toggler {
@@ -49,7 +76,7 @@ header #toggler {
 
 header .fa-bars {
   font-size: 3rem;
-  color: #333;
+  color: var(--smoke);
   border-radius: 0.5rem;
   padding: 0.5rem 1.5rem;
   cursor: pointer;
@@ -59,13 +86,15 @@ header .fa-bars {
 /* header section ends */
 
 /* home section starts */
+app-inicio,
 .home {
   display: flex;
   align-items: center;
   min-height: 100vh;
-  background: url(../assets/images/home-bg.jpg) no-repeat;
-  background-size: cover;
-  background-position: center;
+  gap: 20rem;
+  /* background: #000; */
+  /* background-size: cover;
+  background-position: center; */
 }
 /* home section ends */
 
@@ -84,6 +113,11 @@ app-icons-container {
 /*  icons section ends  */
 
 /* footer section starts */
+
+.footer {
+  background-color: #000;
+}
+
 .footer .box-container {
   display: flex;
   flex-wrap: wrap;
@@ -95,20 +129,21 @@ app-icons-container {
 }
 
 .footer .box-container .box h3 {
-  color: #333;
+  color: var(--white);
   font-size: 2.5rem;
   padding: 1rem 0;
+  text-decoration: underline;
 }
 
 .footer .box-container .box a {
   display: block;
-  color: #666;
+  color: var(--smoke);
   font-size: 1.5rem;
   padding: 1rem 0;
 }
 
 .footer .box-container .box a:hover {
-  color: var(--pink);
+  color: var(--golden);
   text-decoration: underline;
 }
 
@@ -122,13 +157,13 @@ app-icons-container {
   margin-top: 1.5rem;
   padding-top: 2.5rem;
   font-size: 2rem;
-  color: #333;
+  color: var(--white);
   border-top: 0.1rem solid rgba(0, 0, 0, 0.1);
   padding-bottom: 9rem;
 }
 
 .footer .credit span {
-  color: var(--pink);
+  color: var(--golden);
 }
 
 /* footer section ends */
