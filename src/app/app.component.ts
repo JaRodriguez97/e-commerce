@@ -13,6 +13,7 @@ import {
   faHeart,
   faShoppingCart,
   faStar,
+  faBars,
 } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-root',
@@ -25,7 +26,8 @@ export class AppComponent implements OnInit {
   faHeart = faHeart;
   faShoppingCart = faShoppingCart;
   faUser = faUser;
-
+  faBars = faBars;
+  
   constructor(
     private renderer: Renderer2,
     private activatedRoute: ActivatedRoute,

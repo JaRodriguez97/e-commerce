@@ -16,15 +16,44 @@
 
 .content p {
   font-size: 1.5rem;
-  color: #999;
+  color: var(--smoke);
   padding: 1rem 0;
   line-height: 1.5;
 }
 
 .contentImg {
   position: relative;
+  justify-content: center;
+  display: flex;
 }
 
 .contentImg img {
   border-radius: 50%;
+  width: 100%;
+}
+
+@media (max-width: 991px) {
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .content span,
+  .content p,
+  .content h3 {
+    text-align: center;
+  }
+
+  .content a {
+    width: max-content;
+  }
+
+  .contentImg {
+    width: 60rem;
+  }
+
+  .contentImg img {
+    width: 50%;
+  }
 }
