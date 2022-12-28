@@ -9,10 +9,8 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   faUser,
-  faEye,
   faHeart,
   faShoppingCart,
-  faStar,
   faBars,
 } from '@fortawesome/free-solid-svg-icons';
 @Component({

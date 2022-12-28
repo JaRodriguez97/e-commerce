@@ -6,9 +6,9 @@
 
 .box-container .box {
   flex: 1 1 30rem;
-  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.5rem 1.5rem var(--gray);
   border-radius: 0.5rem;
-  border: 0.1rem solid rgba(0, 0, 0, 0.1);
+  border: 0.1rem solid var(--smoke);
   position: relative;
 }
 
@@ -19,7 +19,7 @@
   padding: 0.7rem 1rem;
   font-size: 2rem;
   color: var(--golden);
-  background: rgba(255, 51, 153, 0.05);
+  background: var(--goldenLigth);
   z-index: 1;
   border-radius: 0.5rem;
 }
@@ -27,12 +27,14 @@
 .box-container .box .image {
   position: relative;
   text-align: center;
-  padding-top: 2rem;
+  padding-top: 5rem;
   overflow: hidden;
 }
 
 .box-container .box .image img {
   height: 25rem;
+  filter: invert(1);
+  border-radius: 50%;
 }
 
 .box-container .box:hover .image img {
@@ -57,17 +59,22 @@
   font-size: 2rem;
   width: 50%;
   background: var(--golden);
-  color: #fff;
+  color: var(--black);
 }
 
 .box-container .box .image .icons .cart-btn {
-  border-left: 0.1rem solid #fff7;
-  border-right: 0.1rem solid #fff7;
+  border-left: 0.1rem solid var(--gray);
+  border-right: 0.1rem solid var(--gray);
   width: 100%;
 }
 
 .box-container .box .image .icons a:hover {
   background: var(--black);
+  color: var(--white);
+}
+
+.box-container .box .image .icons a:active {
+  color: var(--golden);
 }
 
 .box-container .box .content {
@@ -77,7 +84,7 @@
 
 .box-container .box .content h3 {
   font-size: 2.5rem;
-  color: var(--black);
+  color: var(--smoke);
 }
 
 .box-container .box .content .price {
@@ -89,7 +96,7 @@
 
 .box-container .box .content .price span {
   font-size: 1.5rem;
-  color: #999;
+  color: var(--gray);
   font-weight: lighter;
   text-decoration: line-through;
 }

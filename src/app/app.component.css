@@ -13,6 +13,10 @@ header {
   box-shadow: 0 0.5rem 1rem var(--gray);
 }
 
+header label {
+  display: none;
+}
+
 header .logo {
   font-size: 3rem;
   color: var(--smoke);
@@ -186,9 +190,15 @@ app-icons-container {
   header {
     justify-content: space-around;
   }
+
+  header label {
+    display: block;
+  }
+
   header .logo {
     margin-right: auto;
     margin-left: 3rem;
+    font-size: 2.5rem;
   }
 
   header .fa-bars {
@@ -232,10 +242,16 @@ app-icons-container {
 }
 
 @media (max-width: 450px) {
-  html {
-    font-size: 50%;
+  header .logo {
+    margin-right: auto;
+    margin-left: 3rem;
+    font-size: 2.5rem;
   }
 
+  header .icons fa-icon {
+    font-size: 2rem;
+  }
+  
   .heading {
     font-size: 3rem;
   }

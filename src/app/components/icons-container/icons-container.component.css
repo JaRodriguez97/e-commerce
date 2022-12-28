@@ -1,25 +1,27 @@
 .icons {
-  background: #fff;
-  border: 0.1rem solid rgba(0, 0, 0, 0.1);
+  background: #000;
+  border: 0.1rem solid var(--black);
   padding: 2rem;
   display: flex;
   align-items: center;
   flex: 1 1 25rem;
+  border-radius: 1rem;
 }
 
 .icons img {
   height: 5rem;
   margin-right: 2rem;
+  filter: invert(1);
 }
 
 .icons h3 {
-  color: var(--black);
+  color: var(--white);
   padding-bottom: 0.5rem;
   font-size: 1.5rem;
 }
 
 .icons span {
-  color: #555;
+  color: var(--smoke);
   font-size: 1.3rem;
 }
 
