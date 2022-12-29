@@ -1,17 +1,19 @@
 import { DOCUMENT } from '@angular/common';
 import {
   Component,
+  ElementRef,
   HostListener,
   Inject,
   OnInit,
   Renderer2,
+  ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  faUser,
+  faBars,
   faHeart,
   faShoppingCart,
-  faBars,
+  faUser,
 } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-root',
@@ -25,7 +27,9 @@ export class AppComponent implements OnInit {
   faShoppingCart = faShoppingCart;
   faUser = faUser;
   faBars = faBars;
-  
+  pedidos!: any;
+  @ViewChild('order') order!: ElementRef;
+
   constructor(
     private renderer: Renderer2,
     private activatedRoute: ActivatedRoute,
@@ -46,18 +50,13 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.navbar = this.document.querySelector('.navbar')!;
-    console.log(
-      '🚀 ~ file: app.component.ts:29 ~ AppComponent ~ this.navbar',
-      this.navbar
-    );
+  }
 
-    // this.renderer.listen()
+  getOrder() {
+    this.renderer.addClass(this.order.nativeElement, 'active');
+  }
 
-    // this.document.querySelector('#menu-bar')!.click = () => {
-    //   this.navbar.classList.toggle('active');
-    // };
-    // this.document.querySelector('#close')!.onclick = () => {
-    //   this.navbar.classList.remove('active');
-    // };
+  getOutOrder() {
+    this.renderer.removeClass(this.order.nativeElement, 'active');
   }
 }

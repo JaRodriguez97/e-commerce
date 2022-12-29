@@ -17,11 +17,23 @@
 
   <div class="icons">
     <fa-icon [icon]="faHeart" aria-hidden="true"></fa-icon>
-    <fa-icon [icon]="faShoppingCart" aria-hidden="true"></fa-icon>
+    <fa-icon
+      [icon]="faShoppingCart"
+      aria-hidden="true"
+      (click)="getOrder()"
+    ></fa-icon>
     <fa-icon [icon]="faUser" aria-hidden="true"></fa-icon>
   </div>
 </header>
 <!-- header section ends -->
+
+<!-- order section starts -->
+
+<section class="order" #order>
+  <app-order></app-order>
+</section>
+
+<!-- order section ends -->
 
 <!-- home section starts  -->
 <section class="home" id="home">
@@ -79,10 +91,10 @@
 
     <div class="box">
       <h3>localización</h3>
-      <a href="#">india</a>
-      <a href="#">EEUU</a>
-      <a href="#">japón</a>
-      <a href="#">francia</a>
+      <a href="#">cali</a>
+      <a href="#">yumbo</a>
+      <a href="#">jamundí</a>
+      <a href="#">candelaria</a>
     </div>
 
     <div class="box">

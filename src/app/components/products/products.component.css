@@ -100,3 +100,9 @@
   font-weight: lighter;
   text-decoration: line-through;
 }
+
+@media (max-width: 991px) {
+  .box-container .box .image .icons {
+    bottom: 0;
+  }
+}

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "component": "ng g c components/contact --skip-import",
+    "component": "ng g c components/order --skip-import",
     "module": "ng g m components/Home/home -m=app --route home --flat",
     "dev": "ng serve -o",
     "build": "ng build",

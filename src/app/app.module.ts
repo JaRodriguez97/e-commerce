@@ -1,3 +1,4 @@
+import { OrderComponent } from './components/order/order.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AboutComponent } from '@components/about/about.component';
@@ -20,6 +21,7 @@ import { AppComponent } from './app.component';
     ProductsComponent,
     ReviewComponent,
     ContactComponent,
+    OrderComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

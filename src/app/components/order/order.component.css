@@ -1,0 +1,16 @@
+.smmok {
+  position: relative;
+  background-color: rgba(204, 204, 204, 0.5);
+  width: 70%;
+  height: 100vh;
+  left: 0;
+  cursor: pointer;
+}
+
+.order__list {
+  position: relative;
+  background-color: var(--white);
+  width: 30%;
+  height: 100vh;
+  right: 0;
+}

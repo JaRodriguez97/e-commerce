@@ -84,4 +84,8 @@
   .contentImg img {
     width: 50%;
   }
+
+  .socialmedia {
+    bottom: 0;
+  }
 }

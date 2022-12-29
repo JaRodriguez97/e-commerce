@@ -89,6 +89,31 @@ header .fa-bars {
 }
 /* header section ends */
 
+/* order section starts */
+
+.order,
+app-order {
+  height: 100%;
+  width: 100%;
+  z-index: 3;
+  background-color: transparent;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+.order {
+  top: 0;
+  right: -100%;
+  position: fixed;
+}
+
+.order.active {
+  right: 0;
+}
+
+/* order section ends */
+
 /* home section starts */
 app-inicio,
 .home {
