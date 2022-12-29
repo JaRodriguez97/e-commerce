@@ -32,6 +32,38 @@
   width: 100%;
 }
 
+.socialmedia {
+  position: absolute;
+  bottom: 5rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.socialmedia div {
+  position: relative;
+  width: 5rem;
+  height: 5rem;
+  filter: invert(1);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.socialmedia .facebook {
+  background-image: url(../../../assets/icons/messenger.svg);
+  transition-delay: 1s;
+}
+
+.socialmedia .instagram {
+  background-image: url(../../../assets/icons/instagram.svg);
+  transition-delay: 2s;
+}
+
+.socialmedia .whatsapp {
+  background-image: url(../../../assets/icons/whatsapp.svg);
+  transition-delay: 3s;
+}
+
 @media (max-width: 991px) {
   .content {
     display: flex;

@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AboutComponent } from '@components/about/about.component';
 import { ContactComponent } from '@components/contact/contact.component';
 import { IconsContainerComponent } from '@components/icons-container/icons-container.component';
-import { InicioComponent } from '@components/Inicio/inicio/inicio.component';
+import { InicioComponent } from '@components/Inicio/inicio.component';
 import { ProductsComponent } from '@components/products/products.component';
 import { ReviewComponent } from '@components/review/review.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';

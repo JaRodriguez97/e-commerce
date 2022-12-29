@@ -8,9 +8,9 @@
 .row form {
   flex: 1 1 40rem;
   padding: 2rem 2.5rem;
-  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
-  border: 0.1rem solid rgba(0, 0, 0, 0.1);
-  background: #fff;
+  box-shadow: 0 0.5rem 1.5rem var(--white);
+  border: 0.1rem solid var(--white);
+  background: var(--black);
   border-radius: 0.5rem;
 }
 
@@ -20,6 +20,7 @@
 
 .row .image img {
   width: 100%;
+  filter: invert(1);
 }
 
 .row form .box {
@@ -27,7 +28,7 @@
   font-size: 1.7rem;
   color: var(--black);
   text-transform: none;
-  border: 0.1rem solid rgba(0, 0, 0, 0.1);
+  border: 0.1rem solid var(--white);
   border-radius: 0.5rem;
   margin: 0.7rem 0;
   width: 100%;
@@ -37,7 +38,31 @@
   border-color: var(--golden);
 }
 
+.row form textarea,
+.row form input {
+  background-color: var(--gray);
+}
+
+.row form textarea::placeholder,
+.row form input::placeholder {
+  color: var(--golden);
+}
+
+.row form textarea:focus::placeholder,
+.row form input:focus::placeholder {
+  color: var(--white);
+}
+
 .row form textarea {
   height: 15rem;
   resize: none;
+}
+
+.row form .btn {
+  color: var(--gray);
+  background: var(--white);
+}
+
+.row form .btn:hover {
+  background: var(--golden);
 }
