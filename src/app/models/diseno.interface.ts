@@ -1,4 +1,4 @@
-export interface comboInterface {
+export interface diseñoInterface {
   _id: String;
   estrellas: Number;
   img: String;

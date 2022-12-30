@@ -14,7 +14,12 @@ import {
   faHeart,
   faShoppingCart,
   faUser,
+  IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
+import { pedidoInterface } from '@models/pedido.interface';
+import { userInterface } from '@models/users.interface';
+import { LocalStorageService } from 'ngx-localstorage';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -23,19 +28,22 @@ import {
 export class AppComponent implements OnInit {
   title = 'eCommerce';
   navbar!: Element;
-  faHeart = faHeart;
-  faShoppingCart = faShoppingCart;
-  faUser = faUser;
-  faBars = faBars;
-  pedidos!: any;
+  faHeart: IconDefinition = faHeart;
+  faShoppingCart: IconDefinition = faShoppingCart;
+  faUser: IconDefinition = faUser;
+  faBars: IconDefinition = faBars;
+  pedidos!: pedidoInterface[];
+  user!: userInterface | undefined;
+  userID!: String | null | undefined;
+
   @ViewChild('order') order!: ElementRef;
 
   constructor(
     private renderer: Renderer2,
     private activatedRoute: ActivatedRoute,
     public router: Router,
-    // public localStorageService: LocalStorageService,
-    // private spinner: NgxSpinnerService,
+    public localStorageService: LocalStorageService,
+    private spinner: NgxSpinnerService,
     @Inject(DOCUMENT) private document: Document
   ) {}
 
