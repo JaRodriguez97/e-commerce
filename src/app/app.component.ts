@@ -18,7 +18,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { pedidoInterface } from '@models/pedido.interface';
 import { userInterface } from '@models/users.interface';
-import { LocalStorageService } from 'ngx-localstorage';
 import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-root',
@@ -42,8 +41,7 @@ export class AppComponent implements OnInit {
     private renderer: Renderer2,
     private activatedRoute: ActivatedRoute,
     public router: Router,
-    public localStorageService: LocalStorageService,
-    private spinner: NgxSpinnerService,
+    public spinner: NgxSpinnerService,
     @Inject(DOCUMENT) private document: Document
   ) {}
 
@@ -58,6 +56,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.navbar = this.document.querySelector('.navbar')!;
+    console.log(localStorage);
   }
 
   getOrder() {
