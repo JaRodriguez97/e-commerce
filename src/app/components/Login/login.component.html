@@ -1,0 +1,102 @@
+<section #body>
+  <div class="container">
+    <div class="blueBg">
+      <div class="box signIn">
+        <h2>Ya tienes una Cuenta?</h2>
+        <button type="button" class="btn" (click)="signInBtn()">Login</button>
+      </div>
+      <div class="box signUp">
+        <h2>No tienes una Cuenta?</h2>
+        <button type="button" class="btn" (click)="signUpBtn()">
+          Registrarse
+        </button>
+      </div>
+    </div>
+    <div #formBx class="formBx">
+      <!-- !!! SignIn !!! -->
+      <div class="form signInForm">
+        <form>
+          <h3>Login</h3>
+          <div class="inputBox">
+            <input
+              required
+              type="number"
+              name="telefono"
+              [(ngModel)]="telefono"
+            />
+            <span>Teléfono</span>
+            <i></i>
+          </div>
+          <div class="inputBox">
+            <input
+              required
+              type="password"
+              name="contraseña"
+              [(ngModel)]="contrasena"
+            />
+            <span>Contraseña</span>
+            <i></i>
+          </div>
+          <a [href]="'#'" class="forgot">¿Olvidaste la Contraseña?</a>
+          <button type="submit" class="btn" (click)="checkLogin()">
+            Ingresar
+          </button>
+        </form>
+      </div>
+      <!-- !!! SignUp !!! -->
+      <div class="form signUpForm">
+        <form>
+          <h3>Crear Cuenta</h3>
+          <div class="inputBox">
+            <input
+              required
+              type="number"
+              name="telefono"
+              [(ngModel)]="telefono"
+            />
+            <span>Teléfono*</span>
+            <i></i>
+          </div>
+          <div class="inputBox">
+            <input type="text" name="nombres" [(ngModel)]="nombres" />
+            <span>Nombres (Opcional)</span>
+            <i></i>
+          </div>
+          <div class="inputBox">
+            <input type="text" name="apellidos" [(ngModel)]="apellidos" />
+            <span>Apellidos (Opcional)</span>
+            <i></i>
+          </div>
+          <div class="inputBox">
+            <input type="email" name="email" [(ngModel)]="email" />
+            <span>Email (Opcional)</span>
+            <i></i>
+          </div>
+          <div class="inputBox">
+            <input
+              required
+              type="password"
+              name="contrasenña"
+              [(ngModel)]="contrasena"
+            />
+            <span>Contraseña*</span>
+            <i></i>
+          </div>
+          <div class="inputBox">
+            <input
+              required
+              type="password"
+              name="repiteContraseña"
+              [(ngModel)]="repiteContrasena"
+            />
+            <span>Repite Contraseña*</span>
+            <i></i>
+          </div>
+          <button type="submit" class="btn" (click)="checkSignUp()">
+            Registrar
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

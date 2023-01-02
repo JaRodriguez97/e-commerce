@@ -19,6 +19,8 @@ import {
 import { pedidoInterface } from '@models/pedido.interface';
 import { userInterface } from '@models/users.interface';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Database } from './database';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -42,7 +44,8 @@ export class AppComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     public router: Router,
     public spinner: NgxSpinnerService,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
+    private database: Database
   ) {}
 
   @HostListener('window:scroll')
@@ -54,7 +57,7 @@ export class AppComponent implements OnInit {
     else this.document.querySelector('header')!.classList.remove('active');
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.navbar = this.document.querySelector('.navbar')!;
     console.log(localStorage);
   }
@@ -65,5 +68,16 @@ export class AppComponent implements OnInit {
 
   getOutOrder() {
     this.renderer.removeClass(this.order.nativeElement, 'active');
+  }
+
+  getUser() {
+    if (localStorage.getItem('userID')) {
+    } else this.router.navigate(['login']);
+  }
+
+   async reloadTo(uri: String) {
+    this.router
+      .navigateByUrl('/', { skipLocationChange: true })
+      .then(() => this.router.navigate([uri]));
   }
 }

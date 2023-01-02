@@ -1,3 +1,13 @@
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.9)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+  [fullScreen]="true"
+>
+  <p style="color: white">Loading...</p>
+</ngx-spinner>
+
 <!-- header section starts  -->
 <header>
   <input placeholder="" title="hide" type="checkbox" name="" id="toggler" />
@@ -22,7 +32,7 @@
       aria-hidden="true"
       (click)="getOrder()"
     ></fa-icon>
-    <fa-icon [icon]="faUser" aria-hidden="true"></fa-icon>
+    <fa-icon [icon]="faUser" aria-hidden="true" (click)="getUser()"></fa-icon>
   </div>
 </header>
 <!-- header section ends -->
@@ -113,3 +123,7 @@
   </div>
 </footer>
 <!-- footer section ends -->
+
+<div>
+  <router-outlet></router-outlet>
+</div>

@@ -2,7 +2,7 @@
   /* --pink: #e84393; */
   --golden: #ffd700;
   --goldenLigth: #ffd90033;
-
+  --blackPanter: #111;
   --black: #333;
   --gray: #666;
   --smoke: #ccc;
@@ -34,18 +34,14 @@ footer {
   padding: 2rem 9%;
 }
 
-.heading {
-  text-align: center;
-  font-size: 4rem;
-  color: var(--white);
-  padding: 1rem;
-  margin: 2rem 0;
-  background: var(--goldenLigth);
-  border-radius: 0.5rem;
-}
-
-.heading span {
-  color: var(--golden);
+app-login {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  top: 0;
+  overflow: hidden;
+  z-index: 10;
 }
 
 .btn {
@@ -65,6 +61,30 @@ footer {
   color: var(--black);
   font-weight: bold;
   letter-spacing: 0.1rem;
+}
+
+.heading {
+  text-align: center;
+  font-size: 4rem;
+  color: var(--white);
+  padding: 1rem;
+  margin: 2rem 0;
+  background: var(--goldenLigth);
+  border-radius: 0.5rem;
+}
+
+.heading span {
+  color: var(--golden);
+}
+
+.hidden {
+  visibility: hidden;
+  display: none;
+}
+
+.visibility {
+  visibility: visible;
+  display: block;
 }
 
 @media (max-width: 991px) {

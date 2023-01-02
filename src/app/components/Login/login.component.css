@@ -1,0 +1,329 @@
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--black);
+
+  position: fixed;
+  width: 100vw;
+  transition: 500ms;
+}
+
+section.active {
+  background: var(--blackPanter);
+}
+
+section > .container {
+  position: relative;
+  width: 800px;
+  height: 450px;
+  margin: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+section > .container > .blueBg {
+  position: absolute;
+  width: 100%;
+  height: 420px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--gray);
+  box-shadow: 0 5px 45px var(--black);
+}
+
+section > .container > .blueBg > .box {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 5rem;
+}
+
+.container > .blueBg > .box > h2 {
+  color: var(--white);
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+section > .container > .formBx {
+  position: absolute;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: var(--black);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 5px 40px var(--gray);
+  transition: 500ms ease-in-out;
+}
+
+section > .container > .formBx::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(0deg, transparent, var(--golden), var(--golden));
+  transform-origin: bottom right;
+  animation: animate 5s linear infinite;
+}
+
+section > .container > .formBx::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(0deg, transparent, var(--golden), var(--golden));
+  transform-origin: bottom right;
+  animation: animate 5s linear infinite;
+  animation-delay: -2.5s;
+}
+
+@keyframes animate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+section > .container > .formBx.active {
+  left: 50%;
+  height: 110%;
+  top: -5%;
+  transition: 500ms ease-in-out;
+}
+
+section > .container > .formBx > .form {
+  position: absolute;
+  z-index: 3;
+  inset: 2px;
+  background: var(--blackPanter);
+  transition: 500ms;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+section > .container > .formBx > .signInForm {
+  transition-delay: 250ms;
+  padding: 50px 40px;
+}
+
+section > .container > .formBx.active > .signInForm {
+  transition-delay: 250ms;
+}
+
+section > .container > .formBx > .signUpForm {
+  left: 100%;
+  transition-delay: 250ms;
+  background: var(--black);
+}
+
+section > .container > .formBx > .signUpForm > form > .btn {
+  background: var(--gray);
+}
+
+section > .container > .formBx > .signUpForm > form > .btn:hover {
+  background: var(--golden);
+}
+
+section > .container > .formBx.active > .signUpForm {
+  left: 2px;
+  transition-delay: 250ms;
+  padding: 10px 40px;
+}
+
+section > .container > .formBx.active > .signUpForm > form {
+  gap: 25px;
+}
+
+.container > .formBx > .form > form {
+  width: 100%;
+  display: grid;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.formBx > .form > form > h3 {
+  color: var(--golden);
+  font-weight: 500;
+  font-size: 3rem;
+  text-align: center;
+  letter-spacing: 0.5rem;
+  margin: 1rem 0;
+}
+
+.formBx > .form > form > .inputBox {
+  position: relative;
+  width: 100%;
+}
+
+.formBx > .form > form > input,
+.formBx > .form > form > .inputBox > input {
+  position: relative;
+  width: 100%;
+  height: 44px;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--black);
+  font-size: 1em;
+  letter-spacing: 0.05em;
+  z-index: 5;
+}
+
+.formBx.active > .form > form > input,
+.formBx.active > .form > form > .inputBox > input {
+  padding: 8px 10px;
+  height: 34px;
+}
+
+.formBx > .form > form > .inputBox > span {
+  position: absolute;
+  padding: 20px 0px 10px;
+  font-size: 1.5rem;
+  color: var(--smoke);
+  left: 0;
+  bottom: 0;
+  pointer-events: none;
+  letter-spacing: 0.05em;
+  transition: 500ms;
+}
+
+.formBx.active > .form > form > .inputBox > span {
+  padding: 25px 0px 0px;
+}
+
+.formBx > .form > form > .inputBox > input:invalid ~ i {
+  border: var(--golden) solid 1px;
+}
+
+.formBx > .form > form > .inputBox > input:hover ~ span,
+.formBx > .form > form > .inputBox > input:focus ~ span,
+.formBx > .form > form > .inputBox > input:valid ~ span {
+  color: var(--white);
+  transform: translateY(-34px);
+  font-size: 1rem;
+}
+
+.formBx > .form > form > .inputBox > i {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--white);
+  border-radius: 4px;
+  transition: 0.5s;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.formBx > .form > form > .inputBox > input:hover ~ i,
+.formBx > .form > form > .inputBox > input:focus ~ i,
+.formBx > .form > form > .inputBox > input:valid ~ i {
+  height: 44px;
+}
+
+.formBx.active > .form > form > .inputBox > input:hover ~ i,
+.formBx.active > .form > form > .inputBox > input:focus ~ i,
+.formBx.active > .form > form > .inputBox > input:valid ~ i {
+  height: 34px;
+}
+
+.formBx > .form > form > .forgot {
+  justify-content: space-between;
+  color: var(--smoke);
+  margin: 10px 0;
+  font-size: 1em;
+  text-decoration: none;
+}
+
+.formBx > .form > form > .forgot:hover {
+  color: var(--white);
+}
+
+@media (max-width: 991px) {
+  section > .container {
+    max-width: 400px;
+    height: 650px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  section > .container > .blueBg {
+    top: 0;
+    bottom: 0;
+    height: 80%;
+    margin: auto;
+  }
+
+  section > .container > .blueBg > .box {
+    position: absolute;
+    width: 100%;
+    height: 150px;
+    bottom: 0;
+  }
+
+  section > .container > .blueBg > .box.signIn {
+    top: 0;
+    height: 100px;
+  }
+
+  section > .container > .formBx {
+    width: 100%;
+    height: 55%;
+    top: 10%;
+    box-shadow: none;
+  }
+
+  section > .container > .formBx.active {
+    left: 0;
+    top: 27%;
+    width: 100%;
+    height: 75%;
+    padding: 0;
+  }
+
+  section > .container > .formBx.active > .signUpForm {
+    padding: 10px 50px;
+    top: 2px;
+  }
+
+  .container > .formBx > .form > form {
+    gap: 15px;
+  }
+
+  .container > .formBx.active > .form > form {
+    display: grid;
+    margin: 0;
+    gap: 25px;
+  }
+
+  .formBx.active > .form > form > h3 {
+    margin-top: 1em;
+    font-size: 1.5em;
+  }
+
+  .formBx.active > .form > form > .inputBox > input {
+    margin: 0;
+  }
+}
