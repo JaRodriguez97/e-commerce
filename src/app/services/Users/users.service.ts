@@ -1,4 +1,4 @@
-import { Database } from '@app/database';
+import { Database } from 'src/database';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import { userInterface } from '@models/users.interface';

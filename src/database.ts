@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
-import { faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import { initializeApp } from 'firebase/app';
 import {
   addDoc,
@@ -16,7 +15,7 @@ import {
   query,
   where,
 } from 'firebase/firestore';
-import { userInterface } from './models/users.interface';
+import { userInterface } from '@app/models/users.interface';
 
 @Injectable({
   providedIn: 'root',

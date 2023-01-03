@@ -6,7 +6,7 @@ import {
   Inject,
   OnInit,
   Renderer2,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -14,12 +14,12 @@ import {
   faHeart,
   faShoppingCart,
   faUser,
-  IconDefinition,
+  IconDefinition
 } from '@fortawesome/free-solid-svg-icons';
 import { pedidoInterface } from '@models/pedido.interface';
 import { userInterface } from '@models/users.interface';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Database } from './database';
+import { Database } from 'src/database';
 
 @Component({
   selector: 'app-root',
@@ -75,7 +75,7 @@ export class AppComponent implements OnInit {
     } else this.router.navigate(['login']);
   }
 
-   async reloadTo(uri: String) {
+  async reloadTo(uri: String) {
     this.router
       .navigateByUrl('/', { skipLocationChange: true })
       .then(() => this.router.navigate([uri]));
