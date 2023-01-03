@@ -53,10 +53,14 @@ header.active .navbar a:hover {
   color: var(--gray);
 }
 
+header .icons {
+  gap: 1.5rem;
+  display: flex;
+}
+
 header .icons fa-icon {
   font-size: 2.5rem;
   color: var(--smoke);
-  margin-left: 1.5rem;
   cursor: pointer;
 }
 
