@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
- projectId: 'creatulogo-database' 
+  projectId: 'creatulogo-database',
 };
 
 /*

@@ -1,4 +1,3 @@
-import { userInterface } from '@models/users.interface';
 import {
   Component,
   ElementRef,
@@ -12,7 +11,6 @@ import { pedidoInterface } from '@models/pedido.interface';
 import { UsersService } from '@service/Users/users.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
-import { DocumentReference, getDoc } from 'firebase/firestore';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +27,7 @@ export class LoginComponent implements OnInit {
   apellidos!: String;
   email!: String;
   idCombo!: String;
-  pedidos!: string | null;
+  pedidos!: pedidoInterface[];
 
   constructor(
     private appComponent: AppComponent,
@@ -47,7 +45,10 @@ export class LoginComponent implements OnInit {
       .show()
       .then(() => {
         if (localStorage.getItem('userID')) this.router.navigate(['/']);
-        this.pedidos = localStorage.getItem('pedido');
+        
+        this.pedidos = localStorage.getItem('pedido')
+          ? JSON.parse(localStorage.getItem('pedido')!)
+          : [];
       })
       .catch((err) => console.error(err))
       .finally(() => this.spinner.hide());
@@ -76,51 +77,63 @@ export class LoginComponent implements OnInit {
           contraseña: this.contrasena,
         };
 
-        this.usersService.getLogin(form);
-        //.subscribe(
-        //   (res) => {
-        //     let { id } = this.activatedRoute?.snapshot?.params || undefined;
+        this.usersService
+          .getLogin(form)
+          .then((res) => {
+            let { id } = this.activatedRoute?.snapshot?.params || undefined;
 
-        //     this.appComponent.user = res;
+            this.appComponent.user = res;
 
-        //     if (id && !res.pedido?.length && !this.pedidos!.length)
-        //       this.usersService
-        //         .updateUser(res._id!, [{ _id: id, cantidad: 1 }], 'pedido')
-        //         .subscribe((res) =>
-        //           console.log('🚀 ~ line:89 ~ LoginComponent ~ User', res)
-        //         );
-        //     else if (
-        //       !id &&
-        //       (!res.pedido || !res.pedido.length) &&
-        //       this.pedidos!.length
-        //     ) {
-        //       this.usersService
-        //         .updateUser(res._id!, this.pedidos, 'pedido')
-        //         .subscribe((res) =>
-        //           console.log('🚀 ~ line:101 ~ LoginComponent ~ User', res)
-        //         );
-        //     }
+            if (id && res.pedido && !res.pedido.length && !this.pedidos.length)
+              /*
+              Si el usuario no tiene un pedido en el localStorage ni en la base
+              de datos, creará el pedido a la base de datos.
+            */
+              this.usersService
+                .updateUser(
+                  res._id!,
+                  { pedido: [{ _id: id, cantidad: 1 }] },
+                  'pedido'
+                )
+                .then((res) =>
+                  console.log('🚀 ~ line:98 ~ LoginComponent ~ User', res)
+                );
+            else if (
+              !id &&
+              (!res.pedido || !res.pedido.length) &&
+              this.pedidos &&
+              this.pedidos.length
+            )
+              /*
+              Si el usuario tiene un pedido en el localStorage pero no en la
+              base de datos, editará el pedido en la base de datos. 
+            */
+              this.usersService
+                .updateUser(res._id!, this.pedidos, 'pedido')
+                .then((res) =>
+                  console.log('🚀 ~ line:101 ~ LoginComponent ~ User', res)
+                );
 
-        //     localStorage.removeItem('pedido');
-        //   },
-        //   (err) =>
-        //     this.spinner.hide().then(() => {
-        //       console.error(err);
-        //       Swal.fire({
-        //         confirmButtonColor: '#000',
-        //         icon: 'error',
-        //         html: err.error.message,
-        //       });
-        //     }),
-        //   () => {
-        //     localStorage.setItem(
-        //       'userID',
-        //       this.appComponent.user?._id!
-        //     );
-
-        //     this.router.navigate(['/']);
-        //   }
-        // );
+            localStorage.removeItem('pedido');
+          })
+          .catch((err) =>
+            this.spinner.hide().then(() => {
+              console.error({ err });
+              Swal.fire({
+                confirmButtonColor: '#000',
+                icon: 'error',
+                html: err.error?.message ?? err.message ?? err,
+              });
+            })
+          )
+          .finally(() => {
+            this.router
+              .navigate(['/'])
+              .then(() =>
+                localStorage.setItem('userID', this.appComponent.user?._id!)
+              )
+              .then(() => this.spinner.hide());
+          });
       })
       .catch((err) =>
         this.spinner.hide().then(() => {
@@ -156,29 +169,31 @@ export class LoginComponent implements OnInit {
 
         this.usersService
           .getSignUp(form)
-          .then((res: userInterface) =>
-            Swal.fire({
-              icon: 'success',
-              imageWidth: 100,
-              confirmButtonColor: '#000',
-              html: `<b>Te damos la bienvenida ${
-                res.nombres || res.numeroTelefono
-              }</b>`,
-            }).then(() =>
-              this.spinner
-                .show()
-                .then(() => this.appComponent.reloadTo('login'))
-                .then(() => setTimeout(() => this.spinner.hide(), 500))
+          .then((res) =>
+            this.spinner.hide().then(() =>
+              Swal.fire({
+                icon: 'success',
+                imageWidth: 100,
+                confirmButtonColor: '#000',
+                html: `<b>Te damos la bienvenida ${
+                  res!.nombres || res!.numeroTelefono
+                }</b>`,
+              }).then(() =>
+                this.spinner
+                  .show()
+                  .then(() => this.appComponent.reloadTo('login'))
+                  .then(() => setTimeout(() => this.spinner.hide(), 500))
+              )
             )
           )
           .then(() => this.spinner.hide())
-          .catch((err: { error: { message: any } }) =>
+          .catch((err) =>
             this.spinner.hide().then(() => {
-              console.error(err);
+              console.error({ err });
               Swal.fire({
                 confirmButtonColor: '#000',
                 icon: 'error',
-                html: err.error.message,
+                html: err.error?.message ?? err.message ?? err,
               });
             })
           )

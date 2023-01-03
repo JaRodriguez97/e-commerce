@@ -6,7 +6,7 @@ import {
   Inject,
   OnInit,
   Renderer2,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -14,7 +14,7 @@ import {
   faHeart,
   faShoppingCart,
   faUser,
-  IconDefinition
+  IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 import { pedidoInterface } from '@models/pedido.interface';
 import { userInterface } from '@models/users.interface';
@@ -59,7 +59,7 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     this.navbar = this.document.querySelector('.navbar')!;
-    console.log(localStorage);
+    console.log({ localStorage });
   }
 
   getOrder() {

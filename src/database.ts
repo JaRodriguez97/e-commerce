@@ -12,7 +12,11 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  orderBy,
   query,
+  QuerySnapshot,
+  setDoc,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 import { userInterface } from '@app/models/users.interface';
@@ -36,42 +40,55 @@ export class Database {
     coleccion: string,
     id: string | number | Number | undefined
   ) {
-    const q = query(
+    let q = query(
         collection(this.db, coleccion),
         where('numeroTelefono', '==', id)
       ),
       querySnapshot = await getDocs(q);
 
-    querySnapshot.forEach((snap) => {
-      console.log(
-        '🚀 ~ file: database.ts:47 ~ Database ~ querySnapshot.forEach ~ snap',
-        snap.data()
-      );
-    });
+    return querySnapshot.docs.map((doc) => {
+      let docReturn: userInterface = doc.data();
 
-    // return querySnapshot[0].data();
+      docReturn._id = doc.id;
+
+      return docReturn;
+    })[0];
   }
 
   async createDataDocument(
     form: userInterface,
     coleccion: string
-  ): Promise<DocumentData | undefined> {
+  ): Promise<DocumentData> {
     let collectionRef = collection(this.db, coleccion),
       documentData = await addDoc(collectionRef, form),
       documentSnapshot = await getDoc(documentData);
 
-    console.info('Usuario creado: ', documentData.id);
+    console.warn('Usuario creado: ', documentData.id);
 
-    return documentSnapshot.data();
+    return documentSnapshot.data()!;
   }
 
-  // async getDataCollection(
-  //   coleccion: string,
-  //   id: string
-  // ): Promise<DocumentData | undefined> {
-  //   let docRef = collection(this.db, coleccion);
-  //   const docSnap = await getDoc(docRef);
+  async getDataCollection(coleccion: string): Promise<DocumentData[]> {
+    let docRef = collection(this.db, coleccion);
+    const docSnap = await getDocs(docRef);
 
-  //   return docSnap.data();
-  // }
+    return docSnap.docs.map((diseño) => {
+      let docReturn: userInterface = diseño.data();
+
+      docReturn._id = diseño.id;
+
+      return docReturn;
+    });
+  }
+
+  async updateDocument(id: string, dataUpdate: any, coleccion: string) {
+    let refDocument = doc(this.db, coleccion, id);
+
+    await updateDoc(refDocument, dataUpdate).then((res) => {
+      console.log(
+        '🚀 ~ file: database.ts:79 ~ Database ~ awaitupdateDoc ~ res',
+        res
+      );
+    });
+  }
 }

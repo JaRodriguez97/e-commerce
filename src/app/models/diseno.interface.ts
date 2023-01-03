@@ -1,6 +1,6 @@
 export interface diseñoInterface {
   _id: String;
-  estrellas: Number;
+  descuento: Number;
   img: String;
   incluye: String;
   nombre: String;
