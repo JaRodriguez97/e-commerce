@@ -95,8 +95,10 @@ header .fa-bars {
 
 /* order section starts */
 
+.user,
 .order,
-app-order {
+app-order,
+app-user {
   height: 100%;
   width: 100%;
   z-index: 3;
@@ -106,12 +108,14 @@ app-order {
   flex-direction: row;
 }
 
+.user,
 .order {
   top: 0;
   right: -100%;
   position: fixed;
 }
 
+.user.active,
 .order.active {
   right: 0;
 }

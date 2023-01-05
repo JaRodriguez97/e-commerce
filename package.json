@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "component": "ng g c components/user --skip-import",
-    "module": "ng g m components/Login/login -m=app --route login --flat",
+    "component": "ng g c components/products/products-list --skip-import",
+    "module": "ng g m components/products/products-details/products-details -m=app --route products-list/:id --flat",
     "dev": "ng serve -o",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",

@@ -1,0 +1,36 @@
+<h1 class="heading">ultimos <span>diseños</span></h1>
+
+<div class="box-container">
+  <div class="box" *ngFor="let diseno of products; let i = index">
+    <span class="discount">-{{ diseno["descuento"] }}%</span>
+    <div class="image">
+      <img [src]="diseno['img']" [alt]="diseno['nombre']" />
+      <ul
+        [ngClass]="{
+          iconsList: true,
+          active: appComponent.existeComboPedido(diseno['_id'])
+        }"
+      >
+        <li (click)="(0)">
+          <fa-icon [icon]="faHeart"></fa-icon>
+        </li>
+        <li (click)="addToCar(diseno['_id'], i)" class="cart-btn">
+          agregar
+          <fa-icon [icon]="faShoppingCart"></fa-icon>
+        </li>
+        <li (click)="getDetails(diseno['_id'])">
+          <fa-icon [icon]="faEye"></fa-icon>
+        </li>
+      </ul>
+    </div>
+    <div class="content">
+      <h3>{{ diseno["nombre"] }}</h3>
+      <div class="price">
+        {{ getTotalDescuento(diseno) | currency : "$" : "symbol" : "4.0-0" }}
+        <span>{{
+          diseno["precio"] | currency : "$" : "symbol" : "4.0-0"
+        }}</span>
+      </div>
+    </div>
+  </div>
+</div>

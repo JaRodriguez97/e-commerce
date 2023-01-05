@@ -7,8 +7,9 @@ import { ContactComponent } from '@components/contact/contact.component';
 import { IconsContainerComponent } from '@components/icons-container/icons-container.component';
 import { InicioComponent } from '@components/Inicio/inicio.component';
 import { OrderComponent } from '@components/order/order.component';
-import { ProductsComponent } from '@components/products/products.component';
+import { ProductsListComponent } from '@components/products/products-list/products-list.component';
 import { ReviewComponent } from '@components/review/review.component';
+import { UserComponent } from '@components/user/user.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { Database } from 'src/database';
@@ -21,10 +22,11 @@ import { AppComponent } from './app.component';
     InicioComponent,
     AboutComponent,
     IconsContainerComponent,
-    ProductsComponent,
     ReviewComponent,
     ContactComponent,
     OrderComponent,
+    UserComponent,
+    ProductsListComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

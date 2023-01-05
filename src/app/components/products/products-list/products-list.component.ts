@@ -1,0 +1,50 @@
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AppComponent } from '@app/app.component';
+import {
+  faEye,
+  faHeart,
+  faShare,
+  faShoppingCart,
+} from '@fortawesome/free-solid-svg-icons';
+import { disenoInterface } from '@models/diseno.interface';
+import { DisenosService } from '@service/Disenos/disenos.service';
+import { DocumentData } from 'firebase/firestore';
+import { NgxSpinnerService } from 'ngx-spinner';
+
+@Component({
+  selector: 'app-products-list',
+  templateUrl: './products-list.component.html',
+  styleUrls: ['./products-list.component.css'],
+})
+export class ProductsListComponent implements OnInit {
+  @Input('products') public products!: disenoInterface[] | DocumentData[];
+  faShoppingCart = faShoppingCart;
+  faHeart = faHeart;
+  faShare = faShare;
+  faEye = faEye;
+  precioTotal!: number;
+
+  constructor(
+    public appComponent: AppComponent,
+    public disenosService: DisenosService,
+    private spinner: NgxSpinnerService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {}
+
+  getTotalDescuento(diseno: disenoInterface | DocumentData) {
+    return diseno.precio - (diseno.precio! * diseno.descuento!) / 100;
+  }
+
+  getDetails(_id: String) {
+    this.spinner
+      .show()
+      .then(() => this.router.navigate(['products-details', _id]));
+  }
+
+  addToCar(_id: String, i?: number, realoadTo?: String) {
+    this.appComponent.addToCar(_id, i, realoadTo).then(() => this.ngOnInit());
+  }
+}

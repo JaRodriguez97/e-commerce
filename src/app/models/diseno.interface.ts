@@ -1,6 +1,6 @@
 export interface disenoInterface {
   _id: String;
-  descuento?: Number;
+  descuento?: number;
   img?: String;
   incluye?: String;
   nombre?: String;

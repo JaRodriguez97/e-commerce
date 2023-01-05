@@ -1,14 +1,13 @@
 <ngx-spinner
   bdColor="rgba(0, 0, 0, 0.9)"
-  size="medium"
+  size="large"
   color="#fff"
-  type="ball-scale-multiple"
   [fullScreen]="true"
 >
-  <p style="color: white">Loading...</p>
+  <p style="color: white; font-size: 2rem">Buscando diseños...</p>
 </ngx-spinner>
 
-<!-- header section starts  -->
+<!-- !!! header section starts  !!! -->
 <header>
   <input placeholder="" title="hide" type="checkbox" name="" id="toggler" />
   <label for="toggler">
@@ -35,60 +34,56 @@
     <fa-icon [icon]="faUser" aria-hidden="true" (click)="getUser()"></fa-icon>
   </div>
 </header>
-<!-- header section ends -->
+<!-- !!! header section ends !!! -->
 
-<!-- order section starts -->
-
+<!-- !!! order section starts !!! -->
 <section class="order" #order>
   <app-order></app-order>
 </section>
+<!-- !!! order section ends !!! -->
 
-<!-- order section ends -->
-
-<!-- user section starts -->
-
+<!-- !!! user section starts !!! -->
 <section class="user" #user>
   <app-user></app-user>
 </section>
+<!-- !!! user section ends !!! -->
 
-<!-- user section ends -->
-
-<!-- home section starts  -->
+<!-- !!! home section starts  !!! -->
 <section class="home" id="home">
   <app-inicio></app-inicio>
 </section>
-<!-- home section ends  -->
+<!-- !!! home section ends  !!! -->
 
-<!-- about section starts  -->
+<!-- !!! about section starts  !!! -->
 <section class="about" id="about">
   <app-about></app-about>
 </section>
-<!-- about section ends  -->
+<!-- !!! about section ends  !!! -->
 
-<!-- icons section starts  -->
+<!-- !!! icons section starts  !!! -->
 <section class="icons-container">
   <app-icons-container></app-icons-container>
 </section>
-<!-- icons section ends  -->
+<!-- !!! icons section ends  !!! -->
 
-<!-- prodcuts section starts  -->
+<!-- !!! prodcuts section starts  !!! -->
 <section class="products" id="products">
-  <app-products [products]="products"></app-products>
+  <app-products-list [products]="products"></app-products-list>
 </section>
-<!-- prodcuts section ends  -->
+<!-- !!! prodcuts section ends  !!! -->
 
-<!-- review section starts  -->
+<!-- !!! review section starts  !!! -->
 <section class="review" id="review">
   <app-review></app-review>
 </section>
 
-<!-- contact section starts  -->
+<!-- !!! contact section starts  !!! -->
 <section class="contact" id="contact">
   <app-contact></app-contact>
 </section>
-<!-- contact section ends  -->
+<!-- !!! contact section ends  !!! -->
 
-<!-- footer section starts  -->
+<!-- !!! footer section starts  !!! -->
 <footer class="footer">
   <div class="box-container">
     <div class="box">
@@ -130,7 +125,7 @@
     todos los derechos reservados.
   </div>
 </footer>
-<!-- footer section ends -->
+<!-- !!! footer section ends !!! -->
 
 <div>
   <router-outlet></router-outlet>
