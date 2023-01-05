@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "component": "ng g c components/login --skip-import",
+    "component": "ng g c components/user --skip-import",
     "module": "ng g m components/Login/login -m=app --route login --flat",
     "dev": "ng serve -o",
     "build": "ng build",

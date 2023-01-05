@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { diseñoInterface } from '@models/diseno.interface';
+import { disenoInterface } from '@models/diseno.interface';
 import { DocumentData } from 'firebase/firestore';
 import { Database } from 'src/database';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DiseñosService {
+export class DisenosService {
   constructor(private database: Database) {}
 
-  getDiseños(): Promise<diseñoInterface[] | DocumentData[]> {
-    return this.database.getDataCollection('diseños');
+  async getDisenos(): Promise<disenoInterface[] | DocumentData[]> {
+    return await this.database.getDataCollection('disenos');
   }
 
   // }

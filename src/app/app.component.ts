@@ -18,8 +18,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { pedidoInterface } from '@models/pedido.interface';
 import { userInterface } from '@models/users.interface';
+import { DisenosService } from '@service/Disenos/disenos.service';
+import { DocumentData } from 'firebase/firestore';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Database } from 'src/database';
+import Swal from 'sweetalert2';
+import { disenoInterface } from './models/diseno.interface';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +32,6 @@ import { Database } from 'src/database';
 })
 export class AppComponent implements OnInit {
   title = 'eCommerce';
-  navbar!: Element;
   faHeart: IconDefinition = faHeart;
   faShoppingCart: IconDefinition = faShoppingCart;
   faUser: IconDefinition = faUser;
@@ -36,6 +39,7 @@ export class AppComponent implements OnInit {
   pedidos!: pedidoInterface[];
   user!: userInterface | undefined;
   userID!: String | null | undefined;
+  products!: disenoInterface[] | DocumentData[];
 
   @ViewChild('order') order!: ElementRef;
 
@@ -45,22 +49,26 @@ export class AppComponent implements OnInit {
     public router: Router,
     public spinner: NgxSpinnerService,
     @Inject(DOCUMENT) private document: Document,
-    private database: Database
+    private database: Database,
+    public disenosServices: DisenosService
   ) {}
 
   @HostListener('window:scroll')
   scrolling(): void {
-    this.navbar.classList.remove('active');
-
-    if (window.scrollY > 500)
+    if (window.scrollY > 50) {
+      if (!this.products) {
+        this.spinner.show();
+        this.disenosServices
+          .getDisenos()
+          .then((disenosPromise) => (this.products = disenosPromise))
+          .catch((err) => {})
+          .finally(() => this.spinner.hide());
+      }
       this.document.querySelector('header')!.classList.add('active');
-    else this.document.querySelector('header')!.classList.remove('active');
+    } else this.document.querySelector('header')!.classList.remove('active');
   }
 
-  async ngOnInit() {
-    this.navbar = this.document.querySelector('.navbar')!;
-    console.log({ localStorage });
-  }
+  async ngOnInit() {}
 
   getOrder() {
     this.renderer.addClass(this.order.nativeElement, 'active');
@@ -72,6 +80,9 @@ export class AppComponent implements OnInit {
 
   getUser() {
     if (localStorage.getItem('userID')) {
+      Swal.fire({
+        title: 'ya te encuentras loguead@',
+      });
     } else this.router.navigate(['login']);
   }
 

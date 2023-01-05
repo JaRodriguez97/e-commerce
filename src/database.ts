@@ -1,4 +1,6 @@
+import { disenoInterface } from '@models/diseno.interface';
 import { Injectable } from '@angular/core';
+import { userInterface } from '@app/models/users.interface';
 import { environment } from '@env/environment';
 import { initializeApp } from 'firebase/app';
 import {
@@ -6,20 +8,14 @@ import {
   collection,
   doc,
   DocumentData,
-  DocumentReference,
-  DocumentSnapshot,
   Firestore,
   getDoc,
   getDocs,
   getFirestore,
-  orderBy,
   query,
-  QuerySnapshot,
-  setDoc,
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { userInterface } from '@app/models/users.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +30,17 @@ export class Database {
     this.db = getFirestore(app);
 
     console.log('Database is Connect!');
+  }
+
+  async getDataCollection(coleccion: string): Promise<disenoInterface[]> {
+    let q = query(collection(this.db, coleccion));
+
+    return await getDocs(q).then((docSnap) =>
+      docSnap.docs.map((doc) => {
+        let docReturn: disenoInterface = { ...doc.data(), _id: doc.id };
+        return docReturn;
+      })
+    );
   }
 
   async getDataDocument(
@@ -66,19 +73,6 @@ export class Database {
     console.warn('Usuario creado: ', documentData.id);
 
     return documentSnapshot.data()!;
-  }
-
-  async getDataCollection(coleccion: string): Promise<DocumentData[]> {
-    let docRef = collection(this.db, coleccion);
-    const docSnap = await getDocs(docRef);
-
-    return docSnap.docs.map((diseño) => {
-      let docReturn: userInterface = diseño.data();
-
-      docReturn._id = diseño.id;
-
-      return docReturn;
-    });
   }
 
   async updateDocument(id: string, dataUpdate: any, coleccion: string) {

@@ -45,6 +45,14 @@
 
 <!-- order section ends -->
 
+<!-- user section starts -->
+
+<section class="user" #user>
+  <app-user></app-user>
+</section>
+
+<!-- user section ends -->
+
 <!-- home section starts  -->
 <section class="home" id="home">
   <app-inicio></app-inicio>
@@ -65,7 +73,7 @@
 
 <!-- prodcuts section starts  -->
 <section class="products" id="products">
-  <app-products></app-products>
+  <app-products [products]="products"></app-products>
 </section>
 <!-- prodcuts section ends  -->
 

@@ -1,7 +1,7 @@
 <h1 class="heading">ultimos <span>diseños</span></h1>
 
 <div class="box-container">
-  <div class="box" *ngFor="let diseno of productos">
+  <div class="box" *ngFor="let diseno of products">
     <span class="discount">-{{ diseno['descuento'] }}%</span>
     <div class="image">
       <img [src]="diseno['img']" [alt]="diseno['nombre']" />
