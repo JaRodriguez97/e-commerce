@@ -23,7 +23,7 @@
   position: relative;
   height: 50px;
   display: flex;
-  justify-content: end;
+  justify-content:flex-end;
 }
 
 .user__list .logOut .btn:hover {
@@ -33,12 +33,11 @@
 .user__list aside {
   width: 100%;
   position: relative;
-  height: 50%;
+  height: 100%;
   margin: 2%;
   padding: 2%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .user__list aside .heading {
@@ -46,6 +45,81 @@
   font-size: 1rem;
 }
 
-.user__list .heading span {
+.user__list aside .heading span {
   color: var(--blackPanter);
+}
+
+.user__list aside .listDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50%;
+}
+
+.user__list aside .listDiv .container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+aside .listDiv .container .box {
+  position: relative;
+  width: 100%;
+  height: 7vh;
+  background: #fff;
+  cursor: pointer;
+  transition: 500ms ease-in-out;
+  box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.025);
+  list-style: none;
+}
+
+aside .listDiv .container .box:nth-child(1) {
+  transform: translateX(-3px);
+}
+
+aside .listDiv .container .box:nth-child(3) {
+  transform: translateX(3px);
+}
+
+aside .listDiv .container:hover .box:nth-child(1) {
+  transform: translateX(0);
+}
+
+aside .listDiv .container:hover .box:nth-child(3) {
+  transform: translateX(0);
+}
+
+aside .listDiv .container .box::before {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 100%;
+  background: var(--golden);
+  transition: 500ms ease-in-out;
+}
+
+aside .listDiv .container .box:hover:before {
+  width: 100%;
+}
+
+.listDiv .container .box .content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.container .box .content .icon {
+  position: relative;
+  min-width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5rem;
+}
+
+.container .box .content .text p {
+  color: var(--gray);
 }

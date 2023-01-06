@@ -14,9 +14,21 @@
         <li (click)="(0)">
           <fa-icon [icon]="faHeart"></fa-icon>
         </li>
-        <li (click)="addToCar(diseno['_id'], i)" class="cart-btn">
+        <li
+          (click)="addToCar(diseno['_id'], i)"
+          class="cart-btn"
+          *ngIf="!appComponent.existeComboPedido(diseno['_id'])"
+        >
           agregar
           <fa-icon [icon]="faShoppingCart"></fa-icon>
+        </li>
+        <li
+          (click)="restToCar(diseno['_id'], i)"
+          class="cart-btn"
+          *ngIf="appComponent.existeComboPedido(diseno['_id'])"
+        >
+          quitar
+          <fa-icon [icon]="faArrowUpFromBracket"></fa-icon>
         </li>
         <li (click)="getDetails(diseno['_id'])">
           <fa-icon [icon]="faEye"></fa-icon>

@@ -6,6 +6,8 @@ import {
   faHeart,
   faShare,
   faShoppingCart,
+  faBan,
+  faArrowUpFromBracket,
 } from '@fortawesome/free-solid-svg-icons';
 import { disenoInterface } from '@models/diseno.interface';
 import { DisenosService } from '@service/Disenos/disenos.service';
@@ -23,6 +25,7 @@ export class ProductsListComponent implements OnInit {
   faHeart = faHeart;
   faShare = faShare;
   faEye = faEye;
+  faArrowUpFromBracket = faArrowUpFromBracket;
   precioTotal!: number;
 
   constructor(
@@ -38,7 +41,7 @@ export class ProductsListComponent implements OnInit {
     return diseno.precio - (diseno.precio! * diseno.descuento!) / 100;
   }
 
-  getDetails(_id: String) {
+  getDetails(_id: string) {
     this.appComponent.paragraphSpinner = 'Cargando...';
 
     this.spinner
@@ -46,7 +49,11 @@ export class ProductsListComponent implements OnInit {
       .then(() => this.router.navigate(['products-details', _id]));
   }
 
-  addToCar(_id: String, i?: number, realoadTo?: String) {
-    this.appComponent.addToCar(_id, i, realoadTo).then(() => this.ngOnInit());
+  addToCar(_id: string, i?: number) {
+    this.appComponent.addToCar(_id, i).then(() => this.ngOnInit());
+  }
+
+  restToCar(_id: string, i?: number) {
+    this.appComponent.restToCar(_id, i).then(() => this.ngOnInit());
   }
 }

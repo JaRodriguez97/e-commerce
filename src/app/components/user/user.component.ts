@@ -1,7 +1,11 @@
 import { userInterface } from '@models/users.interface';
 import { Component, Input, OnInit } from '@angular/core';
 import { AppComponent } from '@app/app.component';
-
+import {
+  faAddressCard,
+  faFileInvoiceDollar,
+  faCircleInfo,
+} from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -9,6 +13,9 @@ import { AppComponent } from '@app/app.component';
 })
 export class UserComponent implements OnInit {
   @Input('user') user: userInterface | undefined;
+  faAddressCard = faAddressCard;
+  faFileInvoiceDollar = faFileInvoiceDollar;
+  faCircleInfo = faCircleInfo;
 
   constructor(public appComponent: AppComponent) {}
 

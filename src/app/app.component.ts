@@ -82,13 +82,9 @@ export class AppComponent implements OnInit {
     if (this.userID) {
       this.usersService.getUser(this.userID).then((res) => {
         this.user = res ? res : undefined;
-
-        this.pedidos =
-          this.user && this.user.pedido
-            ? this.user.pedido
-            : JSON.parse(localStorage.getItem('pedido')!);
+        this.pedidos = this.user!.pedido!;
       });
-    }
+    } else this.pedidos = JSON.parse(localStorage.getItem('pedido')!);
 
     this.paragraphSpinner = 'Cargando...';
   }
@@ -127,19 +123,19 @@ export class AppComponent implements OnInit {
       .then(() => localStorage.clear());
   }
 
-  async reloadTo(uri: String) {
+  async reloadTo(uri: string) {
     this.router
       .navigateByUrl('/', { skipLocationChange: true })
       .then(() => this.router.navigate([uri]));
   }
 
-  existeComboPedido = (_id: String): Boolean => {
+  existeComboPedido = (_id: string): Boolean => {
     return this.user && this.user.pedido && this.user.pedido.length
       ? this.user.pedido.some((pedido) => pedido._id === _id)
       : false;
   };
 
-  async addToCar(_id: String, i?: number, realoadTo?: String): Promise<void> {
+  async addToCar(_id: string, i?: number): Promise<void> {
     this.spinner.show().then(() => {
       if (typeof i == 'number') {
         let list = this.document.querySelectorAll('.iconsList')[i];
@@ -187,6 +183,26 @@ export class AppComponent implements OnInit {
           .then(() => this.ngOnInit())
           .then(() => this.spinner.hide());
       }
+    });
+  }
+
+  async restToCar(_id: string, i?: number) {
+    this.spinner.show().then(() => {
+      if (typeof i == 'number') {
+        let list = this.document.querySelectorAll('.iconsList')[i];
+
+        this.renderer.removeClass(list, 'active');
+      }
+
+      if (this.user) {
+        this.pedidos = this.user.pedido?.filter(
+          (pedido) => pedido._id !== _id
+        )!;
+
+        this.usersService
+          .updateUser(this.userID!, { pedido: this.pedidos }, 'usuarios')
+          .then(() => this.spinner.hide());
+      } else console.log(this.pedidos);
     });
   }
 }
