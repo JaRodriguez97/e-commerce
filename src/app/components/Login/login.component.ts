@@ -21,12 +21,12 @@ export class LoginComponent implements OnInit {
   @ViewChild('formBx') formBx!: ElementRef;
   @ViewChild('body') body!: ElementRef;
   telefono!: Number;
-  contrasena!: String;
+  contrasena!: string;
   repiteContrasena!: String;
-  nombres!: String;
-  apellidos!: String;
-  email!: String;
-  idCombo!: String;
+  nombres!: string;
+  apellidos!: string;
+  email!: string;
+  idCombo!: string;
   pedidos!: pedidoInterface[];
 
   constructor(
@@ -44,8 +44,10 @@ export class LoginComponent implements OnInit {
     this.spinner
       .show()
       .then(() => {
+        this.appComponent.paragraphSpinner = 'Cargando...';
+
         if (localStorage.getItem('userID')) this.router.navigate(['/']);
-        
+
         this.pedidos = localStorage.getItem('pedido')
           ? JSON.parse(localStorage.getItem('pedido')!)
           : [];
@@ -80,41 +82,37 @@ export class LoginComponent implements OnInit {
         this.usersService
           .getLogin(form)
           .then((res) => {
-            let { id } = this.activatedRoute?.snapshot?.params || undefined;
+            let { id } = this.activatedRoute?.snapshot?.params || undefined,
+              dataUpdate;
 
             this.appComponent.user = res;
 
-            if (id && res.pedido && !res.pedido.length && !this.pedidos.length)
-              /*
-              Si el usuario no tiene un pedido en el localStorage ni en la base
-              de datos, creará el pedido a la base de datos.
-            */
-              this.usersService
-                .updateUser(
-                  res._id!,
-                  { pedido: [{ _id: id, cantidad: 1 }] },
-                  'pedido'
-                )
-                .then((res) =>
-                  console.log('🚀 ~ line:98 ~ LoginComponent ~ User', res)
-                );
-            else if (
-              !id &&
-              (!res.pedido || !res.pedido.length) &&
-              this.pedidos &&
-              this.pedidos.length
-            )
-              /*
-              Si el usuario tiene un pedido en el localStorage pero no en la
-              base de datos, editará el pedido en la base de datos. 
-            */
-              this.usersService
-                .updateUser(res._id!, this.pedidos, 'pedido')
-                .then((res) =>
-                  console.log('🚀 ~ line:101 ~ LoginComponent ~ User', res)
-                );
+            if (res.pedido?.length) {
+              res.pedido = res.pedido.filter(
+                (diseño) =>
+                  !this.pedidos.some((pedido) => pedido._id === diseño._id)
+              );
 
-            localStorage.removeItem('pedido');
+              this.pedidos.push(...res.pedido);
+            }
+
+            if (id) {
+              this.pedidos = this.pedidos.filter((pedido) => pedido._id !== id);
+
+              if (!this.pedidos.length)
+                dataUpdate = { pedido: [{ _id: id, cantidad: 1 }] };
+              else
+                dataUpdate = {
+                  pedido: [{ _id: id, cantidad: 1 }, ...this.pedidos],
+                };
+            } else dataUpdate = { pedido: this.pedidos };
+
+            this.usersService.updateUser(res._id!, dataUpdate, 'usuarios');
+
+            this.router
+              .navigate(['/'])
+              .then(() => localStorage.setItem('userID', res?._id!))
+              .then(() => localStorage.removeItem('pedido'));
           })
           .catch((err) =>
             this.spinner.hide().then(() => {
@@ -126,14 +124,7 @@ export class LoginComponent implements OnInit {
               });
             })
           )
-          .finally(() => {
-            this.router
-              .navigate(['/'])
-              .then(() =>
-                localStorage.setItem('userID', this.appComponent.user?._id!)
-              )
-              .then(() => this.spinner.hide());
-          });
+          .finally(() => this.spinner.hide());
       })
       .catch((err) =>
         this.spinner.hide().then(() => {
@@ -161,7 +152,7 @@ export class LoginComponent implements OnInit {
 
         let form = {
           numeroTelefono: this.telefono,
-          contraseña: this.contrasena,
+          contraseña: btoa(this.contrasena),
           nombres: this.nombres || '',
           apellidos: this.apellidos || '',
           email: this.email || '',

@@ -1,7 +1,7 @@
-import { disenoInterface } from '@models/diseno.interface';
 import { Injectable } from '@angular/core';
 import { userInterface } from '@app/models/users.interface';
 import { environment } from '@env/environment';
+import { disenoInterface } from '@models/diseno.interface';
 import { initializeApp } from 'firebase/app';
 import {
   addDoc,
@@ -15,6 +15,7 @@ import {
   query,
   updateDoc,
   where,
+  serverTimestamp,
 } from 'firebase/firestore';
 
 @Injectable({
@@ -47,19 +48,33 @@ export class Database {
     coleccion: string,
     id: string | number | Number | undefined
   ) {
-    let q = query(
-        collection(this.db, coleccion),
-        where('numeroTelefono', '==', id)
-      ),
+    let collectionRef, whereRef, q, querySnapshot, queryData: userInterface;
+
+    if (typeof id == 'number') {
+      collectionRef = collection(this.db, coleccion);
+      whereRef = where('numeroTelefono', '==', id);
+
+      q = query(collectionRef, whereRef);
       querySnapshot = await getDocs(q);
 
-    return querySnapshot.docs.map((doc) => {
-      let docReturn: userInterface = doc.data();
+      return querySnapshot.docs.map((doc) => {
+        let docReturn: userInterface = doc.data();
 
-      docReturn._id = doc.id;
+        docReturn._id = doc.id;
 
-      return docReturn;
-    })[0];
+        return docReturn;
+      })[0];
+    }
+
+    collectionRef = doc(this.db, coleccion + '/' + id);
+
+    q = await getDoc(collectionRef);
+
+    queryData = q.data()!;
+
+    queryData._id = q.id;
+
+    return queryData!;
   }
 
   async createDataDocument(
@@ -67,7 +82,8 @@ export class Database {
     coleccion: string
   ): Promise<DocumentData> {
     let collectionRef = collection(this.db, coleccion),
-      documentData = await addDoc(collectionRef, form),
+      datacreate = { ...form, timestamp: serverTimestamp() },
+      documentData = await addDoc(collectionRef, datacreate),
       documentSnapshot = await getDoc(documentData);
 
     console.warn('Usuario creado: ', documentData.id);
@@ -78,11 +94,9 @@ export class Database {
   async updateDocument(id: string, dataUpdate: any, coleccion: string) {
     let refDocument = doc(this.db, coleccion, id);
 
-    await updateDoc(refDocument, dataUpdate).then((res) => {
-      console.log(
-        '🚀 ~ file: database.ts:79 ~ Database ~ awaitupdateDoc ~ res',
-        res
-      );
+    await updateDoc(refDocument, {
+      ...dataUpdate,
+      timestamp: serverTimestamp(),
     });
   }
 }

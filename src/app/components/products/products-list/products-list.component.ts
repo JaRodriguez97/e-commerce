@@ -39,6 +39,8 @@ export class ProductsListComponent implements OnInit {
   }
 
   getDetails(_id: String) {
+    this.appComponent.paragraphSpinner = 'Cargando...';
+
     this.spinner
       .show()
       .then(() => this.router.navigate(['products-details', _id]));

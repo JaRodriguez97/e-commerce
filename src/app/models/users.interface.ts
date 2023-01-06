@@ -3,15 +3,15 @@ import { pedidoInterface } from './pedido.interface';
 
 export interface userInterface {
   _id?: string;
-  apellidos?: String;
-  contraseña?: String;
-  direccion?: String;
-  email?: String | LowerCasePipe;
-  favoritos?: String[];
-  img?: String;
-  nombres?: String;
+  apellidos?: string;
+  contraseña?: string;
+  direccion?: string;
+  email?: string | LowerCasePipe;
+  favoritos?: string[];
+  img?: string;
+  nombres?: string;
   pedido?: pedidoInterface[];
   pedidosRealizados?: [{ pedido: pedidoInterface[]; fecha: Date }];
   numeroTelefono?: Number;
-  userName?: String;
+  userName?: string;
 }

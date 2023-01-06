@@ -1,3 +1,4 @@
+import { UsersService } from '@service/Users/users.service';
 import { DOCUMENT } from '@angular/common';
 import {
   Component,
@@ -38,15 +39,17 @@ export class AppComponent implements OnInit {
   faBars: IconDefinition = faBars;
   pedidos!: pedidoInterface[];
   user!: userInterface | undefined;
-  userID!: String | null | undefined;
+  userID!: string | null | undefined;
   products!: disenoInterface[] | DocumentData[];
+  paragraphSpinner!: string;
 
   @ViewChild('order') order!: ElementRef;
-  @ViewChild('user') userInfo!: ElementRef;
+  @ViewChild('userInfo') userInfo!: ElementRef;
 
   constructor(
     private renderer: Renderer2,
     private activatedRoute: ActivatedRoute,
+    private usersService: UsersService,
     public router: Router,
     public spinner: NgxSpinnerService,
     @Inject(DOCUMENT) private document: Document,
@@ -57,7 +60,9 @@ export class AppComponent implements OnInit {
   @HostListener('window:scroll')
   scrolling(): void {
     if (window.scrollY > 300) {
-      if (!this.products && window.scrollY > 1000)
+      if (!this.products && window.scrollY > 1000) {
+        this.paragraphSpinner = 'buscando diseños...';
+
         this.spinner.show().then(() =>
           this.disenosServices
             .getDisenos()
@@ -65,16 +70,27 @@ export class AppComponent implements OnInit {
             .catch((err) => console.error(err))
             .finally(() => this.spinner.hide())
         );
+      }
 
       this.document.querySelector('header')!.classList.add('active');
     } else this.document.querySelector('header')!.classList.remove('active');
   }
 
   async ngOnInit() {
-    this.pedidos =
-      this.user && this.user.pedido
-        ? this.user.pedido
-        : JSON.parse(localStorage.getItem('pedido')!);
+    this.userID = localStorage.getItem('userID');
+
+    if (this.userID) {
+      this.usersService.getUser(this.userID).then((res) => {
+        this.user = res ? res : undefined;
+
+        this.pedidos =
+          this.user && this.user.pedido
+            ? this.user.pedido
+            : JSON.parse(localStorage.getItem('pedido')!);
+      });
+    }
+
+    this.paragraphSpinner = 'Cargando...';
   }
 
   getOrder() {
@@ -93,6 +109,22 @@ export class AppComponent implements OnInit {
     if (localStorage.getItem('userID'))
       this.renderer.addClass(this.userInfo.nativeElement, 'active');
     else this.router.navigate(['login']);
+  }
+
+  logOut() {
+    Swal.fire({
+      icon: 'success',
+      imageWidth: 100,
+      confirmButtonColor: '#000',
+      confirmButtonAriaLabel: '',
+      html: '<b>Sesión Cerrada Exitosamente</b>',
+      scrollbarPadding: false,
+    })
+      .then(() => this.ngOnInit())
+      .then(() => this.reloadTo('login'))
+      .then(() => (this.pedidos = []))
+      .then(() => (this.user = undefined))
+      .then(() => localStorage.clear());
   }
 
   async reloadTo(uri: String) {
@@ -129,44 +161,31 @@ export class AppComponent implements OnInit {
               confirmButtonText: 'Deseo ingresar a mi cuenta',
               scrollbarPadding: false,
             }).then((response) => {
-              if (response.isConfirmed) this.router.navigate(['/login', _id]);
-              else {
-                this.pedidos = [];
-                this.pedidos.push({ _id, cantidad: 1 });
-                localStorage.setItem('pedido', JSON.stringify(this.pedidos));
-                this.ngOnInit();
+              if (response.isConfirmed) {
+                this.router.navigate(['/login', _id]);
+                return;
               }
+
+              this.pedidos = [];
+              this.pedidos.push({ _id, cantidad: 1 });
+              localStorage.setItem('pedido', JSON.stringify(this.pedidos));
+              this.ngOnInit().then(() => this.spinner.hide());
             });
           });
         } else {
           this.pedidos.push({ _id, cantidad: 1 });
           localStorage.setItem('pedido', JSON.stringify(this.pedidos));
-          this.ngOnInit();
+          this.ngOnInit().then(() => this.spinner.hide());
         }
       } else {
+        if (!this.pedidos) this.pedidos = [];
+
         this.pedidos.push({ _id, cantidad: 1 });
 
-        // this.usersService
-        //   .updateUser(this.userID, this.pedidos, 'pedido')
-        //   .subscribe(
-        //     (res) => {
-        //       console.log(
-        //         '🚀 ~ file: app.component.ts:430 ~ this.usersService.updateUser ~ res',
-        //         res
-        //       );
-        //     },
-        //     (err) =>
-        //       this.spinner.hide().then(() => {
-        //         console.error(err);
-        //         Swal.fire({
-        //           confirmButtonColor: '#000',
-        //           icon: 'error',
-        //           html: err.error.message,
-        //           scrollbarPadding: false,
-        //         });
-        //       }),
-        //     () => this.ngOnInit()
-        //   );
+        this.usersService
+          .updateUser(this.userID!, { pedido: this.pedidos }, 'usuarios')
+          .then(() => this.ngOnInit())
+          .then(() => this.spinner.hide());
       }
     });
   }

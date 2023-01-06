@@ -10,10 +10,21 @@ import { Database } from 'src/database';
 export class UsersService {
   constructor(private database: Database) {}
 
-  getUser(id: String, token?: string): void {}
+  async getUser(id: string, token?: string): Promise<userInterface> {
+    return await this.database.getDataDocument('usuarios', id);
+  }
 
   async getLogin(form: userInterface, token?: string): Promise<userInterface> {
-    return this.database.getDataDocument('usuarios', form.numeroTelefono);
+    let userFound = await this.database.getDataDocument(
+      'usuarios',
+      form.numeroTelefono
+    );
+
+    return atob(userFound['contraseña']!) == form.contraseña
+      ? userFound
+      : Promise.reject(
+          'la contraseña no coincide, por favor ingrésala nuevamente'
+        );
   }
 
   async getSignUp(
@@ -41,6 +52,6 @@ export class UsersService {
     coleccion: string,
     token?: string
   ) {
-    return this.database.updateDocument(id, dataUpdate, coleccion)
+    return this.database.updateDocument(id, dataUpdate, coleccion);
   }
 }
