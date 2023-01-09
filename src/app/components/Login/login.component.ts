@@ -168,7 +168,7 @@ export class LoginComponent implements OnInit {
                 confirmButtonColor: '#000',
                 html: `<b>Te damos la bienvenida ${
                   res!.nombres || res!.numeroTelefono
-                }</b>`,
+                }, por favor ingresa con los mismos datos para que no los olvides.</b>`,
               }).then(() =>
                 this.spinner
                   .show()

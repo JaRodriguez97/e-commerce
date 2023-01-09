@@ -57,6 +57,7 @@
   bottom: 0;
 }
 
+.box-container .box .image .iconsList li.active:hover,
 .box-container .box .image .iconsList li {
   height: 5rem;
   line-height: 5rem;
@@ -73,6 +74,8 @@
   border-right: 0.1rem solid var(--gray);
   width: 100%;
 }
+
+.box-container .box .image .iconsList li.active,
 .box-container .box .image .iconsList.active li:nth-child(2),
 .box-container .box .image .iconsList li:hover {
   background: var(--black);

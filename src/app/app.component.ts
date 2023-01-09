@@ -90,7 +90,9 @@ export class AppComponent implements OnInit {
   }
 
   getOrder() {
-    this.renderer.addClass(this.order.nativeElement, 'active');
+    this.ngOnInit().then(() =>
+      this.renderer.addClass(this.order.nativeElement, 'active')
+    );
   }
 
   getOutOrder() {
@@ -129,10 +131,69 @@ export class AppComponent implements OnInit {
       .then(() => this.router.navigate([uri]));
   }
 
+  validateFavorite(_id: String): Boolean {
+    if (this.user && this.user.favoritos && this.user.favoritos.length)
+      return this.user.favoritos.some((favorito) => favorito === _id);
+
+    return false;
+  }
+
+  addFavorite(_id: string) {
+    this.spinner.show().then(() => {
+      if (this.user) {
+        if (this.user.favoritos) {
+          if (this.user.favoritos.length) {
+            let index = this.user.favoritos.indexOf(_id);
+
+            if (index == -1) this.user.favoritos.push(_id);
+            else this.user.favoritos!.splice(index, 1);
+          } else this.user.favoritos.push(_id);
+        } else {
+          this.user.favoritos = [];
+          this.user.favoritos.push(_id);
+        }
+
+        this.usersService
+          .updateUser(
+            this.user._id!,
+            { favoritos: this.user.favoritos },
+            'usuarios'
+          )
+          .then((res) => this.ngOnInit())
+          .catch((err) =>
+            this.spinner.hide().then(() => {
+              console.error(err);
+              Swal.fire({
+                confirmButtonColor: '#000',
+                icon: 'error',
+                html: err.error.message,
+                scrollbarPadding: false,
+              });
+            })
+          )
+          .finally(() => this.spinner.hide());
+      } else {
+        this.spinner.hide();
+        Swal.fire({
+          icon: 'warning',
+          title: 'NO HAS INICIADO SESIÓN',
+          text: 'Registrate antes para poder marcar como favorito',
+          showCancelButton: true,
+          scrollbarPadding: false,
+        }).then((response) => {
+          if (response.value) this.router.navigate(['/login']);
+        });
+      }
+    });
+  }
+
   existeComboPedido = (_id: string): Boolean => {
-    return this.user && this.user.pedido && this.user.pedido.length
-      ? this.user.pedido.some((pedido) => pedido._id === _id)
-      : false;
+    if (this.pedidos && this.pedidos.length)
+      return this.pedidos.some((pedido) => pedido._id === _id);
+    else if (this.user)
+      return this.user.pedido!.some((pedido) => pedido._id === _id);
+
+    return false;
   };
 
   async addToCar(_id: string, i?: number): Promise<void> {
@@ -171,7 +232,9 @@ export class AppComponent implements OnInit {
         } else {
           this.pedidos.push({ _id, cantidad: 1 });
           localStorage.setItem('pedido', JSON.stringify(this.pedidos));
-          this.ngOnInit().then(() => this.spinner.hide());
+          this.ngOnInit().then(() =>
+            setTimeout(() => this.spinner.hide(), 500)
+          );
         }
       } else {
         if (!this.pedidos) this.pedidos = [];
@@ -202,7 +265,13 @@ export class AppComponent implements OnInit {
         this.usersService
           .updateUser(this.userID!, { pedido: this.pedidos }, 'usuarios')
           .then(() => this.spinner.hide());
-      } else console.log(this.pedidos);
+      } else {
+        this.pedidos = this.pedidos.filter((pedido) => pedido._id !== _id);
+
+        localStorage.setItem('pedido', JSON.stringify(this.pedidos));
+
+        setTimeout(() => this.spinner.hide(), 500);
+      }
     });
   }
 }

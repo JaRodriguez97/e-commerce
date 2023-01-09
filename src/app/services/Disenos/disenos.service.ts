@@ -13,6 +13,10 @@ export class DisenosService {
     return await this.database.getDataCollection('disenos');
   }
 
+  async getDiseno(id: string): Promise<disenoInterface | DocumentData> {
+    return await this.database.getDataDocument('disenos', id);
+  }
+
   // }
   // getCombo(_id: String, token?: string): Observable<comboInterface> {
   //   let headers = this.headers(token);

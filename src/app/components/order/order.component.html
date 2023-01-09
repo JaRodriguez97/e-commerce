@@ -1,2 +1,36 @@
 <div class="smmok" (click)="appComponent.getOutOrder()"></div>
-<div class="order__list"></div>
+<div class="order__list">
+  <aside>
+    <div class="heading">
+      <h3>
+        Pedido de
+        <span> {{ user?.nombres || user?.numeroTelefono || "Anónimo" }}</span>
+      </h3>
+    </div>
+
+    <!--  -->
+    <div
+      class="containerOrder"
+      *ngIf="
+        (user && user.pedido && user.pedido.length) ||
+        (appComponent.pedidos && appComponent.pedidos.length)
+      "
+    >
+      <div class="container">
+        <div
+          class="drop"
+          *ngFor="let item of appComponent.pedidos; let i = index"
+        >
+          <div class="content">
+            <h2>{{ i + 1 }}</h2>
+            <p>{{ item._id }}</p>
+            <a [routerLink]="['products-details', item._id]" class="btn"
+              >Detalles</a
+            >
+            <!-- <a href="#" class="btn">Detalles</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>

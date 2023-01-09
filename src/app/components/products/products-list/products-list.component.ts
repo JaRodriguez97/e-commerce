@@ -49,11 +49,11 @@ export class ProductsListComponent implements OnInit {
       .then(() => this.router.navigate(['products-details', _id]));
   }
 
-  addToCar(_id: string, i?: number) {
+  addToCar(_id: string, i: number) {
     this.appComponent.addToCar(_id, i).then(() => this.ngOnInit());
   }
 
-  restToCar(_id: string, i?: number) {
+  restToCar(_id: string, i: number) {
     this.appComponent.restToCar(_id, i).then(() => this.ngOnInit());
   }
 }

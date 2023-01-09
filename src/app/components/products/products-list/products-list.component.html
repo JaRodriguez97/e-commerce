@@ -11,10 +11,19 @@
           active: appComponent.existeComboPedido(diseno['_id'])
         }"
       >
-        <li (click)="(0)">
+        <li
+          (click)="appComponent.addFavorite(diseno['_id'])"
+          [title]="
+            appComponent.validateFavorite(diseno['_id'])
+              ? 'Quitar de Favoritos'
+              : 'Agregar a Favoritos'
+          "
+          [ngClass]="{ active: appComponent.validateFavorite(diseno['_id']) }"
+        >
           <fa-icon [icon]="faHeart"></fa-icon>
         </li>
         <li
+          title="Agregar al carrito de compras"
           (click)="addToCar(diseno['_id'], i)"
           class="cart-btn"
           *ngIf="!appComponent.existeComboPedido(diseno['_id'])"
@@ -23,6 +32,7 @@
           <fa-icon [icon]="faShoppingCart"></fa-icon>
         </li>
         <li
+          title="Quitar del carrito de compras"
           (click)="restToCar(diseno['_id'], i)"
           class="cart-btn"
           *ngIf="appComponent.existeComboPedido(diseno['_id'])"
@@ -30,7 +40,7 @@
           quitar
           <fa-icon [icon]="faArrowUpFromBracket"></fa-icon>
         </li>
-        <li (click)="getDetails(diseno['_id'])">
+        <li (click)="getDetails(diseno['_id'])" title="Ver Detalles">
           <fa-icon [icon]="faEye"></fa-icon>
         </li>
       </ul>

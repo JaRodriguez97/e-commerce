@@ -1,5 +1,8 @@
+import { DisenosService } from './../../services/Disenos/disenos.service';
+import { disenoInterface } from './../../models/diseno.interface';
 import { AppComponent } from './../../app.component';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { userInterface } from '@app/models/users.interface';
 
 @Component({
   selector: 'app-order',
@@ -7,9 +10,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./order.component.css'],
 })
 export class OrderComponent implements OnInit {
-  constructor(public appComponent: AppComponent) {}
+  @Input('user') user: userInterface | undefined;
+  pedidos!: disenoInterface[];
 
-  ngOnInit(): void { }
-  
+  constructor(
+    public appComponent: AppComponent,
+    private disenosService: DisenosService
+  ) {}
 
+  ngOnInit(): void {
+    if (this.user) {
+      if (this.user.pedido && this.user.pedido) {
+        // this.pedidos = this.user.pedido.map((pedido) =>
+        //   this.disenosService.getDiseno(pedido._id)
+        // );
+      }
+    }
+  }
 }

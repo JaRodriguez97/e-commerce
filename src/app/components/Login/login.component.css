@@ -4,7 +4,7 @@ section {
   align-items: center;
   min-height: 100vh;
   background: var(--black);
-
+  padding: 7%;
   position: fixed;
   width: 100vw;
   transition: 500ms;
@@ -151,7 +151,7 @@ section > .container > .formBx.active > .signUpForm {
 }
 
 section > .container > .formBx.active > .signUpForm > form {
-  gap: 25px;
+  gap: 20px;
 }
 
 .container > .formBx > .form > form {

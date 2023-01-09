@@ -17,11 +17,11 @@
   <a href="#" class="logo">creaTuLogo<span>.</span></a>
 
   <nav class="navbar">
-    <a href="#home">inicio</a>
-    <a href="#about">nosotros</a>
-    <a href="#products">diseños</a>
-    <a href="#review">reseñas</a>
-    <a href="#contact">contáctanos</a>
+    <a [href]="'#home'">inicio</a>
+    <a [href]="'#about'">Nosotros</a>
+    <a [href]="'#products'">Diseños</a>
+    <a [href]="'#review'">Reseñas</a>
+    <a [href]="'#contact'">Contáctanos</a>
   </nav>
 
   <div class="icons">
@@ -38,7 +38,7 @@
 
 <!-- !!! order section starts !!! -->
 <section class="order" #order>
-  <app-order></app-order>
+  <app-order [user]="user"></app-order>
 </section>
 <!-- !!! order section ends !!! -->
 
