@@ -1,5 +1,5 @@
 export interface disenoInterface {
-  _id: String;
+  _id: string;
   descuento?: number;
   img?: String;
   incluye?: String;

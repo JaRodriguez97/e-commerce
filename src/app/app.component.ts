@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
   faShoppingCart: IconDefinition = faShoppingCart;
   faUser: IconDefinition = faUser;
   faBars: IconDefinition = faBars;
-  pedidos!: pedidoInterface[];
+  pedidos!: disenoInterface[];
   user!: userInterface | undefined;
   userID!: string | null | undefined;
   products!: disenoInterface[] | DocumentData[];
@@ -224,13 +224,13 @@ export class AppComponent implements OnInit {
               }
 
               this.pedidos = [];
-              this.pedidos.push({ _id, cantidad: 1 });
+              this.pedidos.push({ _id });
               localStorage.setItem('pedido', JSON.stringify(this.pedidos));
               this.ngOnInit().then(() => this.spinner.hide());
             });
           });
         } else {
-          this.pedidos.push({ _id, cantidad: 1 });
+          this.pedidos.push({ _id });
           localStorage.setItem('pedido', JSON.stringify(this.pedidos));
           this.ngOnInit().then(() =>
             setTimeout(() => this.spinner.hide(), 500)
@@ -239,7 +239,7 @@ export class AppComponent implements OnInit {
       } else {
         if (!this.pedidos) this.pedidos = [];
 
-        this.pedidos.push({ _id, cantidad: 1 });
+        this.pedidos.push({ _id, });
 
         this.usersService
           .updateUser(this.userID!, { pedido: this.pedidos }, 'usuarios')

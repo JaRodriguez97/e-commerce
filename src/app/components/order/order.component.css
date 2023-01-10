@@ -7,15 +7,28 @@
   cursor: pointer;
 }
 
+.smmok.active {
+  position: absolute;
+  width: 4%;
+  height: 8%;
+  margin-top: 80px;
+  margin-left: 4%;
+  z-index: 9;
+  background-color: red;
+}
+
 .order__list {
   position: relative;
   background-color: var(--white);
-  width: 30%;
+  width: 40%;
   height: 100vh;
   right: 0;
   display: flex;
-  padding: 100px 20px;
-  flex-direction: column;
+  padding: 100px 20px 0;
+}
+
+.order__list.active {
+  width: 100vw;
 }
 
 .order__list aside {
@@ -25,6 +38,12 @@
   padding: 2%;
   display: flex;
   flex-direction: column;
+}
+
+.order__list.active aside {
+  min-width: 40%;
+  width: 40%;
+  left: 0;
 }
 
 .order__list aside .heading {
@@ -42,6 +61,7 @@
   align-items: center;
   height: 100%;
   width: 100%;
+  overflow-y: auto;
 }
 
 .order__list aside .containerOrder .container {
@@ -50,9 +70,10 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  padding: 50px 0;
+  padding: 20px 0;
   gap: 20px 0;
   width: 100%;
+  height: 100%;
 }
 
 aside .containerOrder .container .drop {
@@ -67,17 +88,17 @@ aside .containerOrder .container .drop {
   align-items: center;
 }
 
-aside .containerOrder .container .drop:nth-child(1) {
-  border-radius: 57% 43% 43% 57% / 43% 43% 57% 57%;
+aside .containerOrder .container .drop {
+  border-radius: 35% 65% 31% 69% / 57% 59% 41% 43%;
 }
-
+/*
 aside .containerOrder .container .drop:nth-child(2) {
   border-radius: 73% 27% 59% 41% / 57% 59% 41% 43%;
 }
 
 aside .containerOrder .container .drop:nth-child(3) {
   border-radius: 35% 65% 31% 69% / 57% 59% 41% 43%;
-}
+} */
 
 aside .containerOrder .container .drop:hover {
   border-radius: 50%;
@@ -111,6 +132,15 @@ aside .containerOrder .container .drop::after {
 aside .containerOrder .container .drop:hover::after {
   border-radius: 50%;
   transform: translateX(100%);
+}
+
+aside .finalizarPedido {
+  position: relative;
+  margin: 5% 0;
+}
+
+aside .finalizarPedido .btn {
+  width: 100%;
 }
 
 .containerOrder .container .drop .content {
@@ -148,4 +178,71 @@ aside .containerOrder .container .drop:hover::after {
 
 .container .drop .content a:hover {
   opacity: 1;
+}
+
+.order__list section {
+  position: relative;
+  width: 100%;
+}
+
+.order__list section h3 {
+  font-size: 2rem;
+  color: var(--gray);
+}
+
+.order__list section h3 span {
+  color: var(--blackPanter);
+}
+
+.orderForm form {
+  max-width: 90rem;
+  border-radius: 0.5rem;
+  box-shadow: var(--box-shadow);
+  border: 0.1rem solid rgba(0, 0, 0, 0.2);
+  background: #fff;
+  padding: 1.5rem;
+  margin: 0 auto;
+}
+
+.orderForm form .inputBox {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.orderForm form .inputBox .input {
+  width: 49%;
+}
+
+.orderForm form .inputBox .input span {
+  display: block;
+  padding: 0.5rem 0;
+  font-size: 1.5rem;
+  color: var(--light-color);
+}
+
+.orderForm form .inputBox .input input,
+.orderForm form .inputBox .input textarea {
+  background: #eee;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-size: 1.6rem;
+  color: var(--black);
+  text-transform: none;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.orderForm form .inputBox .input input:focus,
+.orderForm form .inputBox .input textarea:focus {
+  border: 0.1rem solid var(--green);
+}
+
+.orderForm form .inputBox .input textarea {
+  height: 20rem;
+  resize: none;
+}
+
+.orderForm form .btn {
+  margin-top: 0;
 }

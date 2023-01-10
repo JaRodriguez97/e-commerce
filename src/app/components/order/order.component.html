@@ -1,5 +1,5 @@
-<div class="smmok" (click)="appComponent.getOutOrder()"></div>
-<div class="order__list">
+<div class="smmok" #smmok (click)="getOutOrder()"></div>
+<div class="order__list" #order__list>
   <aside>
     <div class="heading">
       <h3>
@@ -11,26 +11,90 @@
     <!--  -->
     <div
       class="containerOrder"
-      *ngIf="
-        (user && user.pedido && user.pedido.length) ||
-        (appComponent.pedidos && appComponent.pedidos.length)
-      "
+      *ngIf="appComponent.pedidos && appComponent.pedidos.length"
     >
-      <div class="container">
+      <div class="container" #container>
         <div
           class="drop"
           *ngFor="let item of appComponent.pedidos; let i = index"
         >
           <div class="content">
             <h2>{{ i + 1 }}</h2>
+            <p>{{ item.nombre }}</p>
             <p>{{ item._id }}</p>
             <a [routerLink]="['products-details', item._id]" class="btn"
               >Detalles</a
             >
-            <!-- <a href="#" class="btn">Detalles</a> -->
           </div>
         </div>
       </div>
     </div>
+    <div class="finalizarPedido" *ngIf="!formBoolean">
+      <button class="btn" type="button" (click)="getFinishOrder()">
+        Finalizar Pedido
+      </button>
+    </div>
   </aside>
+  <section class="orderForm" *ngIf="formBoolean">
+    <div class="heading">
+      <h3><span>Formulario informativo</span> para el pedido</h3>
+    </div>
+
+    <form action="">
+      <div class="inputBox">
+        <div class="input">
+          <span>nombre</span>
+          <input type="text" placeholder="Ingresar Nombre" />
+        </div>
+        <div class="input">
+          <span>apellido</span>
+          <input type="text" placeholder="Ingresar Apellido" />
+        </div>
+      </div>
+      <div class="inputBox">
+        <div class="input">
+          <span>correo electrónico</span>
+          <input type="email" placeholder="Ingresa Correo Electrónico" />
+        </div>
+        <div class="input">
+          <span>día y hora</span>
+          <input type="datetime-local" />
+        </div>
+      </div>
+      <div class="inputBox">
+        <div class="input">
+          <span>dirección exacta</span>
+          <input type="text" placeholder="Ingresa Dirección de Residencia" />
+        </div>
+        <div class="input">
+          <span>additional food</span>
+          <input type="test" placeholder="extra with food" />
+        </div>
+      </div>
+      <div class="inputBox">
+        <div class="input">
+          <span>your address</span>
+          <textarea
+            name=""
+            placeholder="enter your address"
+            id=""
+            cols="30"
+            rows="10"
+          ></textarea>
+        </div>
+        <div class="input">
+          <span>your message</span>
+          <textarea
+            name=""
+            placeholder="enter your message"
+            id=""
+            cols="30"
+            rows="10"
+          ></textarea>
+        </div>
+      </div>
+
+      <input type="submit" value="Ordenar ya!" class="btn" />
+    </form>
+  </section>
 </div>

@@ -1,5 +1,5 @@
 import { LowerCasePipe } from '@angular/common';
-import { pedidoInterface } from './pedido.interface';
+import { disenoInterface } from './diseno.interface';
 
 export interface userInterface {
   _id?: string;
@@ -10,8 +10,8 @@ export interface userInterface {
   favoritos?: string[];
   img?: string;
   nombres?: string;
-  pedido?: pedidoInterface[];
-  pedidosRealizados?: [{ pedido: pedidoInterface[]; fecha: Date }];
+  pedido?: disenoInterface[];
+  pedidosRealizados?: [{ pedido: disenoInterface[]; fecha: Date }];
   numeroTelefono?: Number;
   userName?: string;
 }
