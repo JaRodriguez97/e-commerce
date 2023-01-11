@@ -47,12 +47,12 @@ export class AppComponent implements OnInit {
   @ViewChild('userInfo') userInfo!: ElementRef;
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
     private activatedRoute: ActivatedRoute,
     private usersService: UsersService,
     public router: Router,
     public spinner: NgxSpinnerService,
-    @Inject(DOCUMENT) private document: Document,
     private database: Database,
     public disenosServices: DisenosService
   ) {}
@@ -82,13 +82,10 @@ export class AppComponent implements OnInit {
       this.userID = localStorage.getItem('userID');
 
       if (this.userID) {
-        this.usersService
-          .getUser(this.userID)
-          .then((res) => {
-            this.user = res ? res : undefined;
-            this.pedidos = this.user!.pedido!;
-          })
-          .finally(() => this.spinner.hide());
+        this.usersService.getUser(this.userID).then((res) => {
+          this.user = res ? res : undefined;
+          this.pedidos = this.user!.pedido!;
+        });
       } else {
         this.pedidos = JSON.parse(localStorage.getItem('pedido')!);
         this.spinner.hide();
@@ -98,14 +95,14 @@ export class AppComponent implements OnInit {
 
   getOrder() {
     if (this.pedidos)
-      this.ngOnInit().then(() =>
-        this.renderer.addClass(this.order.nativeElement, 'active')
-      );
+      this.ngOnInit()
+        .then(() => this.renderer.addClass(this.order.nativeElement, 'active'))
+        .finally(() => this.spinner.hide());
     else
       Swal.fire({
         icon: 'warning',
         html: '<span>No has agregado nada al carro de compras</span>',
-      }).then(() => this.ngOnInit());
+      }).then(() => this.ngOnInit().finally(() => this.spinner.hide()));
   }
 
   getOutOrder() {
@@ -257,7 +254,7 @@ export class AppComponent implements OnInit {
         this.usersService
           .updateUser(this.userID!, { pedido: this.pedidos }, 'usuarios')
           .then(() => this.ngOnInit())
-          .then(() => this.spinner.hide());
+          .finally(() => this.spinner.hide());
       }
     });
   }
