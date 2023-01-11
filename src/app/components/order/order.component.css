@@ -29,6 +29,7 @@
 
 .order__list.active {
   width: 100vw;
+  overflow: auto;
 }
 
 .order__list aside {
@@ -44,6 +45,7 @@
   min-width: 40%;
   width: 40%;
   left: 0;
+  /* top: 25vh; */
 }
 
 .order__list aside .heading {

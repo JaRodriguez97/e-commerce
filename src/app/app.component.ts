@@ -77,22 +77,35 @@ export class AppComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.userID = localStorage.getItem('userID');
-
-    if (this.userID) {
-      this.usersService.getUser(this.userID).then((res) => {
-        this.user = res ? res : undefined;
-        this.pedidos = this.user!.pedido!;
-      });
-    } else this.pedidos = JSON.parse(localStorage.getItem('pedido')!);
-
     this.paragraphSpinner = 'Cargando...';
+    this.spinner.show().then(() => {
+      this.userID = localStorage.getItem('userID');
+
+      if (this.userID) {
+        this.usersService
+          .getUser(this.userID)
+          .then((res) => {
+            this.user = res ? res : undefined;
+            this.pedidos = this.user!.pedido!;
+          })
+          .finally(() => this.spinner.hide());
+      } else {
+        this.pedidos = JSON.parse(localStorage.getItem('pedido')!);
+        this.spinner.hide();
+      }
+    });
   }
 
   getOrder() {
-    this.ngOnInit().then(() =>
-      this.renderer.addClass(this.order.nativeElement, 'active')
-    );
+    if (this.pedidos)
+      this.ngOnInit().then(() =>
+        this.renderer.addClass(this.order.nativeElement, 'active')
+      );
+    else
+      Swal.fire({
+        icon: 'warning',
+        html: '<span>No has agregado nada al carro de compras</span>',
+      }).then(() => this.ngOnInit());
   }
 
   getOutOrder() {
@@ -239,7 +252,7 @@ export class AppComponent implements OnInit {
       } else {
         if (!this.pedidos) this.pedidos = [];
 
-        this.pedidos.push({ _id, });
+        this.pedidos.push({ _id });
 
         this.usersService
           .updateUser(this.userID!, { pedido: this.pedidos }, 'usuarios')
