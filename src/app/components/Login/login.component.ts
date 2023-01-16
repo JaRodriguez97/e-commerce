@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from '@app/app.component';
-import { pedidoInterface } from '@models/pedido.interface';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { UsersService } from '@service/Users/users.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
@@ -27,7 +27,8 @@ export class LoginComponent implements OnInit {
   apellidos!: string;
   email!: string;
   idCombo!: string;
-  pedidos!: pedidoInterface[];
+  pedidos!: string[];
+  faXmark = faXmark;
 
   constructor(
     private appComponent: AppComponent,
@@ -89,15 +90,14 @@ export class LoginComponent implements OnInit {
 
             if (res.pedido?.length) {
               res.pedido = res.pedido.filter(
-                (diseño) =>
-                  !this.pedidos.some((pedido) => pedido._id === diseño._id)
+                (diseño) => !this.pedidos.some((id) => id === diseño)
               );
 
               this.pedidos.push(...res.pedido);
             }
 
             if (id) {
-              this.pedidos = this.pedidos.filter((pedido) => pedido._id !== id);
+              this.pedidos = this.pedidos.filter((_id) => _id !== id);
 
               if (!this.pedidos.length)
                 dataUpdate = { pedido: [{ _id: id, cantidad: 1 }] };
@@ -107,12 +107,16 @@ export class LoginComponent implements OnInit {
                 };
             } else dataUpdate = { pedido: this.pedidos };
 
-            this.usersService.updateUser(res._id!, dataUpdate, 'usuarios');
-
-            this.router
-              .navigate(['/'])
+            this.usersService
+              .updateUser(res._id!, dataUpdate, 'usuarios')
               .then(() => localStorage.setItem('userID', res?._id!))
-              .then(() => localStorage.removeItem('pedido'));
+              .then(() => this.appComponent.ngOnInit())
+              .then(() =>
+                this.router
+                  .navigate(['/'])
+                  .then(() => localStorage.removeItem('pedido'))
+              )
+              .finally(() => this.spinner.hide());
           })
           .catch((err) =>
             this.spinner.hide().then(() => {
@@ -121,10 +125,10 @@ export class LoginComponent implements OnInit {
                 confirmButtonColor: '#000',
                 icon: 'error',
                 html: err.error?.message ?? err.message ?? err,
+                scrollbarPadding: false,
               });
             })
-          )
-          .finally(() => this.spinner.hide());
+          );
       })
       .catch((err) =>
         this.spinner.hide().then(() => {
@@ -200,5 +204,9 @@ export class LoginComponent implements OnInit {
           });
         })
       );
+  }
+
+  closeSection() {
+    this.router.navigate(['/']);
   }
 }

@@ -9,7 +9,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  z-index: 1000;
+  z-index: 10;
   box-shadow: 0 0.5rem 1rem var(--gray);
 }
 
@@ -64,6 +64,17 @@ header .icons fa-icon {
   cursor: pointer;
 }
 
+header .icons fa-icon.active::before {
+  content: "";
+  /* background: red;
+  height: 1.2rem;
+  width: 1rem;
+  position: absolute;
+  bottom: 50%;
+  transform: scaleX(-1); */
+}
+
+header .icons fa-icon.active,
 header.active .icons fa-icon {
   color: var(--golden);
   transition: 0s;

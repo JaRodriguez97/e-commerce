@@ -27,6 +27,7 @@
   <div class="icons">
     <fa-icon [icon]="faHeart" aria-hidden="true"></fa-icon>
     <fa-icon
+      [ngClass]="{ active: pedidos && pedidos.length }"
       [icon]="faShoppingCart"
       aria-hidden="true"
       (click)="getOrder()"

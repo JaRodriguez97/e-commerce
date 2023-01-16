@@ -1,4 +1,8 @@
-<div class="smmok" #smmok (click)="getOutOrder()"></div>
+<div class="smmok" #smmok (click)="getOutOrder()">
+  <div class="closeSection">
+    <fa-icon [icon]="faXmark" aria-hidden="true"></fa-icon>
+  </div>
+</div>
 <div class="order__list" #order__list>
   <aside>
     <div class="heading">
@@ -14,10 +18,7 @@
       *ngIf="appComponent.pedidos && appComponent.pedidos.length"
     >
       <div class="container" #container>
-        <div
-          class="drop"
-          *ngFor="let item of appComponent.pedidos; let i = index"
-        >
+        <div class="drop" *ngFor="let item of disenosPedido; let i = index">
           <div class="content">
             <h2>{{ i + 1 }}</h2>
             <p>{{ item.nombre }}</p>
@@ -44,7 +45,6 @@
       name="finishOrder"
       [formGroup]="orderForm"
       (ngSubmit)="orderSubmit(orderForm)"
-      action=""
     >
       <div class="inputBox">
         <div class="input">

@@ -8,7 +8,7 @@
       <ul
         [ngClass]="{
           iconsList: true,
-          active: appComponent.existeComboPedido(diseno['_id'])
+          active: existeCombo(diseno['_id'])
         }"
       >
         <li
@@ -26,7 +26,7 @@
           title="Agregar al carrito de compras"
           (click)="addToCar(diseno['_id'], i)"
           class="cart-btn"
-          *ngIf="!appComponent.existeComboPedido(diseno['_id'])"
+          *ngIf="!existeCombo(diseno['_id'])"
         >
           agregar
           <fa-icon [icon]="faShoppingCart"></fa-icon>
@@ -35,7 +35,7 @@
           title="Quitar del carrito de compras"
           (click)="restToCar(diseno['_id'], i)"
           class="cart-btn"
-          *ngIf="appComponent.existeComboPedido(diseno['_id'])"
+          *ngIf="existeCombo(diseno['_id'])"
         >
           quitar
           <fa-icon [icon]="faArrowUpFromBracket"></fa-icon>

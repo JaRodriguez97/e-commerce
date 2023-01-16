@@ -1,4 +1,11 @@
 <section #body>
+  <div class="closeSection">
+    <fa-icon
+      [icon]="faXmark"
+      (click)="closeSection()"
+      aria-hidden="true"
+    ></fa-icon>
+  </div>
   <div class="container">
     <div class="blueBg">
       <div class="box signIn">

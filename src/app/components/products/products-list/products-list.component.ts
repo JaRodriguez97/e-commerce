@@ -37,6 +37,10 @@ export class ProductsListComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  existeCombo(id: string) {
+    return this.appComponent.existeComboPedido(id);
+  }
+
   getTotalDescuento(diseno: disenoInterface | DocumentData) {
     return diseno.precio - (diseno.precio! * diseno.descuento!) / 100;
   }

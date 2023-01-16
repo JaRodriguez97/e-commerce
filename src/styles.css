@@ -63,6 +63,27 @@ app-login {
   letter-spacing: 0.1rem;
 }
 
+.closeSection {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  cursor: pointer;
+}
+
+.smmok > .closeSection {
+  top: 15%;
+}
+
+.closeSection > fa-icon {
+  font-size: 3.5rem;
+  color: var(--white);
+}
+
+.closeSection > fa-icon:hover {
+  color: var(--golden);
+  font-size: 3.8rem;
+}
+
 .heading {
   text-align: center;
   font-size: 4rem;

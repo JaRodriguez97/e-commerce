@@ -72,7 +72,7 @@ export class Database {
 
     queryData = q.data()!;
 
-    queryData._id = q.id;
+    if (queryData) queryData._id = q.id;
 
     return queryData!;
   }

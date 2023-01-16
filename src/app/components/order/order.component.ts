@@ -1,27 +1,22 @@
-import Swal from 'sweetalert2';
-import { DOCUMENT, LowerCasePipe } from '@angular/common';
 import {
   Component,
   ElementRef,
-  Inject,
   Input,
   OnInit,
   Renderer2,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ValidationErrors,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppComponent } from '@app/app.component';
-import { userInterface } from '@app/models/users.interface';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { datosPedidoInterface } from '@models/datosPedido.interface';
 import { disenoInterface } from '@models/diseno.interface';
+import { userInterface } from '@models/users.interface';
 import { DisenosService } from '@service/Disenos/disenos.service';
+import { UsersService } from '@service/Users/users.service';
 import { DocumentData } from 'firebase/firestore';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { UsersService } from '@app/services/Users/users.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-order',
@@ -36,120 +31,95 @@ export class OrderComponent implements OnInit {
   disenosPedido!: (disenoInterface | DocumentData)[];
   formBoolean: Boolean = false;
   orderForm!: FormGroup;
+  faXmark = faXmark;
 
   constructor(
-    // @Inject(DOCUMENT) private document: Document,
     private readonly formBuilder: FormBuilder,
     public appComponent: AppComponent,
     private disenosService: DisenosService,
     public spinner: NgxSpinnerService,
     private usersService: UsersService,
     private renderer: Renderer2
-  ) {
-    setTimeout(() => this.ngOnInit(), 3000);
-  }
+  ) {}
 
   ngOnInit() {
+    let groupForm: datosPedidoInterface | undefined,
+      pedidos: string[] = [],
+      userID = localStorage.getItem('userID');
+
     this.disenosPedido =
       !this.disenosPedido || !this.disenosPedido.length
         ? []
         : this.disenosPedido;
 
-    console.log(
-      '🚀 ~ file: order.component.ts:59 ~ OrderComponent ~ ngOnInit ~ this.user && this.user.pedido && this.user.pedido.length',
-      this.user && this.user.pedido && this.user.pedido.length
-    );
-    if (this.user && this.user.pedido && this.user.pedido.length) {
-      let groupForm: {
-        nombre: (String | ValidationErrors | null)[];
-        apellido: (String | ValidationErrors | null)[];
-        email: (String | LowerCasePipe | ValidationErrors | null)[];
-        fechaHora: (String | ValidationErrors | null)[];
-        celular: (Number | ValidationErrors | null)[];
-        direccion: (String | ValidationErrors | null)[];
-        detallesUbicacion: (String | ValidationErrors | null)[];
-        detallesPedido: (String | ValidationErrors | null)[];
-      } = {
-        nombre: [],
-        apellido: [],
-        email: [],
-        celular: [],
-        direccion: [],
-        fechaHora: ['', [Validators.required, Validators.minLength(5)]],
-        detallesUbicacion: [],
-        detallesPedido: [],
-      };
+    if (userID) {
+      this.usersService
+        .getUser(userID)
+        .then((res) => {
+          if (res) {
+            if (res.pedido && res.pedido.length) {
+              groupForm = {
+                nombre: [[Validators.required, Validators.minLength(3)]],
+                apellido: [[Validators.required, Validators.minLength(3)]],
+                email: [[Validators.minLength(5)]],
+                celular: [[Validators.required, Validators.minLength(10)]],
+                direccion: [[Validators.minLength(5)]],
+                fechaHora: ['', [Validators.required, Validators.minLength(5)]],
+                detallesUbicacion: [],
+                detallesPedido: [],
+              };
 
-      if (this.user.nombres)
-        groupForm.nombre.push(this.user.nombres, [
-          Validators.required,
-          Validators.minLength(3),
-        ]);
-      else
-        groupForm.nombre.push('', [
-          Validators.required,
-          Validators.minLength(3),
-        ]);
+              res.nombres
+                ? groupForm.nombre.unshift(res.nombres)
+                : groupForm.nombre.unshift('');
 
-      if (this.user.apellidos)
-        groupForm.apellido.push(this.user.apellidos, [
-          Validators.required,
-          Validators.minLength(3),
-        ]);
-      else
-        groupForm.apellido.push('', [
-          Validators.required,
-          Validators.minLength(3),
-        ]);
+              res.apellidos
+                ? groupForm.apellido.unshift(res.apellidos)
+                : groupForm.apellido.unshift('');
 
-      if (this.user.numeroTelefono)
-        groupForm.celular.push(this.user.numeroTelefono, [
-          Validators.required,
-          Validators.minLength(10),
-        ]);
-      else
-        groupForm.celular.push(0, [
-          Validators.required,
-          Validators.minLength(10),
-        ]);
+              res.numeroTelefono
+                ? groupForm.celular.unshift(res.numeroTelefono)
+                : groupForm.celular.unshift(0);
 
-      if (this.user.email)
-        groupForm.email.push(this.user.email, [Validators.minLength(5)]);
-      else groupForm.email.push('', [Validators.minLength(5)]);
+              res.email
+                ? groupForm.email.unshift(res.email)
+                : groupForm.email.unshift('');
 
-      if (this.user.direccion)
-        groupForm.direccion.push(this.user.direccion, [
-          Validators.minLength(5),
-        ]);
-      else groupForm.direccion.push('', [Validators.minLength(5)]);
+              res.direccion
+                ? groupForm.direccion.unshift(res.direccion)
+                : groupForm.direccion.unshift('');
 
-      this.user.pedido.map((pedido) =>
+              pedidos = res.pedido;
+            }
+          } else throw new Error('Usuario no encontrado');
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          pedidos.map((_id) =>
+            this.disenosService
+              .getDiseno(_id)
+              .then((diseno) => this.disenosPedido.push(diseno))
+          );
+          this.initForm(groupForm)
+            .then((orderForm) => (this.orderForm = orderForm))
+            .finally(() => this.spinner.hide());
+        });
+    } else {
+      pedidos = localStorage.getItem('pedido')
+        ? JSON.parse(localStorage.getItem('pedido')!)
+        : this.appComponent.pedidos;
+
+      pedidos?.map((_id: string) =>
         this.disenosService
-          .getDiseno(pedido._id)
+          .getDiseno(_id)
           .then((diseno) => this.disenosPedido.push(diseno))
       );
 
       this.initForm(groupForm)
         .then((orderForm) => (this.orderForm = orderForm))
         .finally(() => this.spinner.hide());
-    } else {
-      this.initForm()
-        .then((orderForm) => (this.orderForm = orderForm))
-        .then(() =>
-          localStorage.getItem('pedido')
-            ? JSON.parse(localStorage.getItem('pedido')!)?.map(
-                (pedido: { _id: string }) =>
-                  this.disenosService
-                    .getDiseno(pedido._id)
-                    .then((diseno) => this.disenosPedido.push(diseno))
-              )
-            : this.appComponent.pedidos?.map((pedido: { _id: string }) =>
-                this.disenosService
-                  .getDiseno(pedido._id)
-                  .then((diseno) => this.disenosPedido.push(diseno))
-              )
-        );
-      // .finally(() => this.spinner.hide());
     }
   }
 
@@ -192,33 +162,18 @@ export class OrderComponent implements OnInit {
     }
   }
 
-  async initForm(groupForm?: {
-    nombre: (String | ValidationErrors | null)[];
-    apellido: (String | ValidationErrors | null)[];
-    email: (String | LowerCasePipe | ValidationErrors | null)[];
-    fechaHora: (String | ValidationErrors | null)[];
-    celular: (Number | ValidationErrors | null)[];
-    direccion: (String | ValidationErrors | null)[];
-    detallesUbicacion: (String | ValidationErrors | null)[];
-    detallesPedido: (String | ValidationErrors | null)[];
-  }): Promise<FormGroup<any>> {
-    if (groupForm) {
-      console.log(
-        '🚀 ~ file: order.component.ts:162 ~ OrderComponent ~ groupForm',
-        groupForm
-      );
-      return this.formBuilder.group(groupForm);
-    }
-
-    return this.formBuilder.group({
-      nombre: ['', [Validators.required, Validators.minLength(3)]],
-      apellido: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.minLength(5)]],
-      fechaHora: ['', [Validators.required, Validators.minLength(5)]],
-      celular: ['', [Validators.required, Validators.minLength(10)]],
-      direccion: ['', [Validators.required, Validators.minLength(5)]],
-      detallesUbicacion: [],
-      detallesPedido: [],
-    });
+  async initForm(groupForm?: datosPedidoInterface): Promise<FormGroup<any>> {
+    return groupForm
+      ? this.formBuilder.group(groupForm)
+      : this.formBuilder.group({
+          nombre: ['', [Validators.required, Validators.minLength(3)]],
+          apellido: ['', [Validators.required, Validators.minLength(3)]],
+          email: ['', [Validators.minLength(5)]],
+          fechaHora: ['', [Validators.required, Validators.minLength(5)]],
+          celular: ['', [Validators.required, Validators.minLength(10)]],
+          direccion: ['', [Validators.required, Validators.minLength(5)]],
+          detallesUbicacion: [],
+          detallesPedido: [],
+        });
   }
 }

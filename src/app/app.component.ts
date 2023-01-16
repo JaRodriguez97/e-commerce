@@ -1,4 +1,3 @@
-import { UsersService } from '@service/Users/users.service';
 import { DOCUMENT } from '@angular/common';
 import {
   Component,
@@ -9,7 +8,7 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import {
   faBars,
   faHeart,
@@ -17,14 +16,13 @@ import {
   faUser,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
-import { pedidoInterface } from '@models/pedido.interface';
+import { disenoInterface } from '@models/diseno.interface';
 import { userInterface } from '@models/users.interface';
 import { DisenosService } from '@service/Disenos/disenos.service';
+import { UsersService } from '@service/Users/users.service';
 import { DocumentData } from 'firebase/firestore';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Database } from 'src/database';
 import Swal from 'sweetalert2';
-import { disenoInterface } from './models/diseno.interface';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +35,7 @@ export class AppComponent implements OnInit {
   faShoppingCart: IconDefinition = faShoppingCart;
   faUser: IconDefinition = faUser;
   faBars: IconDefinition = faBars;
-  pedidos!: disenoInterface[];
+  pedidos!: string[];
   user!: userInterface | undefined;
   userID!: string | null | undefined;
   products!: disenoInterface[] | DocumentData[];
@@ -49,11 +47,9 @@ export class AppComponent implements OnInit {
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
-    private activatedRoute: ActivatedRoute,
     private usersService: UsersService,
     public router: Router,
     public spinner: NgxSpinnerService,
-    private database: Database,
     public disenosServices: DisenosService
   ) {}
 
@@ -84,7 +80,11 @@ export class AppComponent implements OnInit {
       if (this.userID) {
         this.usersService.getUser(this.userID).then((res) => {
           this.user = res ? res : undefined;
-          this.pedidos = this.user!.pedido!;
+          this.pedidos = this.user?.pedido!;
+          console.log(
+            '🚀 ~ file: app.component.ts:84 ~ AppComponent ~ this.usersService.getUser ~ pedidos',
+            this.pedidos
+          );
         });
       } else {
         this.pedidos = JSON.parse(localStorage.getItem('pedido')!);
@@ -197,14 +197,13 @@ export class AppComponent implements OnInit {
     });
   }
 
-  existeComboPedido = (_id: string): Boolean => {
+  existeComboPedido(_id: string): Boolean {
     if (this.pedidos && this.pedidos.length)
-      return this.pedidos.some((pedido) => pedido._id === _id);
-    else if (this.user)
-      return this.user.pedido!.some((pedido) => pedido._id === _id);
+      return this.pedidos?.some((id) => id === _id)!;
+    else if (this.user) return this.user.pedido?.some((id) => id === _id)!;
 
     return false;
-  };
+  }
 
   async addToCar(_id: string, i?: number): Promise<void> {
     this.spinner.show().then(() => {
@@ -234,13 +233,13 @@ export class AppComponent implements OnInit {
               }
 
               this.pedidos = [];
-              this.pedidos.push({ _id });
+              this.pedidos.push(_id);
               localStorage.setItem('pedido', JSON.stringify(this.pedidos));
               this.ngOnInit().then(() => this.spinner.hide());
             });
           });
         } else {
-          this.pedidos.push({ _id });
+          this.pedidos.push(_id);
           localStorage.setItem('pedido', JSON.stringify(this.pedidos));
           this.ngOnInit().then(() =>
             setTimeout(() => this.spinner.hide(), 500)
@@ -249,7 +248,7 @@ export class AppComponent implements OnInit {
       } else {
         if (!this.pedidos) this.pedidos = [];
 
-        this.pedidos.push({ _id });
+        this.pedidos.push(_id);
 
         this.usersService
           .updateUser(this.userID!, { pedido: this.pedidos }, 'usuarios')
@@ -268,15 +267,13 @@ export class AppComponent implements OnInit {
       }
 
       if (this.user) {
-        this.pedidos = this.user.pedido?.filter(
-          (pedido) => pedido._id !== _id
-        )!;
+        this.pedidos = this.user.pedido?.filter((id) => id !== _id)!;
 
         this.usersService
           .updateUser(this.userID!, { pedido: this.pedidos }, 'usuarios')
           .then(() => this.spinner.hide());
       } else {
-        this.pedidos = this.pedidos.filter((pedido) => pedido._id !== _id);
+        this.pedidos = this.pedidos.filter((id) => id !== _id);
 
         localStorage.setItem('pedido', JSON.stringify(this.pedidos));
 
