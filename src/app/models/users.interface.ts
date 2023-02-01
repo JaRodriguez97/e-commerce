@@ -1,6 +1,5 @@
 import { LowerCasePipe } from '@angular/common';
 import { datosPedidoInterface } from '@models/datosPedido.interface';
-import { disenoInterface } from '@models/diseno.interface';
 
 export interface userInterface {
   _id?: string;
@@ -11,6 +10,7 @@ export interface userInterface {
   favoritos?: string[];
   img?: string;
   nombres?: string;
+  numeroTelefono?: Number;
   pedido?: string[];
   pedidosRealizados?: [
     {
@@ -20,6 +20,5 @@ export interface userInterface {
       datosPedido: datosPedidoInterface;
     }
   ];
-  numeroTelefono?: Number;
   userName?: string;
 }

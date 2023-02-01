@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
   pedidos!: string[];
   user!: userInterface | undefined;
   userID!: string | null | undefined;
-  products!: disenoInterface[] | DocumentData[];
+  products!: disenoInterface[];
   paragraphSpinner!: string;
 
   @ViewChild('order') order!: ElementRef;
@@ -56,15 +56,15 @@ export class AppComponent implements OnInit {
   @HostListener('window:scroll')
   scrolling(): void {
     if (window.scrollY > 300) {
-      if (!this.products && window.scrollY > 1000) {
+      if (!this.products && window.scrollY > 1000 * 1000) {
         this.paragraphSpinner = 'buscando diseños...';
 
         this.spinner.show().then(() =>
-          this.disenosServices
-            .getDisenos()
-            .then((disenosPromise) => (this.products = disenosPromise))
-            .catch((err) => console.error(err))
-            .finally(() => this.spinner.hide())
+          this.disenosServices.getDisenos().subscribe(
+            (disenosPromise) => (this.products = disenosPromise),
+            (err) => console.error(err),
+            () => this.spinner.hide()
+          )
         );
       }
 
@@ -78,14 +78,18 @@ export class AppComponent implements OnInit {
       this.userID = localStorage.getItem('userID');
 
       if (this.userID) {
-        this.usersService.getUser(this.userID).then((res) => {
-          this.user = res ? res : undefined;
-          this.pedidos = this.user?.pedido!;
-          console.log(
-            '🚀 ~ file: app.component.ts:84 ~ AppComponent ~ this.usersService.getUser ~ pedidos',
-            this.pedidos
-          );
-        });
+        this.usersService.getUser(this.userID).subscribe(
+          (res) => {
+            this.user = res ? res : undefined;
+            this.pedidos = this.user?.pedido!;
+            console.log(
+              '🚀 ~ file: app.component.ts:84 ~ AppComponent ~ this.usersService.getUser ~ pedidos',
+              this.pedidos
+            );
+          },
+          (err) => console.error(err),
+          () => this.spinner.hide()
+        );
       } else {
         this.pedidos = JSON.parse(localStorage.getItem('pedido')!);
         this.spinner.hide();
@@ -164,24 +168,21 @@ export class AppComponent implements OnInit {
         }
 
         this.usersService
-          .updateUser(
-            this.user._id!,
-            { favoritos: this.user.favoritos },
-            'usuarios'
-          )
-          .then((res) => this.ngOnInit())
-          .catch((err) =>
-            this.spinner.hide().then(() => {
-              console.error(err);
-              Swal.fire({
-                confirmButtonColor: '#000',
-                icon: 'error',
-                html: err.error.message,
-                scrollbarPadding: false,
-              });
-            })
-          )
-          .finally(() => this.spinner.hide());
+          .updateUser(this.user._id!, this.user.favoritos, 'favoritos')
+          .subscribe(
+            (res) => this.ngOnInit(),
+            (err) =>
+              this.spinner.hide().then(() => {
+                console.error(err);
+                Swal.fire({
+                  confirmButtonColor: '#000',
+                  icon: 'error',
+                  html: err.error.message,
+                  scrollbarPadding: false,
+                });
+              }),
+            () => this.spinner.hide()
+          );
       } else {
         this.spinner.hide();
         Swal.fire({
@@ -251,9 +252,12 @@ export class AppComponent implements OnInit {
         this.pedidos.push(_id);
 
         this.usersService
-          .updateUser(this.userID!, { pedido: this.pedidos }, 'usuarios')
-          .then(() => this.ngOnInit())
-          .finally(() => this.spinner.hide());
+          .updateUser(this.userID!, this.pedidos, 'pedido')
+          .subscribe(
+            () => this.ngOnInit(),
+            (err) => console.error(err),
+            () => this.spinner.hide()
+          );
       }
     });
   }
@@ -270,8 +274,8 @@ export class AppComponent implements OnInit {
         this.pedidos = this.user.pedido?.filter((id) => id !== _id)!;
 
         this.usersService
-          .updateUser(this.userID!, { pedido: this.pedidos }, 'usuarios')
-          .then(() => this.spinner.hide());
+          .updateUser(this.userID!, this.pedidos, 'pedido')
+          .subscribe(() => this.spinner.hide());
       } else {
         this.pedidos = this.pedidos.filter((id) => id !== _id);
 

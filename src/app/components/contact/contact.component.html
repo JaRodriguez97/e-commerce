@@ -1,22 +1,48 @@
 <h1 class="heading">escribe<span>nos</span></h1>
 
 <div class="row">
-  <form action="">
-    <input type="text" placeholder="Nombre" class="box" />
-    <input type="email" placeholder="Email" class="box" />
-    <input type="number" placeholder="Numero Celular" class="box" />
+  <form
+    name="contactForm"
+    [formGroup]="contactForm"
+    (ngSubmit)="sendContactMail(contactForm)"
+  >
+    <input
+      type="text"
+      placeholder="Nombre"
+      class="box"
+      name="nombreCompleto"
+      formControlName="nombreCompleto"
+      required
+    />
+    <input
+      type="email"
+      placeholder="Email"
+      class="box"
+      name="email"
+      formControlName="email"
+      required
+    />
+    <input
+      type="number"
+      placeholder="Numero Celular"
+      class="box"
+      name="celular"
+      formControlName="celular"
+      required
+    />
     <textarea
-      name=""
       class="box"
       placeholder="Mensaje"
-      id=""
       cols="30"
       rows="10"
+      name="mensaje"
+      formControlName="mensaje"
+      required
     ></textarea>
     <button type="submit" class="btn">enviar mensaje</button>
   </form>
 
   <div class="image">
-    <img src="../../../assets/images/home-bg2.jpeg" alt="" />
+    <img src="../../../assets/images/home-bg2.jpeg" alt="crea tu logo" />
   </div>
 </div>

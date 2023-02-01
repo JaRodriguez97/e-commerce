@@ -4,7 +4,7 @@ import {
   Input,
   OnInit,
   Renderer2,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppComponent } from '@app/app.component';
@@ -53,9 +53,8 @@ export class OrderComponent implements OnInit {
         : this.disenosPedido;
 
     if (userID) {
-      this.usersService
-        .getUser(userID)
-        .then((res) => {
+      this.usersService.getUser(userID).subscribe(
+        (res) => {
           if (res) {
             if (res.pedido && res.pedido.length) {
               groupForm = {
@@ -92,33 +91,35 @@ export class OrderComponent implements OnInit {
               pedidos = res.pedido;
             }
           } else throw new Error('Usuario no encontrado');
-        })
-        .catch((err) => {
-          console.error(err);
-        })
-        .finally(() => {
+        },
+        (err) => console.error(err),
+        () => {
           pedidos.map((_id) =>
-            this.disenosService
-              .getDiseno(_id)
-              .then((diseno) => this.disenosPedido.push(diseno))
+            this.disenosService.getDiseno(_id).subscribe(
+              (res) => this.disenosPedido.push(res),
+              (err) => console.error(err)
+            )
           );
           this.initForm(groupForm)
             .then((orderForm) => (this.orderForm = orderForm))
             .finally(() => this.spinner.hide());
-        });
+        }
+      );
     } else {
       pedidos = localStorage.getItem('pedido')
         ? JSON.parse(localStorage.getItem('pedido')!)
         : this.appComponent.pedidos;
 
       pedidos?.map((_id: string) =>
-        this.disenosService
-          .getDiseno(_id)
-          .then((diseno) => this.disenosPedido.push(diseno))
+        this.disenosService.getDiseno(_id).subscribe(
+          (res) => this.disenosPedido.push(res),
+          (err) => console.error(err)
+        )
       );
 
       this.initForm(groupForm)
         .then((orderForm) => (this.orderForm = orderForm))
+        .catch((err) => console.error(err))
         .finally(() => this.spinner.hide());
     }
   }

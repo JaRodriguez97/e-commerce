@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   projectId: 'creatulogo-database',
+  backend: 'http://localhost:3000/api/',
 };
 
 /*

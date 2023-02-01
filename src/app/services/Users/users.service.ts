@@ -1,57 +1,47 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import { userInterface } from '@models/users.interface';
-import { DocumentData, DocumentReference } from 'firebase/firestore';
-import { Database } from 'src/database';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UsersService {
-  constructor(private database: Database) {}
+  URL = environment.backend;
 
-  async getUser(id: string, token?: string): Promise<userInterface> {
-    return await this.database.getDataDocument('usuarios', id);
+  constructor(private http: HttpClient) {}
+
+  headers() {
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
   }
 
-  async getLogin(form: userInterface, token?: string): Promise<userInterface> {
-    let userFound = await this.database.getDataDocument(
-      'usuarios',
-      form.numeroTelefono
-    );
+  getUser(id: string, token?: string): Observable<userInterface> {
+    let headers = this.headers();
 
-    return atob(userFound['contraseña']!) == form.contraseña
-      ? userFound
-      : Promise.reject(
-          'la contraseña no coincide, por favor ingrésala nuevamente'
-        );
+    return this.http.get(`${this.URL}/${id}`, { headers });
   }
 
-  async getSignUp(
-    form: userInterface,
-    token?: string
-  ): Promise<undefined | userInterface> {
-    let existUser = this.database.getDataDocument(
-      'usuarios',
-      form.numeroTelefono
-    );
+  getLogin(form: userInterface, token?: string): Observable<userInterface> {
+    let headers = this.headers();
 
-    if (!(await existUser))
-      return this.database.createDataDocument(form, 'usuarios');
-
-    console.error(existUser);
-    throw Error(
-      `Este número de celular ya se encuentra registrado en la base de datos,
-         por favor intente con otro número.`
-    );
+    return this.http.post(`${this.URL}login`, form, { headers });
   }
 
-  async updateUser(
-    id: string,
-    dataUpdate: any,
-    coleccion: string,
-    token?: string
-  ) {
-    return this.database.updateDocument(id, dataUpdate, coleccion);
+  getSignUp(form: userInterface, token?: string) {
+    let headers = this.headers();
+
+    return this.http.post<userInterface>(`${this.URL}signUp`, form, {
+      headers,
+    });
+  }
+
+  updateUser(id: string, dataUpdate: any, propiedad: string, token?: string) {
+    let headers = this.headers(),
+      form = { id, dataUpdate, propiedad };
+
+    return this.http.post(`${this.URL}login`, form, { headers });
   }
 }

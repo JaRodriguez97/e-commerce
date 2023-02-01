@@ -37,9 +37,7 @@ export class LoginComponent implements OnInit {
     private usersService: UsersService,
     private router: Router,
     private spinner: NgxSpinnerService
-  ) {
-    // appComponent.ngOnInit().then(() => {});
-  }
+  ) {}
 
   ngOnInit(): void {
     this.spinner
@@ -80,59 +78,58 @@ export class LoginComponent implements OnInit {
           contraseña: this.contrasena,
         };
 
-        this.usersService
-          .getLogin(form)
-          .then((res) => {
-            let { id } = this.activatedRoute?.snapshot?.params || undefined,
-              dataUpdate;
+        this.usersService.getLogin(form).subscribe((res) => {
+          let { id } = this.activatedRoute?.snapshot?.params || undefined,
+            dataUpdate;
 
-            this.appComponent.user = res;
+          this.appComponent.user = res;
 
-            if (res.pedido?.length) {
-              res.pedido = res.pedido.filter(
-                (diseño) => !this.pedidos.some((id) => id === diseño)
-              );
+          if (res.pedido?.length) {
+            res.pedido = res.pedido.filter(
+              (diseño) => !this.pedidos.some((id) => id === diseño)
+            );
 
-              this.pedidos.push(...res.pedido);
-            }
+            this.pedidos.push(...res.pedido);
+          }
 
-            if (id) {
-              this.pedidos = this.pedidos.filter((_id) => _id !== id);
+          if (id) {
+            this.pedidos = this.pedidos.filter((_id) => _id !== id);
 
-              if (!this.pedidos.length)
-                dataUpdate = { pedido: [{ _id: id, cantidad: 1 }] };
-              else
-                dataUpdate = {
-                  pedido: [{ _id: id, cantidad: 1 }, ...this.pedidos],
-                };
-            } else dataUpdate = { pedido: this.pedidos };
+            if (!this.pedidos.length)
+              dataUpdate = { pedido: [{ _id: id, cantidad: 1 }] };
+            else
+              dataUpdate = {
+                pedido: [{ _id: id, cantidad: 1 }, ...this.pedidos],
+              };
+          } else dataUpdate = { pedido: this.pedidos };
 
-            this.usersService
-              .updateUser(res._id!, dataUpdate, 'usuarios')
-              .then(() => localStorage.setItem('userID', res?._id!))
-              .then(() => this.appComponent.ngOnInit())
-              .then(() =>
-                this.router
-                  .navigate(['/'])
-                  .then(() => localStorage.removeItem('pedido'))
-              )
-              .finally(() => this.spinner.hide());
-          })
-          .catch((err) =>
-            this.spinner.hide().then(() => {
-              console.error({ err });
-              Swal.fire({
-                confirmButtonColor: '#000',
-                icon: 'error',
-                html: err.error?.message ?? err.message ?? err,
-                scrollbarPadding: false,
-              });
-            })
-          );
+          this.usersService
+            .updateUser(res._id!, dataUpdate, 'usuarios')
+            .subscribe(
+              () => localStorage.setItem('userID', res._id!),
+              (err) =>
+                this.spinner.hide().then(() => {
+                  console.error({ err });
+                  Swal.fire({
+                    confirmButtonColor: '#000',
+                    icon: 'error',
+                    html: err.error?.message ?? err.message ?? err,
+                    scrollbarPadding: false,
+                  });
+                }),
+              () =>
+                this.appComponent.ngOnInit().then(() => {
+                  this.router
+                    .navigate(['/'])
+                    .then(() => localStorage.removeItem('pedido'))
+                    .finally(() => this.spinner.hide());
+                })
+            );
+        });
       })
       .catch((err) =>
         this.spinner.hide().then(() => {
-          console.error(err);
+          console.error({ err });
           Swal.fire({
             confirmButtonColor: '#000',
             icon: 'error',
@@ -162,9 +159,8 @@ export class LoginComponent implements OnInit {
           email: this.email || '',
         };
 
-        this.usersService
-          .getSignUp(form)
-          .then((res) =>
+        this.usersService.getSignUp(form).subscribe(
+          (res) =>
             this.spinner.hide().then(() =>
               Swal.fire({
                 icon: 'success',
@@ -179,10 +175,8 @@ export class LoginComponent implements OnInit {
                   .then(() => this.appComponent.reloadTo('login'))
                   .then(() => setTimeout(() => this.spinner.hide(), 500))
               )
-            )
-          )
-          .then(() => this.spinner.hide())
-          .catch((err) =>
+            ),
+          (err) =>
             this.spinner.hide().then(() => {
               console.error({ err });
               Swal.fire({
@@ -190,9 +184,9 @@ export class LoginComponent implements OnInit {
                 icon: 'error',
                 html: err.error?.message ?? err.message ?? err,
               });
-            })
-          )
-          .then(() => this.spinner.hide());
+            }),
+          () => this.spinner.hide()
+        );
       })
       .catch((err) =>
         this.spinner.hide().then(() => {
