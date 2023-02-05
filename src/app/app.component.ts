@@ -9,6 +9,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { productInterface } from '@app/models/products.interface';
+import { ProductsService } from '@app/services/Products/products.service';
 import {
   faBars,
   faHeart,
@@ -16,11 +18,8 @@ import {
   faUser,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
-import { disenoInterface } from '@models/diseno.interface';
 import { userInterface } from '@models/users.interface';
-import { DisenosService } from '@service/Disenos/disenos.service';
 import { UsersService } from '@service/Users/users.service';
-import { DocumentData } from 'firebase/firestore';
 import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
 
@@ -38,7 +37,7 @@ export class AppComponent implements OnInit {
   pedidos!: string[];
   user!: userInterface | undefined;
   userID!: string | null | undefined;
-  products!: disenoInterface[];
+  products!: productInterface[];
   paragraphSpinner!: string;
 
   @ViewChild('order') order!: ElementRef;
@@ -50,18 +49,18 @@ export class AppComponent implements OnInit {
     private usersService: UsersService,
     public router: Router,
     public spinner: NgxSpinnerService,
-    public disenosServices: DisenosService
+    public productsServices: ProductsService
   ) {}
 
   @HostListener('window:scroll')
   scrolling(): void {
     if (window.scrollY > 300) {
-      if (!this.products && window.scrollY > 1000 * 1000) {
+      if (!this.products && window.scrollY > 1000) {
         this.paragraphSpinner = 'buscando diseños...';
 
         this.spinner.show().then(() =>
-          this.disenosServices.getDisenos().subscribe(
-            (disenosPromise) => (this.products = disenosPromise),
+          this.productsServices.getProducts().subscribe(
+            (productsPromise) => (this.products = productsPromise),
             (err) => console.error(err),
             () => this.spinner.hide()
           )
@@ -81,11 +80,10 @@ export class AppComponent implements OnInit {
         this.usersService.getUser(this.userID).subscribe(
           (res) => {
             this.user = res ? res : undefined;
-            this.pedidos = this.user?.pedido!;
-            console.log(
-              '🚀 ~ file: app.component.ts:84 ~ AppComponent ~ this.usersService.getUser ~ pedidos',
-              this.pedidos
-            );
+            this.pedidos =
+              this.user && this.user.pedido && this.user.pedido.length
+                ? this.user.pedido
+                : this.pedidos;
           },
           (err) => console.error(err),
           () => this.spinner.hide()
@@ -98,15 +96,17 @@ export class AppComponent implements OnInit {
   }
 
   getOrder() {
-    if (this.pedidos)
-      this.ngOnInit()
-        .then(() => this.renderer.addClass(this.order.nativeElement, 'active'))
-        .finally(() => this.spinner.hide());
+    if (this.pedidos && this.pedidos.length)
+      this.ngOnInit().then(() =>
+        this.renderer.addClass(this.order.nativeElement, 'active')
+      );
     else
       Swal.fire({
         icon: 'warning',
         html: '<span>No has agregado nada al carro de compras</span>',
-      }).then(() => this.ngOnInit().finally(() => this.spinner.hide()));
+      })
+        .then(() => this.ngOnInit())
+        .finally(() => this.spinner.hide());
   }
 
   getOutOrder() {
@@ -133,9 +133,13 @@ export class AppComponent implements OnInit {
       scrollbarPadding: false,
     })
       .then(() => this.ngOnInit())
-      .then(() => this.reloadTo('login'))
+      .then(() => this.getOutUser())
+      .then(() => {
+        window ? window.location.reload() : this.router.navigate(['/login']);
+      })
       .then(() => (this.pedidos = []))
       .then(() => (this.user = undefined))
+      .then(() => (this.userID = undefined))
       .then(() => localStorage.clear());
   }
 

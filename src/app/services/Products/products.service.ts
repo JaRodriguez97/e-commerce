@@ -2,13 +2,13 @@ import { environment } from '@env/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { disenoInterface } from '@models/diseno.interface';
+import { productInterface } from '@app/models/products.interface';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DisenosService {
-  URL = environment.backend;
+export class ProductsService {
+  URL = environment.backend + 'productos/';
 
   constructor(private http: HttpClient) {}
 
@@ -18,14 +18,14 @@ export class DisenosService {
     });
   }
 
-  getDisenos() {
+  getProducts() {
     let headers = this.headers();
-    return this.http.get<disenoInterface[]>(`${this.URL}disenos`, { headers });
+    return this.http.get<productInterface[]>(this.URL, { headers });
   }
 
-  getDiseno(id: string) {
+  getProduct(id: string) {
     let headers = this.headers();
-    return this.http.get(`${this.URL}${id}`, { headers });
+    return this.http.get<productInterface>(`${this.URL}${id}`, { headers });
   }
 
   // getCombo(_id: String, token?: string): Observable<comboInterface> {

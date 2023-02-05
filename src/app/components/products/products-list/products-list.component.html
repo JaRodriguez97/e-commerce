@@ -1,56 +1,56 @@
 <h1 class="heading">ultimos <span>diseños</span></h1>
 
 <div class="box-container">
-  <div class="box" *ngFor="let diseno of products; let i = index">
-    <span class="discount">-{{ diseno["descuento"] }}%</span>
+  <div class="box" *ngFor="let product of products; let i = index">
+    <span class="discount">-{{ product["descuento"] }}%</span>
     <div class="image">
-      <img [src]="diseno['img']" [alt]="diseno['nombre']" />
+      <img [src]="product.img" [alt]="product['nombre']" />
       <ul
         [ngClass]="{
           iconsList: true,
-          active: existeCombo(diseno['_id'])
+          active: existeCombo(product['_id'])
         }"
       >
         <li
-          (click)="appComponent.addFavorite(diseno['_id'])"
+          (click)="appComponent.addFavorite(product['_id'])"
           [title]="
-            appComponent.validateFavorite(diseno['_id'])
+            appComponent.validateFavorite(product['_id'])
               ? 'Quitar de Favoritos'
               : 'Agregar a Favoritos'
           "
-          [ngClass]="{ active: appComponent.validateFavorite(diseno['_id']) }"
+          [ngClass]="{ active: appComponent.validateFavorite(product['_id']) }"
         >
           <fa-icon [icon]="faHeart"></fa-icon>
         </li>
         <li
           title="Agregar al carrito de compras"
-          (click)="addToCar(diseno['_id'], i)"
+          (click)="addToCar(product['_id'], i)"
           class="cart-btn"
-          *ngIf="!existeCombo(diseno['_id'])"
+          *ngIf="!existeCombo(product['_id'])"
         >
           agregar
           <fa-icon [icon]="faShoppingCart"></fa-icon>
         </li>
         <li
           title="Quitar del carrito de compras"
-          (click)="restToCar(diseno['_id'], i)"
+          (click)="restToCar(product['_id'], i)"
           class="cart-btn"
-          *ngIf="existeCombo(diseno['_id'])"
+          *ngIf="existeCombo(product['_id'])"
         >
           quitar
           <fa-icon [icon]="faArrowUpFromBracket"></fa-icon>
         </li>
-        <li (click)="getDetails(diseno['_id'])" title="Ver Detalles">
+        <li (click)="getDetails(product['_id'])" title="Ver Detalles">
           <fa-icon [icon]="faEye"></fa-icon>
         </li>
       </ul>
     </div>
     <div class="content">
-      <h3>{{ diseno["nombre"] }}</h3>
+      <h3>{{ product["nombre"] }}</h3>
       <div class="price">
-        {{ getTotalDescuento(diseno) | currency : "$" : "symbol" : "4.0-0" }}
+        {{ getTotalDescuento(product) | currency : "$" : "symbol" : "4.0-0" }}
         <span>{{
-          diseno["precio"] | currency : "$" : "symbol" : "4.0-0"
+          product["precio"] | currency : "$" : "symbol" : "4.0-0"
         }}</span>
       </div>
     </div>

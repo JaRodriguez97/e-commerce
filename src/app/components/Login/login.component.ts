@@ -75,57 +75,72 @@ export class LoginComponent implements OnInit {
 
         let form = {
           numeroTelefono: this.telefono,
-          contraseña: this.contrasena,
+          contrasena: this.contrasena,
         };
 
-        this.usersService.getLogin(form).subscribe((res) => {
-          let { id } = this.activatedRoute?.snapshot?.params || undefined,
-            dataUpdate;
+        this.usersService.getLogin(form).subscribe(
+          (res) => {
+            let { id } = this.activatedRoute?.snapshot?.params || undefined,
+              dataUpdate;
 
-          this.appComponent.user = res;
+            this.appComponent.user = res;
 
-          if (res.pedido?.length) {
-            res.pedido = res.pedido.filter(
-              (diseño) => !this.pedidos.some((id) => id === diseño)
-            );
+            // if (!id && (!this.pedidos || !this.pedidos.length)) return;
 
-            this.pedidos.push(...res.pedido);
-          }
+            if (res.pedido?.length) {
+              res.pedido = res.pedido.filter(
+                (diseño) => !this.pedidos.some((id) => id === diseño)
+              );
 
-          if (id) {
-            this.pedidos = this.pedidos.filter((_id) => _id !== id);
+              this.pedidos.push(...res.pedido);
+            }
 
-            if (!this.pedidos.length)
-              dataUpdate = { pedido: [{ _id: id, cantidad: 1 }] };
-            else
-              dataUpdate = {
-                pedido: [{ _id: id, cantidad: 1 }, ...this.pedidos],
-              };
-          } else dataUpdate = { pedido: this.pedidos };
+            if (id) {
+              this.pedidos = this.pedidos.filter((_id) => _id !== id);
 
-          this.usersService
-            .updateUser(res._id!, dataUpdate, 'usuarios')
-            .subscribe(
-              () => localStorage.setItem('userID', res._id!),
-              (err) =>
-                this.spinner.hide().then(() => {
-                  console.error({ err });
-                  Swal.fire({
-                    confirmButtonColor: '#000',
-                    icon: 'error',
-                    html: err.error?.message ?? err.message ?? err,
-                    scrollbarPadding: false,
-                  });
-                }),
-              () =>
-                this.appComponent.ngOnInit().then(() => {
-                  this.router
-                    .navigate(['/'])
-                    .then(() => localStorage.removeItem('pedido'))
-                    .finally(() => this.spinner.hide());
-                })
-            );
-        });
+              dataUpdate = !this.pedidos.length ? [id] : [id, ...this.pedidos];
+            } else dataUpdate = this.pedidos;
+
+            this.usersService
+              .updateUser(res._id!, dataUpdate, 'pedido')
+              .subscribe(
+                (userUpdate) => {
+                  console.log(
+                    '🚀 ~ file: login.component.ts:108 ~ LoginComponent ~ this.usersService.getLogin ~ userUpdate',
+                    userUpdate
+                  );
+                  localStorage.setItem('userID', res._id!);
+                },
+                (err) =>
+                  this.spinner.hide().then(() => {
+                    console.error({ err });
+                    Swal.fire({
+                      confirmButtonColor: '#000',
+                      icon: 'error',
+                      html: err.error?.message ?? err.message ?? err,
+                      scrollbarPadding: false,
+                    });
+                  }),
+                () =>
+                  this.appComponent.ngOnInit().then(() => {
+                    this.router
+                      .navigate(['/'])
+                      .then(() => localStorage.removeItem('pedido'))
+                      .finally(() => this.spinner.hide());
+                  })
+              );
+          },
+          (err) =>
+            this.spinner.hide().then(() => {
+              console.error({ err });
+              Swal.fire({
+                confirmButtonColor: '#000',
+                icon: 'error',
+                html: err.error?.message ?? err.message ?? err,
+                scrollbarPadding: false,
+              });
+            })
+        );
       })
       .catch((err) =>
         this.spinner.hide().then(() => {
@@ -153,10 +168,10 @@ export class LoginComponent implements OnInit {
 
         let form = {
           numeroTelefono: this.telefono,
-          contraseña: btoa(this.contrasena),
+          contrasena: this.contrasena,
           nombres: this.nombres || '',
           apellidos: this.apellidos || '',
-          email: this.email || '',
+          email: +this.email ? undefined : this.email,
         };
 
         this.usersService.getSignUp(form).subscribe(

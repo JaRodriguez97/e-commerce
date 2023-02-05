@@ -1,17 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppComponent } from '@app/app.component';
+import { OrderComponent } from '@app/components/order/order.component';
 import {
+  faArrowUpFromBracket,
   faEye,
   faHeart,
   faShare,
   faShoppingCart,
-  faBan,
-  faArrowUpFromBracket,
 } from '@fortawesome/free-solid-svg-icons';
-import { disenoInterface } from '@models/diseno.interface';
-import { DisenosService } from '@service/Disenos/disenos.service';
-import { DocumentData } from 'firebase/firestore';
+import { productInterface } from '@models/products.interface';
+import { ProductsService } from '@service/Products/products.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
@@ -20,7 +19,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./products-list.component.css'],
 })
 export class ProductsListComponent implements OnInit {
-  @Input('products') public products!: disenoInterface[] | DocumentData[];
+  @Input('products') public products!: productInterface[];
   faShoppingCart = faShoppingCart;
   faHeart = faHeart;
   faShare = faShare;
@@ -29,8 +28,9 @@ export class ProductsListComponent implements OnInit {
   precioTotal!: number;
 
   constructor(
+    public orderComponent: OrderComponent,
     public appComponent: AppComponent,
-    public disenosService: DisenosService,
+    public productsService: ProductsService,
     private spinner: NgxSpinnerService,
     private router: Router
   ) {}
@@ -41,8 +41,8 @@ export class ProductsListComponent implements OnInit {
     return this.appComponent.existeComboPedido(id);
   }
 
-  getTotalDescuento(diseno: disenoInterface | DocumentData) {
-    return diseno.precio - (diseno.precio! * diseno.descuento!) / 100;
+  getTotalDescuento(product: productInterface) {
+    return product.precio! - (product.precio! * product.descuento!) / 100;
   }
 
   getDetails(_id: string) {
@@ -54,10 +54,14 @@ export class ProductsListComponent implements OnInit {
   }
 
   addToCar(_id: string, i: number) {
-    this.appComponent.addToCar(_id, i).then(() => this.ngOnInit());
+    this.appComponent
+      .addToCar(_id, i)
+      .then(() => this.orderComponent.ngOnInit());
   }
 
   restToCar(_id: string, i: number) {
-    this.appComponent.restToCar(_id, i).then(() => this.ngOnInit());
+    this.appComponent
+      .restToCar(_id, i)
+      .then(() => this.orderComponent.ngOnInit());
   }
 }

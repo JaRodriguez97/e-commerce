@@ -4,7 +4,7 @@ import { datosPedidoInterface } from '@models/datosPedido.interface';
 export interface userInterface {
   _id?: string;
   apellidos?: string;
-  contraseña?: string;
+  contrasena?: string;
   direccion?: string;
   email?: string | LowerCasePipe;
   favoritos?: string[];

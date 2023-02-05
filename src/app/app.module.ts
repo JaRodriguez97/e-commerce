@@ -13,7 +13,7 @@ import { ReviewComponent } from '@components/review/review.component';
 import { UserComponent } from '@components/user/user.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { Database } from 'src/database';
+// import { Database } from 'src/database';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -40,7 +40,7 @@ import { AppComponent } from './app.component';
     HttpClientModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [Database],
+  providers: [OrderComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

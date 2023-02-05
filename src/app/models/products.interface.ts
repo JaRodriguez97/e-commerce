@@ -1,4 +1,4 @@
-export interface disenoInterface {
+export interface productInterface {
   _id: string;
   descuento?: number;
   img?: String;

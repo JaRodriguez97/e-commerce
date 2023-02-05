@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class UsersService {
-  URL = environment.backend;
+  URL = environment.backend + 'usuarios/';
 
   constructor(private http: HttpClient) {}
 
@@ -18,10 +18,16 @@ export class UsersService {
     });
   }
 
+  getUsers(token?: string): Observable<userInterface> {
+    let headers = this.headers();
+
+    return this.http.get(this.URL, { headers });
+  }
+
   getUser(id: string, token?: string): Observable<userInterface> {
     let headers = this.headers();
 
-    return this.http.get(`${this.URL}/${id}`, { headers });
+    return this.http.get(`${this.URL}${id}`, { headers });
   }
 
   getLogin(form: userInterface, token?: string): Observable<userInterface> {
@@ -38,10 +44,12 @@ export class UsersService {
     });
   }
 
-  updateUser(id: string, dataUpdate: any, propiedad: string, token?: string) {
+  updateUser(id: string, dataUpdate: any, propiedad?: string, token?: string) {
     let headers = this.headers(),
       form = { id, dataUpdate, propiedad };
 
-    return this.http.post(`${this.URL}login`, form, { headers });
+    return this.http.post<userInterface>(`${this.URL}updateUser`, form, {
+      headers,
+    });
   }
 }

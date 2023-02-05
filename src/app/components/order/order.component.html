@@ -16,9 +16,9 @@
     <div
       class="containerOrder"
       *ngIf="appComponent.pedidos && appComponent.pedidos.length"
-    >
+    > 
       <div class="container" #container>
-        <div class="drop" *ngFor="let item of disenosPedido; let i = index">
+        <div class="drop" *ngFor="let item of productsPedido; let i = index">
           <div class="content">
             <h2>{{ i + 1 }}</h2>
             <p>{{ item.nombre }}</p>
@@ -38,7 +38,7 @@
   </aside>
   <section class="orderForm" *ngIf="formBoolean">
     <div class="heading">
-      <h3><span>Formulario informativo</span> para el pedido</h3>
+      <h3><span>Formulario informativo de </span>quien recibe el pedido</h3>
     </div>
 
     <form

@@ -31,7 +31,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.1.1",
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
-    "@netlify/plugin-lighthouse": "^4.0.3",
+    "@netlify/plugin-lighthouse": "^4.0.7",
     "@nguniversal/express-engine": "^14.2.0",
     "@popperjs/core": "^2.11.6",
     "bootstrap": "^3.4.1",
