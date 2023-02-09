@@ -34,10 +34,10 @@ export class ProductsService {
   //   return this.http.get<comboInterface>(this.URL + _id, { headers });
   // }
 
-  getTotalPedido(arrayID: String[], token?: string) {
-    let headers = this.headers();
-    return this.http.post(this.URL, { arrayID }, { headers });
-  }
+  // getTotalPedido(arrayID: String[], token?: string) {
+  //   let headers = this.headers();
+  //   return this.http.post(this.URL, { arrayID }, { headers });
+  // }
 
   // updateComboComentario(id: String, contactForm: any, token?: string) {
   //   let headers = this.headers(token);

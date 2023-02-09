@@ -38,7 +38,9 @@ export class ProductsListComponent implements OnInit {
   ngOnInit(): void {}
 
   existeCombo(id: string) {
-    return this.appComponent.existeComboPedido(id);
+    return this.appComponent.pedidos?.some(
+      (productPedido) => productPedido._id == id
+    );
   }
 
   getTotalDescuento(product: productInterface) {
@@ -53,10 +55,14 @@ export class ProductsListComponent implements OnInit {
       .then(() => this.router.navigate(['products-details', _id]));
   }
 
-  addToCar(_id: string, i: number) {
-    this.appComponent
-      .addToCar(_id, i)
-      .then(() => this.orderComponent.ngOnInit());
+  addToCar(product: productInterface, i: number) {
+    this.spinner
+      .show()
+      .then(() =>
+        this.appComponent
+          .addToCar(product, i)
+          .then(() => setTimeout(() => this.orderComponent.ngOnInit(), 1000))
+      );
   }
 
   restToCar(_id: string, i: number) {

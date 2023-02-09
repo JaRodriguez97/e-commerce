@@ -2,40 +2,40 @@
 
 <div class="box-container">
   <div class="box" *ngFor="let product of products; let i = index">
-    <span class="discount">-{{ product["descuento"] }}%</span>
+    <span class="discount">-{{ product.descuento }}%</span>
     <div class="image">
-      <img [src]="product.img" [alt]="product['nombre']" />
+      <img [src]="product.img" [alt]="product.nombre" />
       <ul
         [ngClass]="{
           iconsList: true,
-          active: existeCombo(product['_id'])
+          active: existeCombo(product._id)
         }"
       >
         <li
-          (click)="appComponent.addFavorite(product['_id'])"
+          (click)="appComponent.addFavorite(product._id)"
           [title]="
-            appComponent.validateFavorite(product['_id'])
+            appComponent.validateFavorite(product._id)
               ? 'Quitar de Favoritos'
               : 'Agregar a Favoritos'
           "
-          [ngClass]="{ active: appComponent.validateFavorite(product['_id']) }"
+          [ngClass]="{ active: appComponent.validateFavorite(product._id) }"
         >
           <fa-icon [icon]="faHeart"></fa-icon>
         </li>
         <li
           title="Agregar al carrito de compras"
-          (click)="addToCar(product['_id'], i)"
+          (click)="addToCar(product, i)"
           class="cart-btn"
-          *ngIf="!existeCombo(product['_id'])"
+          *ngIf="!existeCombo(product._id)"
         >
           agregar
           <fa-icon [icon]="faShoppingCart"></fa-icon>
         </li>
         <li
           title="Quitar del carrito de compras"
-          (click)="restToCar(product['_id'], i)"
+          (click)="restToCar(product._id, i)"
           class="cart-btn"
-          *ngIf="existeCombo(product['_id'])"
+          *ngIf="existeCombo(product._id)"
         >
           quitar
           <fa-icon [icon]="faArrowUpFromBracket"></fa-icon>

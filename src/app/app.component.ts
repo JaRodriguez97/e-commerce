@@ -1,3 +1,4 @@
+import { OrderComponent } from '@components/order/order.component';
 import { DOCUMENT } from '@angular/common';
 import {
   Component,
@@ -22,6 +23,7 @@ import { userInterface } from '@models/users.interface';
 import { UsersService } from '@service/Users/users.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -34,7 +36,7 @@ export class AppComponent implements OnInit {
   faShoppingCart: IconDefinition = faShoppingCart;
   faUser: IconDefinition = faUser;
   faBars: IconDefinition = faBars;
-  pedidos!: string[];
+  pedidos!: Array<productInterface>;
   user!: userInterface | undefined;
   userID!: string | null | undefined;
   products!: productInterface[];
@@ -44,6 +46,7 @@ export class AppComponent implements OnInit {
   @ViewChild('userInfo') userInfo!: ElementRef;
 
   constructor(
+    private readonly formBuilder: FormBuilder,
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
     private usersService: UsersService,
@@ -75,7 +78,6 @@ export class AppComponent implements OnInit {
     this.paragraphSpinner = 'Cargando...';
     this.spinner.show().then(() => {
       this.userID = localStorage.getItem('userID');
-
       if (this.userID) {
         this.usersService.getUser(this.userID).subscribe(
           (res) => {
@@ -134,9 +136,7 @@ export class AppComponent implements OnInit {
     })
       .then(() => this.ngOnInit())
       .then(() => this.getOutUser())
-      .then(() => {
-        window ? window.location.reload() : this.router.navigate(['/login']);
-      })
+      .then(() => this.router.navigate(['/login']))
       .then(() => (this.pedidos = []))
       .then(() => (this.user = undefined))
       .then(() => (this.userID = undefined))
@@ -204,66 +204,63 @@ export class AppComponent implements OnInit {
 
   existeComboPedido(_id: string): Boolean {
     if (this.pedidos && this.pedidos.length)
-      return this.pedidos?.some((id) => id === _id)!;
-    else if (this.user) return this.user.pedido?.some((id) => id === _id)!;
+      return this.pedidos?.some((product) => product._id === _id)!;
+    else if (this.user)
+      return this.user.pedido?.some((product) => product._id === _id)!;
+
 
     return false;
   }
 
-  async addToCar(_id: string, i?: number): Promise<void> {
-    this.spinner.show().then(() => {
-      if (typeof i == 'number') {
-        let list = this.document.querySelectorAll('.iconsList')[i];
+  async addToCar(product: productInterface, i?: number): Promise<void> {
+    if (typeof i == 'number') {
+      let list = this.document.querySelectorAll('.iconsList')[i];
 
-        this.renderer.addClass(list, 'active');
-      }
+      this.renderer.addClass(list, 'active');
+    }
 
-      if (!this.user) {
-        if (!this.pedidos) {
-          this.spinner.hide().then(() => {
-            Swal.fire({
-              icon: 'question',
-              title: 'NO ESTÁ REGISTRADO',
-              html: `<h4>Desea ingresar antes de hacer su pedido?</h4>
-        <h6 style="font-size:10px">Si marca NO podrá hacer su pedido sin
-        ningún problema, pero de manera anónima.</h6>`,
-              showCancelButton: true,
-              cancelButtonText: 'Quiero hacer mi pedido ya',
-              confirmButtonText: 'Deseo ingresar a mi cuenta',
-              scrollbarPadding: false,
-            }).then((response) => {
-              if (response.isConfirmed) {
-                this.router.navigate(['/login', _id]);
-                return;
-              }
+    if (!this.user) {
+      if (!this.pedidos) {
+        this.spinner.hide().then(() => {
+          Swal.fire({
+            icon: 'question',
+            title: 'NO ESTÁ REGISTRADO',
+            html: `<h4>Desea ingresar antes de hacer su pedido?</h4>
+              <h6 style="font-size:10px">Si marca NO podrá hacer su pedido sin
+              ningún problema, pero de manera anónima.</h6>`,
+            showCancelButton: true,
+            cancelButtonText: 'Quiero hacer mi pedido ya',
+            confirmButtonText: 'Deseo ingresar a mi cuenta',
+            scrollbarPadding: false,
+          }).then((response) => {
+            if (response.isConfirmed) {
+              this.router.navigate(['/login', product._id]);
+              return;
+            }
 
-              this.pedidos = [];
-              this.pedidos.push(_id);
-              localStorage.setItem('pedido', JSON.stringify(this.pedidos));
-              this.ngOnInit().then(() => this.spinner.hide());
-            });
+            this.pedidos = [];
+            this.pedidos.push(product);
+            localStorage.setItem('pedido', JSON.stringify(this.pedidos));
           });
-        } else {
-          this.pedidos.push(_id);
-          localStorage.setItem('pedido', JSON.stringify(this.pedidos));
-          this.ngOnInit().then(() =>
-            setTimeout(() => this.spinner.hide(), 500)
-          );
-        }
+        });
       } else {
-        if (!this.pedidos) this.pedidos = [];
-
-        this.pedidos.push(_id);
-
-        this.usersService
-          .updateUser(this.userID!, this.pedidos, 'pedido')
-          .subscribe(
-            () => this.ngOnInit(),
-            (err) => console.error(err),
-            () => this.spinner.hide()
-          );
+        this.pedidos.push(product);
+        localStorage.setItem('pedido', JSON.stringify(this.pedidos));
+        this.ngOnInit().then(() => setTimeout(() => this.spinner.hide(), 500));
       }
-    });
+    } else {
+      if (!this.pedidos) this.pedidos = [];
+
+      this.pedidos.push(product);
+
+      this.usersService
+        .updateUser(this.userID!, this.pedidos, 'pedido')
+        .subscribe(
+          () => this.ngOnInit(),
+          (err) => console.error(err),
+          () => this.spinner.hide()
+        );
+    }
   }
 
   async restToCar(_id: string, i?: number) {
@@ -275,13 +272,15 @@ export class AppComponent implements OnInit {
       }
 
       if (this.user) {
-        this.pedidos = this.user.pedido?.filter((id) => id !== _id)!;
+        this.pedidos = this.user.pedido?.filter(
+          (product) => product._id !== _id
+        )!;
 
         this.usersService
           .updateUser(this.userID!, this.pedidos, 'pedido')
           .subscribe(() => this.spinner.hide());
       } else {
-        this.pedidos = this.pedidos.filter((id) => id !== _id);
+        this.pedidos = this.pedidos.filter((product) => product._id !== _id);
 
         localStorage.setItem('pedido', JSON.stringify(this.pedidos));
 

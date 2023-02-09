@@ -52,4 +52,13 @@ export class UsersService {
       headers,
     });
   }
+
+  sendOrder(id: string, dataUpdate: any, propiedad?: string, token?: string) {
+    let headers = this.headers(),
+      form = { id, dataUpdate, propiedad };
+
+    return this.http.post<userInterface>(`${this.URL}sendOrder`, form, {
+      headers,
+    });
+  }
 }

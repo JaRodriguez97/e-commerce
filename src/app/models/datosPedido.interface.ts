@@ -5,7 +5,7 @@ export interface datosPedidoInterface {
   nombre: (String | ValidationErrors | null)[];
   apellido: (String | ValidationErrors | null)[];
   email: (String | LowerCasePipe | ValidationErrors | null)[];
-  fechaHora: (String | ValidationErrors | null)[];
+  fechaHora: (Date | ValidationErrors | null)[] | Date;
   celular: (Number | ValidationErrors | null)[];
   direccion: (String | ValidationErrors | null)[];
   detallesUbicacion: (String | ValidationErrors | null)[];

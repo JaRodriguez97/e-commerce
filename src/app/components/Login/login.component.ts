@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from '@app/app.component';
+import { productInterface } from '@app/models/products.interface';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { UsersService } from '@service/Users/users.service';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -27,7 +28,7 @@ export class LoginComponent implements OnInit {
   apellidos!: string;
   email!: string;
   idCombo!: string;
-  pedidos!: string[];
+  pedidos!: Array<productInterface>;
   faXmark = faXmark;
 
   constructor(
@@ -85,11 +86,12 @@ export class LoginComponent implements OnInit {
 
             this.appComponent.user = res;
 
-            // if (!id && (!this.pedidos || !this.pedidos.length)) return;
-
             if (res.pedido?.length) {
               res.pedido = res.pedido.filter(
-                (diseño) => !this.pedidos.some((id) => id === diseño)
+                (productUser) =>
+                  !this.pedidos.some(
+                    (product) => product._id === productUser._id
+                  )
               );
 
               this.pedidos.push(...res.pedido);

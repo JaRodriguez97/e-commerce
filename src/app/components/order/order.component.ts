@@ -1,10 +1,12 @@
 import {
   Component,
   ElementRef,
+  ChangeDetectorRef,
   Input,
   OnInit,
   Renderer2,
   ViewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -22,13 +24,14 @@ import Swal from 'sweetalert2';
   selector: 'app-order',
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.css'],
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class OrderComponent implements OnInit {
   @Input('user') user!: userInterface | undefined;
   @ViewChild('order__list') order__list!: ElementRef;
   @ViewChild('smmok') smmok!: ElementRef;
 
-  productsPedido!: productInterface[];
+  productsPedido: Array<productInterface> = [];
   formBoolean: Boolean = false;
   orderForm!: FormGroup;
   faXmark = faXmark;
@@ -47,13 +50,15 @@ export class OrderComponent implements OnInit {
     if (this.orderForm && this.orderForm.valid) this.orderForm.reset();
 
     let groupForm: datosPedidoInterface | undefined,
-      pedidos: Array<string> = [],
+      pedidos: Array<productInterface> = [],
       userID = localStorage.getItem('userID');
 
     this.productsPedido =
       !this.productsPedido || !this.productsPedido.length
         ? []
         : this.productsPedido;
+
+    // this.appComponent.pedidos?.forEach((id) => this.getProduct(id));
 
     if (userID && userID.length) {
       this.usersService.getUser(userID).subscribe(
@@ -66,7 +71,10 @@ export class OrderComponent implements OnInit {
                 email: [[Validators.minLength(5)]],
                 celular: [[Validators.required, Validators.minLength(10)]],
                 direccion: [[Validators.minLength(5)]],
-                fechaHora: ['', [Validators.required, Validators.minLength(5)]],
+                fechaHora: [
+                  new Date(),
+                  [Validators.required, Validators.minLength(5)],
+                ],
                 detallesUbicacion: [],
                 detallesPedido: [],
               };
@@ -97,44 +105,25 @@ export class OrderComponent implements OnInit {
         },
         (err) => console.error(err),
         () => {
-          pedidos.map((_id) =>
-            this.productsService.getProduct(_id).subscribe(
-              (product) => this.productsPedido.push(product),
-              (err) => console.error(err)
-            )
-          );
           this.initForm(groupForm)
             .then((orderForm) => (this.orderForm = orderForm))
+            .catch((err) => console.error(err))
             .finally(() => this.spinner.hide());
         }
       );
     } else {
-      pedidos = localStorage.getItem('pedido')
-        ? JSON.parse(localStorage.getItem('pedido')!)
-        : this.appComponent.pedidos;
-      console.log(
-        '🚀 ~ file: order.component.ts:113 ~ OrderComponent ~ ngOnInit ~ pedidos',
-        pedidos
-      );
-
-      pedidos?.map((_id: string) =>
-        this.productsService.getProduct(_id).subscribe(
-          (res) => {
-            console.log(
-              '🚀 ~ file: order.component.ts:119 ~ OrderComponent ~ ngOnInit ~ res',
-              res
-            );
-            this.productsPedido.push(res);
-          },
-          (err) => console.error(err)
-        )
-      );
-
       this.initForm(groupForm)
         .then((orderForm) => (this.orderForm = orderForm))
         .catch((err) => console.error(err))
         .finally(() => this.spinner.hide());
     }
+  }
+
+  getProduct(_id: string) {
+    this.productsService.getProduct(_id).subscribe(
+      (res) => this.productsPedido.push(res),
+      (err) => console.error(err)
+    );
   }
 
   getOutOrder() {
@@ -145,6 +134,7 @@ export class OrderComponent implements OnInit {
   }
 
   getFinishOrder() {
+    this.ngOnInit();
     if (!this.user || !this.appComponent.userID) {
       Swal.fire({
         icon: 'warning',
@@ -180,34 +170,147 @@ export class OrderComponent implements OnInit {
       return;
     } else if (this.user) {
       let pedidoFinalizado = {
-        pedido: this.appComponent.pedidos,
-        fecha: new Date(),
-        entregado: false,
-        datosPedido: orderForm.value as datosPedidoInterface,
-      };
+          pedido: this.appComponent.pedidos,
+          fecha: new Date(),
+          entregado: false,
+          datosPedido: orderForm.value as datosPedidoInterface,
+        },
+        addMlSeconds = 115 * 60000;
+
+      if (
+        new Date(pedidoFinalizado.datosPedido.fechaHora.toString()).getTime() -
+          Date.now() +
+          addMlSeconds <
+        addMlSeconds * 2
+      ) {
+        Swal.fire({
+          icon: 'warning',
+          html: '<span>el pedido debe ser programado minimo para dentro de 2 horas</span>',
+        });
+        return;
+      }
 
       this.user.pedidosRealizados || this.user.pedidosRealizados!.length
         ? this.user.pedidosRealizados!.push(pedidoFinalizado)
         : (this.user.pedidosRealizados = [pedidoFinalizado]);
 
-      console.log(
-        '🚀 ~ file: order.component.ts:160 ~ OrderComponent ~ orderSubmit ~ pedidoFinalizado.datosPedido.direccion',
-        pedidoFinalizado.datosPedido.direccion
-      );
-      if (
+      this.user.direccion =
         !this.user.direccion &&
         typeof pedidoFinalizado.datosPedido.direccion == 'string'
-      )
-        this.user.direccion = pedidoFinalizado.datosPedido.direccion;
+          ? pedidoFinalizado.datosPedido.direccion
+          : this.user.direccion;
 
-      console.log(
-        '🚀 ~ file: order.component.ts:178 ~ OrderComponent ~ orderSubmit ~ pedidosRealizados',
-        this.user
-      );
-      this.usersService.updateUser(this.user._id!, this.user).subscribe(
-        (res) => {},
-        (err) => {}
-      );
+      Swal.fire({
+        icon: 'warning',
+        width: '70vw',
+        title: 'Confirma la información de quien recibirá el pedido',
+        html: `
+<style>
+  section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1vh;
+  }
+</style>
+        
+<section>
+  <div class="group">
+    <label for="nombre">Nombre:</label
+    ><strong>
+      ${pedidoFinalizado.datosPedido.nombre || 'Dato no Asignado'}
+    </strong>
+  </div>
+  <div class="group">
+    <label for="apellido">Apellido:</label
+    ><strong>
+      ${pedidoFinalizado.datosPedido.apellido || 'Dato no Asignado'}
+    </strong>
+  </div>
+  <div class="group">
+    <label for="email">Email: </label
+    ><strong>
+      ${pedidoFinalizado.datosPedido.email || 'Dato no Asignado'}
+    </strong>
+  </div>
+  <div class="group">
+    <label for="fecha">Fecha: </label
+    ><strong>
+      ${
+        pedidoFinalizado.datosPedido.fechaHora.toString().split('T').shift() ||
+        'Dato no Asignado'
+      }
+    </strong>
+  </div>
+  <div class="group">
+    <label for="hora">Hora aproximada de entrega: </label
+    ><strong>
+      ${
+        pedidoFinalizado.datosPedido.fechaHora.toString().split('T').pop() ||
+        'Dato no Asignado'
+      }
+    </strong>
+  </div>
+  <div class="group">
+    <label for="celular">Número teléfono: </label
+    ><strong>
+      ${pedidoFinalizado.datosPedido.celular || 'Dato no Asignado'}
+    </strong>
+  </div>
+  <div class="group">
+    <label for="direccion">Dirección: </label
+    ><strong>
+      ${pedidoFinalizado.datosPedido.direccion || 'Dato no Asignado'}
+    </strong>
+  </div>
+  <div class="group">
+    <label for="detallesUbicacion">Detalles de ubicación: </label
+    ><strong>
+      ${pedidoFinalizado.datosPedido.detallesUbicacion || 'Dato no Asignado'}
+    </strong>
+  </div>
+  <div class="group">
+    <label for="detallesPedido">Detalles sobre el pedido: </label
+    ><strong>
+      ${pedidoFinalizado.datosPedido.detallesPedido || 'Dato no Asignado'}
+    </strong>
+  </div>
+</section>`,
+        showCancelButton: true,
+        cancelButtonText: 'Corregir datos',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Enviar pedido',
+        showConfirmButton: true,
+      }).then((res) => {
+        this.spinner.show().then(() => {
+          if (res.isConfirmed && this.user) {
+            this.user.pedido = [];
+            this.usersService.sendOrder(this.user._id!, this.user).subscribe(
+              (res) => {
+                let ultimoPedido = res.pedidosRealizados?.pop();
+                console.log(
+                  '🚀 ~ file: order.component.ts:293 ~ OrderComponent ~ this.spinner.show ~ ultimoPedido',
+                  res
+                );
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Pedido enviado',
+                  text: 'en unos instantes te llegará un mensaje al correo electrónico sobre la confirmación del pedido',
+                }).then(() =>
+                  this.router.navigate([
+                    'seguimientoPedido/',
+                    ultimoPedido?._id,
+                  ])
+                );
+              },
+              (err) => console.error(err),
+              () => this.spinner.hide()
+            );
+          } else this.spinner.hide();
+        });
+      });
     } else {
     }
   }
