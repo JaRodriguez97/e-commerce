@@ -1,12 +1,11 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
-  ChangeDetectorRef,
   Input,
   OnInit,
   Renderer2,
   ViewChild,
-  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -290,21 +289,21 @@ export class OrderComponent implements OnInit {
             this.user.pedido = [];
             this.usersService.sendOrder(this.user._id!, this.user).subscribe(
               (res) => {
-                let ultimoPedido = res.pedidosRealizados?.pop();
-                console.log(
-                  '🚀 ~ file: order.component.ts:293 ~ OrderComponent ~ this.spinner.show ~ ultimoPedido',
-                  res
-                );
+                let ultimoPedido = res.pedidosRealizados
+                  ?.sort(
+                    (a, b) =>
+                      new Date(a.fecha).getTime() - new Date(b.fecha).getTime()
+                  )
+                  .pop();
+
                 Swal.fire({
                   icon: 'success',
                   title: 'Pedido enviado',
                   text: 'en unos instantes te llegará un mensaje al correo electrónico sobre la confirmación del pedido',
-                }).then(() =>
-                  this.router.navigate([
-                    'seguimientoPedido/',
-                    ultimoPedido?._id,
-                  ])
-                );
+                }).then(() => {
+                  this.getOutOrder();
+                  this.router.navigate(['follow-order/', ultimoPedido?._id]);
+                });
               },
               (err) => console.error(err),
               () => this.spinner.hide()

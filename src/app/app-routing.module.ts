@@ -15,6 +15,13 @@ const routes: Routes = [
         './components/products/products-details/products-details.module'
       ).then((m) => m.ProductsDetailsModule),
   },
+  {
+    path: 'follow-order/:id',
+    loadChildren: () =>
+      import('./components/order/follow-order/follow-order.module').then(
+        (m) => m.FollowOrderModule
+      ),
+  },
 ];
 
 @NgModule({

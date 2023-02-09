@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppComponent } from '@app/app.component';
-import { OrderComponent } from '@app/components/order/order.component';
+import { OrderComponent } from '@app/components/order/pre-order/order.component';
 import {
   faArrowUpFromBracket,
   faEye,

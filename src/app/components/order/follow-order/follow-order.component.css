@@ -1,0 +1,107 @@
+section {
+  position: fixed;
+  top: 0;
+  min-height: 100vh;
+  min-width: 100vw;
+  z-index: 11;
+  background-color: var(--blackPanter);
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  /* gap: 1vh; */
+}
+
+section .step {
+  background-color: var(--smoke);
+  position: absolute;
+  padding: 1.5vw;
+  border-radius: 50%;
+  font-weight: bold;
+  z-index: 1;
+}
+
+section .border {
+  width: 37vw;
+  height: 20vh;
+  position: relative;
+  border-radius: 5vh;
+}
+
+section .border.activeRight {
+  border-left-width: 5px;
+  border-left-style: dashed;
+  border-image: linear-gradient(to top, var(--golden), var(--goldenLigth)) 1;
+  border-bottom: 5px solid;
+  animation: gradientRight 10s infinite;
+}
+
+@keyframes gradientRight {
+  0% {
+    border-image: linear-gradient(to top, var(--blackPanter), var(--black)) 1;
+  }
+  25% {
+    border-image: linear-gradient(to top, var(--goldenLigth), var(--golden)) 1;
+  }
+  75% {
+    border-image: linear-gradient(to top, var(--golden), var(--goldenLigth)) 1;
+  }
+  100% {
+    border-image: linear-gradient(to top, var(--black), var(--blackPanter)) 1;
+  }
+}
+
+section .border.activeLeft {
+  border-left-width: 5px;
+  border-left-style: dashed;
+  border-image: linear-gradient(to top, var(--golden), var(--goldenLigth)) 1;
+  border-bottom: 5px solid;
+  animation: gradient 10s infinite;
+}
+
+section .step:nth-child(1) {
+  left: 30vw;
+  top: 5vh;
+}
+
+section .border:nth-child(2),
+section .border:nth-child(6) {
+  border-left: 5px solid var(--golden);
+  border-bottom: 5px solid var(--golden);
+}
+
+section .step:nth-child(3) {
+  right: 30vw;
+  top: 25vh;
+}
+
+section .border:nth-child(4),
+section .border:nth-child(8) {
+  border-right: 5px solid var(--golden);
+  border-bottom: 5px solid var(--golden);
+}
+
+section .step:nth-child(5) {
+  left: 30vw;
+  top: 45vh;
+}
+
+section .step:nth-child(7) {
+  right: 30vw;
+  top: 65vh;
+}
+
+section .step:nth-child(9) {
+  left: 30vw;
+  top: 85vh;
+}
+
+/* @keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} */

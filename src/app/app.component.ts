@@ -1,4 +1,4 @@
-import { OrderComponent } from '@components/order/order.component';
+import { OrderComponent } from '@app/components/order/pre-order/order.component';
 import { DOCUMENT } from '@angular/common';
 import {
   Component,
@@ -207,7 +207,6 @@ export class AppComponent implements OnInit {
       return this.pedidos?.some((product) => product._id === _id)!;
     else if (this.user)
       return this.user.pedido?.some((product) => product._id === _id)!;
-
 
     return false;
   }

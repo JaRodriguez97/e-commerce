@@ -7,7 +7,7 @@ import { AboutComponent } from '@components/about/about.component';
 import { ContactComponent } from '@components/contact/contact.component';
 import { IconsContainerComponent } from '@components/icons-container/icons-container.component';
 import { InicioComponent } from '@components/Inicio/inicio.component';
-import { OrderComponent } from '@components/order/order.component';
+import { OrderComponent } from '@app/components/order/pre-order/order.component';
 import { ProductsListComponent } from '@components/products/products-list/products-list.component';
 import { ReviewComponent } from '@components/review/review.component';
 import { UserComponent } from '@components/user/user.component';
