@@ -190,12 +190,13 @@ export class OrderComponent implements OnInit {
         return;
       }
 
-      this.user.pedidosRealizados || this.user.pedidosRealizados!.length
-        ? this.user.pedidosRealizados!.push(pedidoFinalizado)
+      this.user.pedidosRealizados
+        ? this.user.pedidosRealizados.push(pedidoFinalizado)
         : (this.user.pedidosRealizados = [pedidoFinalizado]);
 
       this.user.direccion =
         !this.user.direccion &&
+        pedidoFinalizado.datosPedido.direccion &&
         typeof pedidoFinalizado.datosPedido.direccion == 'string'
           ? pedidoFinalizado.datosPedido.direccion
           : this.user.direccion;
