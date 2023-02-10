@@ -171,7 +171,12 @@ export class OrderComponent implements OnInit {
       let pedidoFinalizado = {
           pedido: this.appComponent.pedidos,
           fecha: new Date(),
-          entregado: false,
+          entregado: {
+            aceptado: undefined,
+            procesado: undefined,
+            enviado: undefined,
+            finalizado: undefined,
+          },
           datosPedido: orderForm.value as datosPedidoInterface,
         },
         addMlSeconds = 115 * 60000;
@@ -289,12 +294,18 @@ export class OrderComponent implements OnInit {
             this.user.pedido = [];
             this.usersService.sendOrder(this.user._id!, this.user).subscribe(
               (res) => {
-                let ultimoPedido = res.pedidosRealizados
-                  ?.sort(
-                    (a, b) =>
-                      new Date(a.fecha).getTime() - new Date(b.fecha).getTime()
-                  )
-                  .pop();
+                let ultimoPedido =
+                  res.pedidosRealizados &&
+                  res.pedidosRealizados.length &&
+                  res.pedidosRealizados.length > 1
+                    ? res.pedidosRealizados
+                        .sort(
+                          (a, b) =>
+                            new Date(a.fecha).getTime() -
+                            new Date(b.fecha).getTime()
+                        )
+                        .pop()
+                    : res.pedidosRealizados?.pop();
 
                 Swal.fire({
                   icon: 'success',

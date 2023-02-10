@@ -1,16 +1,231 @@
 <section>
-  <div class="step">
-    1
-    <!-- <span *ngIf="expression">1</span>
-    <fa-icon [icon]="faCircleCheck" aria-hidden="true" *ngIf="expression"></fa-icon> 
-    <fa-icon [icon]="faSpinner" aria-hidden="true" *ngIf="expression"></fa-icon>-->
+  <div class="contentBox">
+    <div class="step finish">
+      <fa-icon [icon]="faCircleCheck" aria-hidden="true"></fa-icon>
+    </div>
+    <div
+      [ngClass]="{
+        border: true,
+        activeRight:
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          !pedidoEnSeguimiento.entregado.aceptado &&
+          !pedidoEnSeguimiento.entregado.procesado &&
+          !pedidoEnSeguimiento.entregado.enviado &&
+          !pedidoEnSeguimiento.entregado.finalizado
+      }"
+    ></div>
   </div>
-  <div class="border activeRight"></div>
-  <div class="step">2</div>
-  <div class="border"></div>
-  <div class="step">3</div>
-  <div class="border activeRight"></div>
-  <div class="step">4</div>
-  <div class="border"></div>
-  <div class="step">5</div>
+  <div class="contentBox">
+    <div
+      [ngClass]="{
+        step: true,
+        right: true,
+        proccesing:
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          !pedidoEnSeguimiento.entregado.aceptado
+      }"
+    >
+      <fa-icon
+        [icon]="faCircleCheck"
+        aria-hidden="true"
+        *ngIf="
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          pedidoEnSeguimiento.entregado.aceptado
+        "
+      ></fa-icon>
+      <fa-icon
+        id="spinner"
+        [icon]="faSpinner"
+        aria-hidden="true"
+        *ngIf="
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          !pedidoEnSeguimiento.entregado.aceptado
+        "
+      ></fa-icon>
+    </div>
+    <div
+      [ngClass]="{
+        border: true,
+        invert: true,
+        activeRight:
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          pedidoEnSeguimiento.entregado.aceptado &&
+          !pedidoEnSeguimiento.entregado.procesado &&
+          !pedidoEnSeguimiento.entregado.enviado &&
+          !pedidoEnSeguimiento.entregado.finalizado
+      }"
+    ></div>
+  </div>
+  <div class="contentBox">
+    <div
+      [ngClass]="{
+        step: true,
+        proccesing:
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          pedidoEnSeguimiento.entregado.aceptado &&
+          !pedidoEnSeguimiento.entregado.procesado
+      }"
+    >
+      <span
+        *ngIf="
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          !pedidoEnSeguimiento.entregado.aceptado &&
+          !pedidoEnSeguimiento.entregado.procesado
+        "
+      >
+        3
+      </span>
+      <fa-icon
+        [icon]="faCircleCheck"
+        aria-hidden="true"
+        *ngIf="
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          pedidoEnSeguimiento.entregado.aceptado &&
+          pedidoEnSeguimiento.entregado.procesado
+        "
+      ></fa-icon>
+      <fa-icon
+        id="spinner"
+        [icon]="faSpinner"
+        aria-hidden="true"
+        *ngIf="
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          pedidoEnSeguimiento.entregado.aceptado &&
+          !pedidoEnSeguimiento.entregado.procesado
+        "
+      ></fa-icon>
+    </div>
+    <div
+      [ngClass]="{
+        border: true,
+        activeRight:
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          pedidoEnSeguimiento.entregado.aceptado &&
+          pedidoEnSeguimiento.entregado.procesado &&
+          !pedidoEnSeguimiento.entregado.enviado &&
+          !pedidoEnSeguimiento.entregado.finalizado
+      }"
+    ></div>
+  </div>
+  <div class="contentBox">
+    <div
+      [ngClass]="{
+        step: true,
+        right: true,
+        proccesing:
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          pedidoEnSeguimiento.entregado.aceptado &&
+          pedidoEnSeguimiento.entregado.procesado &&
+          !pedidoEnSeguimiento.entregado.enviado
+      }"
+    >
+      <span
+        *ngIf="
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          pedidoEnSeguimiento.entregado.aceptado &&
+          !pedidoEnSeguimiento.entregado.procesado
+        "
+        >4</span
+      >
+      <fa-icon
+        [icon]="faCircleCheck"
+        aria-hidden="true"
+        *ngIf="
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          pedidoEnSeguimiento.entregado.aceptado &&
+          pedidoEnSeguimiento.entregado.procesado &&
+          pedidoEnSeguimiento.entregado.enviado
+        "
+      ></fa-icon>
+      <fa-icon
+        id="spinner"
+        [icon]="faSpinner"
+        aria-hidden="true"
+        *ngIf="
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          pedidoEnSeguimiento.entregado.aceptado &&
+          pedidoEnSeguimiento.entregado.procesado &&
+          !pedidoEnSeguimiento.entregado.enviado
+        "
+      ></fa-icon>
+    </div>
+    <div
+      [ngClass]="{
+        border: true,
+        invert: true,
+        activeRight:
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          pedidoEnSeguimiento.entregado.aceptado &&
+          pedidoEnSeguimiento.entregado.procesado &&
+          pedidoEnSeguimiento.entregado.enviado &&
+          !pedidoEnSeguimiento.entregado.finalizado
+      }"
+    ></div>
+  </div>
+  <div class="contentBox">
+    <div
+      [ngClass]="{
+        step: true,
+        proccesing:
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          pedidoEnSeguimiento.entregado.aceptado &&
+          pedidoEnSeguimiento.entregado.procesado &&
+          pedidoEnSeguimiento.entregado.enviado &&
+          !pedidoEnSeguimiento.entregado.finalizado
+      }"
+    >
+      <span
+        *ngIf="
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          pedidoEnSeguimiento.entregado.aceptado &&
+          pedidoEnSeguimiento.entregado.procesado &&
+          pedidoEnSeguimiento.entregado.enviado &&
+          !pedidoEnSeguimiento.entregado.finalizado
+        "
+        >5</span
+      >
+      <fa-icon
+        [icon]="faCircleCheck"
+        aria-hidden="true"
+        *ngIf="
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          pedidoEnSeguimiento.entregado.aceptado &&
+          pedidoEnSeguimiento.entregado.procesado &&
+          pedidoEnSeguimiento.entregado.enviado &&
+          pedidoEnSeguimiento.entregado.finalizado
+        "
+      ></fa-icon>
+      <fa-icon
+        id="spinner"
+        [icon]="faSpinner"
+        aria-hidden="true"
+        *ngIf="
+          pedidoEnSeguimiento &&
+          pedidoEnSeguimiento.entregado &&
+          pedidoEnSeguimiento.entregado.aceptado &&
+          pedidoEnSeguimiento.entregado.procesado &&
+          pedidoEnSeguimiento.entregado.enviado &&
+          !pedidoEnSeguimiento.entregado.finalizado
+        "
+      ></fa-icon>
+    </div>
+  </div>
 </section>

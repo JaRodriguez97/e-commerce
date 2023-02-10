@@ -10,98 +10,180 @@ section {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  /* gap: 1vh; */
+  gap: 5vh;
 }
 
-section .step {
+section .contentBox {
+  display: flex;
+  align-items: baseline;
+  flex-direction: column;
+  min-width: 30vw;
+}
+
+section .contentBox .step {
   background-color: var(--smoke);
-  position: absolute;
+  position: relative;
   padding: 1.5vw;
   border-radius: 50%;
   font-weight: bold;
   z-index: 1;
+  bottom: 3vh;
+  right: 1.5vw;
 }
 
-section .border {
-  width: 37vw;
-  height: 20vh;
+section .contentBox .step.right {
+  left: 28vw;
+}
+
+section .contentBox .step.proccesing {
+  background-color: var(--golden);
+  padding: 1.6vw;
+  right: 1.7vw;
+}
+
+section .contentBox .step.proccesing fa-icon {
+  display: inline-block;
+  animation: spin 1s infinite linear;
+}
+
+section .contentBox .border {
+  width: 30vw;
+  height: 1vh;
   position: relative;
-  border-radius: 5vh;
+  border-bottom-left-radius: 5vh;
+  border-top-right-radius: 5vh;
+  background-color: var(--white);
 }
 
-section .border.activeRight {
-  border-left-width: 5px;
-  border-left-style: dashed;
-  border-image: linear-gradient(to top, var(--golden), var(--goldenLigth)) 1;
-  border-bottom: 5px solid;
-  animation: gradientRight 10s infinite;
+section .contentBox .border.invert {
+  border-radius: 0;
+  border-bottom-right-radius: 5vh;
+  border-top-left-radius: 5vh;
+}
+
+section .contentBox .border.activeRight {
+  animation: gradientRight 1s infinite linear;
+}
+
+section .contentBox .border::before {
+  content: "";
+  width: 1vh;
+  height: 5vh;
+  background-color: var(--white);
+  position: relative;
+  display: flex;
+  bottom: 5vh;
+}
+
+section .contentBox .border.invert::before {
+  border-top-left-radius: 5vh;
+  bottom: 0;
+}
+
+section .contentBox .border.activeRight::before,
+section .contentBox .border.activeRight::after {
+  animation: gradientBottom 1s infinite linear;
+}
+
+section .contentBox .border::after {
+  content: "";
+  width: 1vh;
+  height: 5vh;
+  background-color: var(--white);
+  position: relative;
+  display: flex;
+  bottom: 5vh;
+  margin-left: 29.6vw;
+  border-top-right-radius: 5vh;
+}
+
+section .contentBox .border.invert::after {
+  bottom: 10vh;
+}
+
+/* !!!keyframes!!! */
+
+@keyframes gradientBottom {
+  0% {
+    background: var(--golden);
+  }
+  25% {
+    background: var(--golden);
+  }
+  50% {
+    background: linear-gradient(
+      to bottom,
+      var(--goldenLigth),
+      var(--golden),
+      var(--golden)
+    );
+  }
+  75% {
+    background: linear-gradient(
+      to bottom,
+      var(--goldenLigth),
+      var(--goldenLigth),
+      var(--golden)
+    );
+  }
+  100% {
+    background: linear-gradient(
+      to bottom,
+      var(--goldenLigth),
+      var(--goldenLigth),
+      var(--goldenLigth)
+    );
+  }
 }
 
 @keyframes gradientRight {
   0% {
-    border-image: linear-gradient(to top, var(--blackPanter), var(--black)) 1;
+    background: linear-gradient(
+      to right,
+      var(--goldenLigth),
+      var(--golden),
+      var(--golden)
+    );
   }
   25% {
-    border-image: linear-gradient(to top, var(--goldenLigth), var(--golden)) 1;
+    background: linear-gradient(
+      to right,
+      var(--goldenLigth),
+      var(--goldenLigth),
+      var(--golden)
+    );
+  }
+  50% {
+    background: linear-gradient(
+      to right,
+      var(--goldenLigth),
+      var(--goldenLigth),
+      var(--goldenLigth)
+    );
   }
   75% {
-    border-image: linear-gradient(to top, var(--golden), var(--goldenLigth)) 1;
+    background: linear-gradient(
+      to right,
+      var(--golden),
+      var(--goldenLigth),
+      var(--goldenLigth)
+    );
   }
   100% {
-    border-image: linear-gradient(to top, var(--black), var(--blackPanter)) 1;
+    background: linear-gradient(
+      to right,
+      var(--golden),
+      var(--golden),
+      var(--goldenLigth)
+    );
   }
 }
 
-section .border.activeLeft {
-  border-left-width: 5px;
-  border-left-style: dashed;
-  border-image: linear-gradient(to top, var(--golden), var(--goldenLigth)) 1;
-  border-bottom: 5px solid;
-  animation: gradient 10s infinite;
-}
-
-section .step:nth-child(1) {
-  left: 30vw;
-  top: 5vh;
-}
-
-section .border:nth-child(2),
-section .border:nth-child(6) {
-  border-left: 5px solid var(--golden);
-  border-bottom: 5px solid var(--golden);
-}
-
-section .step:nth-child(3) {
-  right: 30vw;
-  top: 25vh;
-}
-
-section .border:nth-child(4),
-section .border:nth-child(8) {
-  border-right: 5px solid var(--golden);
-  border-bottom: 5px solid var(--golden);
-}
-
-section .step:nth-child(5) {
-  left: 30vw;
-  top: 45vh;
-}
-
-section .step:nth-child(7) {
-  right: 30vw;
-  top: 65vh;
-}
-
-section .step:nth-child(9) {
-  left: 30vw;
-  top: 85vh;
-}
-
-/* @keyframes spin {
-  from {
+@keyframes spin {
+  0% {
     transform: rotate(0deg);
   }
-  to {
+  100% {
     transform: rotate(360deg);
   }
-} */
+}

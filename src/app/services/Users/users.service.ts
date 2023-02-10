@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
+import { pedidoRealizadoInterface } from '@models/pedidoRealizado.interface';
 import { userInterface } from '@models/users.interface';
 import { Observable } from 'rxjs';
 
@@ -28,6 +29,15 @@ export class UsersService {
     let headers = this.headers();
 
     return this.http.get(`${this.URL}${id}`, { headers });
+  }
+
+  getSeguimientoPedido(id: string, token?: string) {
+    let headers = this.headers();
+
+    return this.http.get<Array<pedidoRealizadoInterface>>(
+      `${this.URL}seguimientoPedido/${id}`,
+      { headers }
+    );
   }
 
   getLogin(form: userInterface, token?: string): Observable<userInterface> {
