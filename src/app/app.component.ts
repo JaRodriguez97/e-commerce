@@ -75,6 +75,7 @@ export class AppComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.logOut();
     this.paragraphSpinner = 'Cargando...';
     this.spinner.show().then(() => {
       this.userID = localStorage.getItem('userID');
