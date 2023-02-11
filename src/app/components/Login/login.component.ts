@@ -9,6 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from '@app/app.component';
 import { productInterface } from '@app/models/products.interface';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { userInterface } from '@models/users.interface';
+import { ProductsService } from '@service/Products/products.service';
 import { UsersService } from '@service/Users/users.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
@@ -30,6 +32,7 @@ export class LoginComponent implements OnInit {
   idCombo!: string;
   pedidos!: Array<productInterface>;
   faXmark = faXmark;
+  dataUpdate!: Array<productInterface>;
 
   constructor(
     private appComponent: AppComponent,
@@ -37,7 +40,8 @@ export class LoginComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private usersService: UsersService,
     private router: Router,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private productsService: ProductsService
   ) {}
 
   ngOnInit(): void {
@@ -80,57 +84,24 @@ export class LoginComponent implements OnInit {
         };
 
         this.usersService.getLogin(form).subscribe(
-          (res) => {
-            let { id } = this.activatedRoute?.snapshot?.params || undefined,
-              dataUpdate;
+          (user) => {
+            let { id } = this.activatedRoute?.snapshot?.params || undefined;
 
-            this.appComponent.user = res;
+            this.appComponent.user = user;
 
-            if (res.pedido?.length) {
-              res.pedido = res.pedido.filter(
+            if (user.pedido?.length) {
+              user.pedido = user.pedido.filter(
                 (productUser) =>
                   !this.pedidos.some(
                     (product) => product._id === productUser._id
                   )
               );
 
-              this.pedidos.push(...res.pedido);
+              this.pedidos.push(...user.pedido);
             }
 
-            if (id) {
-              this.pedidos = this.pedidos.filter((_id) => _id !== id);
-
-              dataUpdate = !this.pedidos.length ? [id] : [id, ...this.pedidos];
-            } else dataUpdate = this.pedidos;
-
-            this.usersService
-              .updateUser(res._id!, dataUpdate, 'pedido')
-              .subscribe(
-                (userUpdate) => {
-                  console.log(
-                    '🚀 ~ file: login.component.ts:108 ~ LoginComponent ~ this.usersService.getLogin ~ userUpdate',
-                    userUpdate
-                  );
-                  localStorage.setItem('userID', res._id!);
-                },
-                (err) =>
-                  this.spinner.hide().then(() => {
-                    console.error({ err });
-                    Swal.fire({
-                      confirmButtonColor: '#000',
-                      icon: 'error',
-                      html: err.error?.message ?? err.message ?? err,
-                      scrollbarPadding: false,
-                    });
-                  }),
-                () =>
-                  this.appComponent.ngOnInit().then(() => {
-                    this.router
-                      .navigate(['/'])
-                      .then(() => localStorage.removeItem('pedido'))
-                      .finally(() => this.spinner.hide());
-                  })
-              );
+            if (id) this.getLogWhitId(user, id);
+            else this.getLogWhitOutId(user._id!);
           },
           (err) =>
             this.spinner.hide().then(() => {
@@ -154,6 +125,95 @@ export class LoginComponent implements OnInit {
           });
         })
       );
+  }
+
+  getLogWhitId(user: userInterface, id: string) {
+    this.pedidos = this.pedidos.filter((product) => product._id !== id);
+
+    this.productsService.getProduct(id).subscribe(
+      (product) => {
+        this.dataUpdate = !this.pedidos.length
+          ? [product]
+          : [product, ...this.pedidos];
+      },
+      (err) =>
+        this.spinner
+          .hide()
+          .then(() => console.error({ err }))
+          .finally(() =>
+            Swal.fire({
+              confirmButtonColor: '#000',
+              icon: 'error',
+              html: err.error?.message ?? err.message ?? err,
+              scrollbarPadding: false,
+            })
+          ),
+      () => {
+        this.usersService
+          .updateUser(user._id!, this.dataUpdate, 'pedido')
+          .subscribe(
+            (userUpdate) => {
+              console.log(
+                '🚀 ~ file: login.component.ts:165 ~ LoginComponent ~ getLogWhitId ~ userUpdate',
+                userUpdate
+              );
+              localStorage.setItem('userID', userUpdate._id!);
+            },
+            (err) =>
+              this.spinner
+                .hide()
+                .then(() => console.error({ err }))
+                .finally(() =>
+                  Swal.fire({
+                    confirmButtonColor: '#000',
+                    icon: 'error',
+                    html: err.error?.message ?? err.message ?? err,
+                    scrollbarPadding: false,
+                  })
+                ),
+            () =>
+              this.appComponent.ngOnInit().then(() => {
+                this.router
+                  .navigate(['/'])
+                  .then(() => localStorage.removeItem('pedido'))
+                  .finally(() => this.spinner.hide());
+              })
+          );
+      }
+    );
+  }
+
+  getLogWhitOutId(_id: string) {
+    this.dataUpdate = this.pedidos;
+
+    this.usersService.updateUser(_id!, this.dataUpdate, 'pedido').subscribe(
+      (userUpdate) => {
+        console.log(
+          '🚀 ~ file: login.component.ts:165 ~ LoginComponent ~ getLogWhitId ~ userUpdate',
+          userUpdate
+        );
+        localStorage.setItem('userID', userUpdate._id!);
+      },
+      (err) =>
+        this.spinner
+          .hide()
+          .then(() => console.error({ err }))
+          .finally(() =>
+            Swal.fire({
+              confirmButtonColor: '#000',
+              icon: 'error',
+              html: err.error?.message ?? err.message ?? err,
+              scrollbarPadding: false,
+            })
+          ),
+      () =>
+        this.appComponent.ngOnInit().then(() => {
+          this.router
+            .navigate(['/'])
+            .then(() => localStorage.removeItem('pedido'))
+            .finally(() => this.spinner.hide());
+        })
+    );
   }
 
   checkSignUp() {
