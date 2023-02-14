@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "component": "ng g c components/favorites --skip-import",
-    "module": "ng g m components/order/follow-order/follow-order -m=app --route follow-order/:id --flat",
+    "module": "ng g m components/admin/admin-list -m=app --route admin-list --flat",
     "dev": "ng serve -o",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",

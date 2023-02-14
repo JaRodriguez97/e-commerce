@@ -5,6 +5,7 @@ import {
   faAddressCard,
   faFileInvoiceDollar,
   faCircleInfo,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-user',
@@ -16,6 +17,7 @@ export class UserComponent implements OnInit {
   faAddressCard = faAddressCard;
   faFileInvoiceDollar = faFileInvoiceDollar;
   faCircleInfo = faCircleInfo;
+  faXmark = faXmark;
 
   constructor(public appComponent: AppComponent) {}
 

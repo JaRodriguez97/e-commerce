@@ -9,10 +9,8 @@
 
 .smmok.active {
   position: absolute;
-  width: 4%;
-  height: 8%;
-  margin-top: 80px;
-  margin-left: 4%;
+  width: 5vw;
+  height: 5vw;
   z-index: 9;
   background-color: transparent;
 }
@@ -28,7 +26,7 @@
   height: 100vh;
   right: 0;
   display: flex;
-  padding: 100px 20px 0;
+  padding: 20px 0;
 }
 
 .order__list.active {
@@ -49,7 +47,6 @@
   min-width: 40%;
   width: 40%;
   left: 0;
-  /* top: 25vh; */
 }
 
 .order__list aside .heading {
@@ -192,7 +189,7 @@ aside .finalizarPedido .btn {
 }
 
 .order__list section h3 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: var(--gray);
 }
 
@@ -251,4 +248,24 @@ aside .finalizarPedido .btn {
 
 .orderForm form .btn {
   margin-top: 0;
+}
+
+/* !!! Responsive !!! */
+
+@media (max-width: 991px) {
+  .order__list.active {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .order__list,
+  .order__list.active aside {
+    width: 100%;
+  }
+
+  .smmok.active {
+    width: 5vw;
+    height: 10vw;
+    margin-left: 4%;
+  }
 }

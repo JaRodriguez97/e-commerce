@@ -1,9 +1,9 @@
 export interface productInterface {
   _id: string;
   descuento?: number;
-  img?: String;
-  incluye?: String;
-  nombre?: String;
+  img?: string;
+  incluye?: string;
+  nombre?: string;
   precio?: number;
-  REF?: String;
+  REF?: string;
 }

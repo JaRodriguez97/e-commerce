@@ -1,4 +1,11 @@
 <section>
+  <div class="closeSection">
+    <fa-icon
+      [icon]="faXmark"
+      (click)="appComponent.closeSection()"
+      aria-hidden="true"
+    ></fa-icon>
+  </div>
   <div class="contentBox">
     <div class="step finish">
       <fa-icon [icon]="faCircleCheck" aria-hidden="true"></fa-icon>

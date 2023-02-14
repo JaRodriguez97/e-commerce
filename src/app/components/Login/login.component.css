@@ -4,7 +4,6 @@ section {
   align-items: center;
   min-height: 100vh;
   background: var(--black);
-  padding: 7%;
   position: fixed;
   width: 100vw;
   transition: 500ms;

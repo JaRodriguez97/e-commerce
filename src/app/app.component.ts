@@ -1,4 +1,3 @@
-import { OrderComponent } from '@app/components/order/pre-order/order.component';
 import { DOCUMENT } from '@angular/common';
 import {
   Component,
@@ -9,7 +8,8 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import { productInterface } from '@app/models/products.interface';
 import { ProductsService } from '@app/services/Products/products.service';
 import {
@@ -23,7 +23,6 @@ import { userInterface } from '@models/users.interface';
 import { UsersService } from '@service/Users/users.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
-import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -42,8 +41,19 @@ export class AppComponent implements OnInit {
   products!: productInterface[];
   paragraphSpinner!: string;
 
+  // !!! Sections !!!
+
   @ViewChild('order') order!: ElementRef;
   @ViewChild('userInfo') userInfo!: ElementRef;
+
+  @ViewChild('header') header!: ElementRef;
+  @ViewChild('home') home!: ElementRef;
+  @ViewChild('about') about!: ElementRef;
+  @ViewChild('iconsContainer') iconsContainer!: ElementRef;
+  @ViewChild('productsSection') productsSection!: ElementRef;
+  @ViewChild('review') review!: ElementRef;
+  @ViewChild('contact') contact!: ElementRef;
+  @ViewChild('footer') footer!: ElementRef;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -51,50 +61,63 @@ export class AppComponent implements OnInit {
     private renderer: Renderer2,
     private usersService: UsersService,
     public router: Router,
+    public activatedRoute: ActivatedRoute,
     public spinner: NgxSpinnerService,
     public productsServices: ProductsService
   ) {}
 
   @HostListener('window:scroll')
   scrolling(): void {
-    if (window.scrollY > 300) {
-      if (!this.products && window.scrollY > 1000) {
-        this.paragraphSpinner = 'buscando diseños...';
-
-        this.spinner.show().then(() =>
-          this.productsServices.getProducts().subscribe(
-            (productsPromise) => (this.products = productsPromise),
-            (err) => console.error(err),
-            () => this.spinner.hide()
-          )
-        );
-      }
-
-      this.document.querySelector('header')!.classList.add('active');
-    } else this.document.querySelector('header')!.classList.remove('active');
+    if (window.scrollY > 300)
+      this.renderer.addClass(this.header.nativeElement, 'active');
+    else this.renderer.removeClass(this.header.nativeElement, 'active');
   }
 
   async ngOnInit() {
     this.paragraphSpinner = 'Cargando...';
-    this.spinner.show().then(() => {
-      this.userID = localStorage.getItem('userID');
-      if (this.userID) {
-        this.usersService.getUser(this.userID).subscribe(
-          (res) => {
-            this.user = res ? res : undefined;
-            this.pedidos =
-              this.user && this.user.pedido && this.user.pedido.length
-                ? this.user.pedido
-                : this.pedidos;
-          },
-          (err) => console.error(err),
-          () => this.spinner.hide()
-        );
-      } else {
-        this.pedidos = JSON.parse(localStorage.getItem('pedido')!);
-        this.spinner.hide();
-      }
-    });
+    this.spinner
+      .show()
+      .then(() => {
+        this.userID = localStorage.getItem('userID');
+        if (this.userID)
+          this.usersService.getUser(this.userID).subscribe(
+            (res) => {
+              this.user = res ? res : undefined;
+              this.pedidos =
+                this.user && this.user.pedido && this.user.pedido.length
+                  ? this.user.pedido
+                  : this.pedidos;
+            },
+            (err) => console.error(err),
+            () => this.spinner.hide()
+          );
+        else {
+          this.pedidos = JSON.parse(localStorage.getItem('pedido')!);
+          this.spinner.hide();
+        }
+      })
+      .finally(() =>
+        setTimeout(() => {
+          if (this.document.location.pathname !== '/') this.getOutSections();
+          else this.closeSection();
+        }, 0)
+      );
+  }
+
+  closeSection() {
+    this.renderer.removeClass(this.header.nativeElement, 'noneDisplay');
+    this.renderer.removeClass(this.home.nativeElement, 'noneDisplay');
+    this.renderer.removeClass(this.about.nativeElement, 'noneDisplay');
+    this.renderer.removeClass(this.iconsContainer.nativeElement, 'noneDisplay');
+    this.renderer.removeClass(
+      this.productsSection.nativeElement,
+      'noneDisplay'
+    );
+    this.renderer.removeClass(this.review.nativeElement, 'noneDisplay');
+    this.renderer.removeClass(this.contact.nativeElement, 'noneDisplay');
+    this.renderer.removeClass(this.footer.nativeElement, 'noneDisplay');
+
+    this.router.navigate(['/']);
   }
 
   getOrder() {
@@ -113,16 +136,30 @@ export class AppComponent implements OnInit {
 
   getOutOrder() {
     this.renderer.removeClass(this.order.nativeElement, 'active');
+    // this.closeSection();
   }
 
   getOutUser() {
     this.renderer.removeClass(this.userInfo.nativeElement, 'active');
+    this.closeSection();
+  }
+
+  getOutSections() {
+    this.renderer.addClass(this.header.nativeElement, 'noneDisplay');
+    this.renderer.addClass(this.home.nativeElement, 'noneDisplay');
+    this.renderer.addClass(this.about.nativeElement, 'noneDisplay');
+    this.renderer.addClass(this.iconsContainer.nativeElement, 'noneDisplay');
+    this.renderer.addClass(this.productsSection.nativeElement, 'noneDisplay');
+    this.renderer.addClass(this.review.nativeElement, 'noneDisplay');
+    this.renderer.addClass(this.contact.nativeElement, 'noneDisplay');
+    this.renderer.addClass(this.footer.nativeElement, 'noneDisplay');
   }
 
   getUser() {
     if (localStorage.getItem('userID'))
-      this.renderer.addClass(this.userInfo.nativeElement, 'active');
-    else this.router.navigate(['login']);
+      return this.renderer.addClass(this.userInfo.nativeElement, 'active');
+
+    this.router.navigate(['login']).then(() => this.ngOnInit());
   }
 
   logOut() {

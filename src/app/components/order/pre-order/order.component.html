@@ -24,9 +24,7 @@
               {{ pedido.img || "Nombre indefinido" }}
             </p>
             <p>{{ pedido._id }}</p>
-            <a [routerLink]="['products-details', pedido._id]" class="btn"
-              >Detalles</a
-            >
+            <a (click)="getDetails(pedido._id)" class="btn">Detalles</a>
           </div>
         </div>
       </div>

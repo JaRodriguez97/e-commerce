@@ -192,6 +192,7 @@ export class LoginComponent implements OnInit {
           '🚀 ~ file: login.component.ts:165 ~ LoginComponent ~ getLogWhitId ~ userUpdate',
           userUpdate
         );
+        this.appComponent.closeSection();
         localStorage.setItem('userID', userUpdate._id!);
       },
       (err) =>
@@ -278,6 +279,6 @@ export class LoginComponent implements OnInit {
   }
 
   closeSection() {
-    this.router.navigate(['/']);
+    this.appComponent.closeSection();
   }
 }

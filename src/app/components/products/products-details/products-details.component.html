@@ -1,1 +1,45 @@
-<p>products-details works!</p>
+<section class="banner">
+  <div class="closeSection">
+    <fa-icon
+      [icon]="faXmark"
+      (click)="appComponent.closeSection()"
+      aria-hidden="true"
+    ></fa-icon>
+  </div>
+  <div class="banner__content" *ngIf="product">
+    <div class="banner__content--contentBx">
+      <h2>{{ product.nombre }}</h2>
+      <!--  !!!  existentes:  REF:  estrellas: !!!-->
+      <!-- <p>
+        Nuestro combo está hecho con "{{ product.ingredientes }}" además incluye
+        "{{ product.incluye }}", tinene un peso de "{{ product.peso }}"
+      </p> -->
+      <div class="banner__content--contentBx-inlineBlock">
+        <button
+          type="button"
+          title="Agregar al carrito de compras"
+          (click)="addToCar(product)"
+          class="cart-btn"
+          *ngIf="!existeCombo(product._id)"
+        >
+          agregar
+          <fa-icon [icon]="faShoppingCart"></fa-icon>
+        </button>
+        <button
+          type="button"
+          title="Quitar del carrito de compras"
+          (click)="restToCar(product._id)"
+          class="cart-btn"
+          *ngIf="existeCombo(product._id)"
+        >
+          quitar
+          <fa-icon [icon]="faArrowUpFromBracket"></fa-icon>
+        </button>
+        <span>{{ product.precio | currency : "$" : "symbol" : "4.0-0" }}</span>
+      </div>
+    </div>
+    <div class="banner__content--imgBx">
+      <img [src]="product.img" [alt]="product.nombre" />
+    </div>
+  </div>
+</section>

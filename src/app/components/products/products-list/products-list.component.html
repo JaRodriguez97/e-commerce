@@ -4,7 +4,7 @@
   <div class="box" *ngFor="let product of products; let i = index">
     <span class="discount">-{{ product.descuento }}%</span>
     <div class="image">
-      <img [src]="product.img" [alt]="product.nombre" />
+      <img [src]="product.img!" [alt]="product.nombre" />
       <ul
         [ngClass]="{
           iconsList: true,
@@ -48,10 +48,13 @@
     <div class="content">
       <h3>{{ product["nombre"] }}</h3>
       <div class="price">
+        <span>
+          Precio original:
+          {{ product["precio"] | currency : "$" : "symbol" : "4.0-0" }}
+        </span>
+        <br />
+        <p>Precio con descuento:</p>
         {{ getTotalDescuento(product) | currency : "$" : "symbol" : "4.0-0" }}
-        <span>{{
-          product["precio"] | currency : "$" : "symbol" : "4.0-0"
-        }}</span>
       </div>
     </div>
   </div>

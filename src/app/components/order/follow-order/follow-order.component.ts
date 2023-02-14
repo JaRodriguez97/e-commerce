@@ -1,7 +1,12 @@
+import { AppComponent } from '@app/app.component';
 import Swal from 'sweetalert2';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faCircleCheck, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCircleCheck,
+  faSpinner,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { pedidoRealizadoInterface } from '@models/pedidoRealizado.interface';
 import { UsersService } from '@service/Users/users.service';
 
@@ -14,10 +19,12 @@ export class FollowOrderComponent implements OnInit {
   faCircleCheck = faCircleCheck;
   faSpinner = faSpinner;
   pedidoEnSeguimiento!: pedidoRealizadoInterface;
+  faXmark = faXmark;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private usersService: UsersService,
+    public appComponent: AppComponent,
     private router: Router
   ) {}
 

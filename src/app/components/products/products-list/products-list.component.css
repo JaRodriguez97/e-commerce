@@ -104,6 +104,10 @@
   padding-top: 1rem;
 }
 
+.box-container .box .content .price p{
+  font-size: 1.5rem;
+}
+
 .box-container .box .content .price span {
   font-size: 1.5rem;
   color: var(--gray);

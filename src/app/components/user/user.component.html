@@ -1,4 +1,8 @@
-<div class="smmok" (click)="appComponent.getOutUser()"></div>
+<div class="smmok" (click)="appComponent.getOutUser()">
+  <div class="closeSection">
+    <fa-icon [icon]="faXmark" aria-hidden="true"></fa-icon>
+  </div>
+</div>
 <div class="user__list">
   <div class="logOut" (click)="appComponent.logOut()">
     <span class="btn">Cerrar Sesión</span>

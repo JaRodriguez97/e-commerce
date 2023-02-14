@@ -19,7 +19,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./products-list.component.css'],
 })
 export class ProductsListComponent implements OnInit {
-  @Input('products') public products!: productInterface[];
+  products!: productInterface[];
   faShoppingCart = faShoppingCart;
   faHeart = faHeart;
   faShare = faShare;
@@ -35,7 +35,15 @@ export class ProductsListComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.spinner.show().then(() =>
+      this.productsService.getProducts().subscribe(
+        (productsPromise) => (this.products = productsPromise),
+        (err) => console.error(err),
+        () => this.spinner.hide()
+      )
+    );
+  }
 
   existeCombo(id: string) {
     return this.appComponent.pedidos?.some(
@@ -48,10 +56,9 @@ export class ProductsListComponent implements OnInit {
   }
 
   getDetails(_id: string) {
-    this.appComponent.paragraphSpinner = 'Cargando...';
-
     this.spinner
       .show()
+      .then(() => this.appComponent.getOutSections())
       .then(() => this.router.navigate(['products-details', _id]));
   }
 

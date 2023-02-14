@@ -8,7 +8,7 @@
 </ngx-spinner>
 
 <!-- !!! header section starts  !!! -->
-<header>
+<header #header>
   <input placeholder="" title="hide" type="checkbox" name="" id="toggler" />
   <label for="toggler">
     <fa-icon [icon]="faBars" aria-hidden="true" class="fa-bars"></fa-icon>
@@ -50,42 +50,42 @@
 <!-- !!! user section ends !!! -->
 
 <!-- !!! home section starts  !!! -->
-<section class="home" id="home">
+<section class="home" id="home" #home>
   <app-inicio></app-inicio>
 </section>
 <!-- !!! home section ends  !!! -->
 
 <!-- !!! about section starts  !!! -->
-<section class="about" id="about">
+<section class="about" id="about" #about>
   <app-about></app-about>
 </section>
 <!-- !!! about section ends  !!! -->
 
 <!-- !!! icons section starts  !!! -->
-<section class="icons-container">
+<section class="icons-container" #iconsContainer>
   <app-icons-container></app-icons-container>
 </section>
 <!-- !!! icons section ends  !!! -->
 
 <!-- !!! prodcuts section starts  !!! -->
-<section class="products" id="products">
+<section class="products" id="products" #productsSection>
   <app-products-list [products]="products"></app-products-list>
 </section>
 <!-- !!! prodcuts section ends  !!! -->
 
 <!-- !!! review section starts  !!! -->
-<section class="review" id="review">
+<section class="review" id="review" #review>
   <app-review></app-review>
 </section>
 
 <!-- !!! contact section starts  !!! -->
-<section class="contact" id="contact">
+<section class="contact" id="contact" #contact>
   <app-contact></app-contact>
 </section>
 <!-- !!! contact section ends  !!! -->
 
 <!-- !!! footer section starts  !!! -->
-<footer class="footer">
+<footer class="footer" #footer>
   <div class="box-container">
     <div class="box">
       <h3>enlaces rápidos</h3>

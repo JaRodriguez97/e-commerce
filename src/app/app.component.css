@@ -1,3 +1,7 @@
+.noneDisplay {
+  display: none !important;
+}
+
 /* header section starts  */
 header {
   position: fixed;

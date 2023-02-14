@@ -145,15 +145,20 @@ export class OrderComponent implements OnInit {
         confirmButtonText: 'Login',
         showConfirmButton: true,
       }).then((res) => {
-        if (res.isConfirmed)
-          this.router.navigate(['/login']).then(() => this.getOutOrder());
-        else if (res.isDenied || res.dismiss) {
+        if (res.isConfirmed) {
+          this.router
+            .navigate(['/login'])
+            .then(() => this.appComponent.ngOnInit())
+            .then(() => this.getOutOrder());
+        } else if (res.isDenied || res.dismiss) {
+          this.appComponent.getOutSections();
           this.formBoolean = true;
           this.renderer.addClass(this.order__list.nativeElement, 'active');
           this.renderer.addClass(this.smmok.nativeElement, 'active');
         }
       });
     } else {
+      this.appComponent.getOutSections();
       this.formBoolean = true;
       this.renderer.addClass(this.order__list.nativeElement, 'active');
       this.renderer.addClass(this.smmok.nativeElement, 'active');
@@ -210,79 +215,89 @@ export class OrderComponent implements OnInit {
         width: '70vw',
         title: 'Confirma la información de quien recibirá el pedido',
         html: `
-<style>
-  section {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1vh;
-  }
-</style>
-        
-<section>
-  <div class="group">
-    <label for="nombre">Nombre:</label
-    ><strong>
-      ${pedidoFinalizado.datosPedido.nombre || 'Dato no Asignado'}
-    </strong>
-  </div>
-  <div class="group">
-    <label for="apellido">Apellido:</label
-    ><strong>
-      ${pedidoFinalizado.datosPedido.apellido || 'Dato no Asignado'}
-    </strong>
-  </div>
-  <div class="group">
-    <label for="email">Email: </label
-    ><strong>
-      ${pedidoFinalizado.datosPedido.email || 'Dato no Asignado'}
-    </strong>
-  </div>
-  <div class="group">
-    <label for="fecha">Fecha: </label
-    ><strong>
-      ${
-        pedidoFinalizado.datosPedido.fechaHora.toString().split('T').shift() ||
-        'Dato no Asignado'
-      }
-    </strong>
-  </div>
-  <div class="group">
-    <label for="hora">Hora aproximada de entrega: </label
-    ><strong>
-      ${
-        pedidoFinalizado.datosPedido.fechaHora.toString().split('T').pop() ||
-        'Dato no Asignado'
-      }
-    </strong>
-  </div>
-  <div class="group">
-    <label for="celular">Número teléfono: </label
-    ><strong>
-      ${pedidoFinalizado.datosPedido.celular || 'Dato no Asignado'}
-    </strong>
-  </div>
-  <div class="group">
-    <label for="direccion">Dirección: </label
-    ><strong>
-      ${pedidoFinalizado.datosPedido.direccion || 'Dato no Asignado'}
-    </strong>
-  </div>
-  <div class="group">
-    <label for="detallesUbicacion">Detalles de ubicación: </label
-    ><strong>
-      ${pedidoFinalizado.datosPedido.detallesUbicacion || 'Dato no Asignado'}
-    </strong>
-  </div>
-  <div class="group">
-    <label for="detallesPedido">Detalles sobre el pedido: </label
-    ><strong>
-      ${pedidoFinalizado.datosPedido.detallesPedido || 'Dato no Asignado'}
-    </strong>
-  </div>
-</section>`,
+        <style>
+          section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1vh;
+          }
+        </style>
+                
+        <section>
+          <div class="group">
+            <label for="nombre">Nombre:</label
+            ><strong>
+              ${pedidoFinalizado.datosPedido.nombre || 'Dato no Asignado'}
+            </strong>
+          </div>
+          <div class="group">
+            <label for="apellido">Apellido:</label
+            ><strong>
+              ${pedidoFinalizado.datosPedido.apellido || 'Dato no Asignado'}
+            </strong>
+          </div>
+          <div class="group">
+            <label for="email">Email: </label
+            ><strong>
+              ${pedidoFinalizado.datosPedido.email || 'Dato no Asignado'}
+            </strong>
+          </div>
+          <div class="group">
+            <label for="fecha">Fecha: </label
+            ><strong>
+              ${
+                pedidoFinalizado.datosPedido.fechaHora
+                  .toString()
+                  .split('T')
+                  .shift() || 'Dato no Asignado'
+              }
+            </strong>
+          </div>
+          <div class="group">
+            <label for="hora">Hora aproximada de entrega: </label
+            ><strong>
+              ${
+                pedidoFinalizado.datosPedido.fechaHora
+                  .toString()
+                  .split('T')
+                  .pop() || 'Dato no Asignado'
+              }
+            </strong>
+          </div>
+          <div class="group">
+            <label for="celular">Número teléfono: </label
+            ><strong>
+              ${pedidoFinalizado.datosPedido.celular || 'Dato no Asignado'}
+            </strong>
+          </div>
+          <div class="group">
+            <label for="direccion">Dirección: </label
+            ><strong>
+              ${pedidoFinalizado.datosPedido.direccion || 'Dato no Asignado'}
+            </strong>
+          </div>
+          <div class="group">
+            <label for="detallesUbicacion">Detalles de ubicación: </label
+            ><strong>
+              ${
+                pedidoFinalizado.datosPedido.detallesUbicacion ||
+                'Dato no Asignado'
+              }
+            </strong>
+          </div>
+          <div class="group">
+            <label for="detallesPedido">Detalles sobre el pedido: </label
+            ><strong>
+              ${
+                pedidoFinalizado.datosPedido.detallesPedido ||
+                'Dato no Asignado'
+              }
+            </strong>
+          </div>
+        </section>`,
         showCancelButton: true,
         cancelButtonText: 'Corregir datos',
         confirmButtonColor: '#3085d6',
@@ -313,7 +328,11 @@ export class OrderComponent implements OnInit {
                   text: 'en unos instantes te llegará un mensaje al correo electrónico sobre la confirmación del pedido',
                 }).then(() => {
                   this.getOutOrder();
-                  this.router.navigate(['follow-order/', ultimoPedido?._id]);
+                  this.router
+                    .navigate(['follow-order/', ultimoPedido?._id])
+                    .then(() => {
+                      this.appComponent.getOutSections();
+                    });
                 });
               },
               (err) => console.error(err),
@@ -324,6 +343,14 @@ export class OrderComponent implements OnInit {
       });
     } else {
     }
+  }
+
+  getDetails(id: string) {
+    this.spinner
+      .show()
+      .then(() => this.router.navigate(['products-details', id]))
+      .then(() => this.getOutOrder())
+      .then(() => this.appComponent.ngOnInit());
   }
 
   async initForm(groupForm?: datosPedidoInterface): Promise<FormGroup<any>> {
