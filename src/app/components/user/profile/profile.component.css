@@ -1,0 +1,95 @@
+.container {
+  width: 100%;
+}
+
+.container__titleProfile {
+  font-size: 2rem;
+  color: var(--black);
+}
+
+.container__infoUser {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 0 5vw;
+  gap: 15vw;
+}
+
+.container__infoUser--imgBox {
+  width: max-content;
+}
+
+.container__infoUser--all {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 5vh;
+}
+
+.container__infoUser--data {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  clear: both;
+  height: 25vh;
+}
+
+.container__infoUser--contact_row,
+.container__infoUser--data_row {
+  display: grid;
+  grid-row: 1 / 3;
+  margin: 0 1vw;
+}
+
+.container__infoUser--contact {
+  width: 180%;
+  height: 15vh;
+  display: grid;
+  position: relative;
+  right: 30vw;
+}
+
+.container__infoUser--all_btn {
+  width: 30vw;
+  margin-left: auto;
+  justify-content: space-evenly;
+  display: flex;
+}
+
+label,
+span {
+  justify-content: space-around;
+  display: flex;
+  font-size: 1.3rem;
+}
+
+label {
+  align-items: center;
+  font-weight: bold;
+}
+
+span {
+  text-transform: none;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"] {
+  height: 5vh;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  text-transform: none;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+input.invert {
+  background-color: var(--blackPanter);
+}
+
+/* #email {
+  font-size: 1rem;
+} */

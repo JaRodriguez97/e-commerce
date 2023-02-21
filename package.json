@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "component": "ng g c components/favorites --skip-import",
-    "module": "ng g m components/admin/admin-list -m=app --route admin-list --flat",
+    "c": "ng g c components/user/help --skip-import",
+    "m": "ng g m components/user/profile/profile -m=app --route profile --flat",
     "dev": "ng serve -o",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",

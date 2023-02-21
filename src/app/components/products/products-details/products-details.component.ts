@@ -43,10 +43,7 @@ export class ProductsDetailsComponent implements OnInit {
   }
 
   addToCar(product: productInterface, i?: number) {
-    this.spinner.show().then(
-      () => this.appComponent.addToCar(product, i)
-      // .then(() => setTimeout(() => this.orderComponent.ngOnInit(), 1000))
-    );
+    this.spinner.show().then(() => this.appComponent.addToCar(product, i));
   }
 
   existeCombo(id: string) {
@@ -57,6 +54,5 @@ export class ProductsDetailsComponent implements OnInit {
 
   restToCar(_id: string, i?: number) {
     this.appComponent.restToCar(_id, i);
-    // .then(() => this.orderComponent.ngOnInit());
   }
 }

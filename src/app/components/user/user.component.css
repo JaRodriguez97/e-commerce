@@ -7,6 +7,18 @@
   cursor: pointer;
 }
 
+.smmok.active {
+  position: absolute;
+  width: 5vw;
+  height: 5vw;
+  z-index: 9;
+  background-color: transparent;
+}
+
+.smmok.active > .closeSection > fa-icon {
+  color: var(--black);
+}
+
 .user__list {
   position: relative;
   background-color: var(--white);
@@ -14,21 +26,44 @@
   height: 100vh;
   right: 0;
   display: flex;
-  padding: 100px 20px;
+  padding: 70px 20px;
   flex-direction: column;
+}
+
+.user__list.active {
+  width: 100vw;
+  padding: 50px 20px;
+}
+
+.user__list--profileUser {
+  display: none;
+}
+
+.user__list--profileUser.active {
+  display: block;
 }
 
 .user__list .logOut {
   width: 100%;
   position: relative;
-  height: 50px;
   display: flex;
   justify-content: flex-end;
+}
+
+.user__list.active .logOut {
+  width: max-content;
+  position: absolute;
+  display: flex;
+  justify-content: flex-end;
+  top: 1vh;
+  right: 3vw;
 }
 
 .user__list .logOut .btn {
   font-size: 1rem;
   padding: 0.9rem 2rem;
+  align-items: center;
+  display: flex;
 }
 
 .user__list .logOut .btn:hover {
@@ -39,10 +74,13 @@
   width: 100%;
   position: relative;
   height: 100%;
-  margin: 2%;
   padding: 2%;
   display: flex;
   flex-direction: column;
+}
+
+.user__list.active aside {
+  display: none;
 }
 
 .user__list aside .heading {

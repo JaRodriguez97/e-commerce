@@ -1,5 +1,12 @@
 import { userInterface } from '@models/users.interface';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { AppComponent } from '@app/app.component';
 import {
   faAddressCard,
@@ -13,32 +20,34 @@ import {
   styleUrls: ['./user.component.css'],
 })
 export class UserComponent implements OnInit {
-  @Input('user') user: userInterface | undefined;
+  @ViewChild('smmok') smmok!: ElementRef;
+  @ViewChild('user__list') user__list!: ElementRef;
+  @ViewChild('profile') profile!: ElementRef;
+  
   faAddressCard = faAddressCard;
   faFileInvoiceDollar = faFileInvoiceDollar;
   faCircleInfo = faCircleInfo;
   faXmark = faXmark;
 
-  constructor(public appComponent: AppComponent) {}
+  constructor(public appComponent: AppComponent, private renderer: Renderer2) {}
 
   ngOnInit(): void {}
 
-  getProfileInfo() {
-    if (this.user) {
-      console.log(
-        '🚀 ~ file: user.component.ts:19 ~ UserComponent ~ getProfileInfo ~ this.user',
-        this.user
-      );
-      if (this.user.nombres && this.user.apellidos)
-        return this.user.nombres, this.user.apellidos;
-      else if (this.user.nombres && !this.user.apellidos)
-        return this.user.nombres;
-      else if (!this.user.nombres && this.user.apellidos)
-        return this.user.apellidos;
-      else if (!this.user.nombres && !this.user.apellidos)
-        return this.user.numeroTelefono;
-    }
-
-    return 'Anónimo';
+  getOutUser() {
+    this.appComponent.getOutUser();
+    this.renderer.removeClass(this.user__list.nativeElement, 'active');
+    this.renderer.removeClass(this.smmok.nativeElement, 'active');
+    this.renderer.removeClass(this.profile.nativeElement, 'active');
   }
+
+  getProfile() {
+    this.appComponent.getOutSections();
+    this.renderer.addClass(this.user__list.nativeElement, 'active');
+    this.renderer.addClass(this.smmok.nativeElement, 'active');
+    this.renderer.addClass(this.profile.nativeElement, 'active');
+  }
+
+  getOrdersFinishing() {}
+
+  getHelp() {}
 }

@@ -156,7 +156,7 @@ export class AppComponent implements OnInit {
   }
 
   getUser() {
-    if (localStorage.getItem('userID'))
+    if (this.user)
       return this.renderer.addClass(this.userInfo.nativeElement, 'active');
 
     this.router.navigate(['login']).then(() => this.ngOnInit());

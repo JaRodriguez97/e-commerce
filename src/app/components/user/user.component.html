@@ -1,24 +1,22 @@
-<div class="smmok" (click)="appComponent.getOutUser()">
+<div class="smmok" #smmok (click)="getOutUser()">
   <div class="closeSection">
     <fa-icon [icon]="faXmark" aria-hidden="true"></fa-icon>
   </div>
 </div>
-<div class="user__list">
+<div class="user__list" #user__list>
   <div class="logOut" (click)="appComponent.logOut()">
     <span class="btn">Cerrar Sesión</span>
   </div>
 
   <aside>
     <div class="heading">
-      <h3>
-        Menú de <span> {{ user?.nombres || user?.numeroTelefono }}</span>
-      </h3>
+      <h3>Lista <span>Informativa</span></h3>
     </div>
 
     <div class="listDiv">
       <ul class="container">
         <li class="box">
-          <div class="content">
+          <div class="content" (click)="getProfile()">
             <fa-icon
               [icon]="faAddressCard"
               aria-hidden="true"
@@ -26,12 +24,12 @@
             ></fa-icon>
             <div class="text">
               <h3>Perfil</h3>
-              <p>Lorem ipsum dolor.</p>
+              <p>Información sobre la cuenta.</p>
             </div>
           </div>
         </li>
         <li class="box">
-          <div class="content">
+          <div class="content" (click)="getOrdersFinishing()">
             <fa-icon
               [icon]="faFileInvoiceDollar"
               aria-hidden="true"
@@ -39,12 +37,12 @@
             ></fa-icon>
             <div class="text">
               <h3>Pedidos Realizados</h3>
-              <p>Lorem ipsum dolor.</p>
+              <p>Con sus respectivos detalles.</p>
             </div>
           </div>
         </li>
         <li class="box">
-          <div class="content">
+          <div class="content" (click)="getHelp()">
             <fa-icon
               [icon]="faCircleInfo"
               aria-hidden="true"
@@ -52,11 +50,17 @@
             ></fa-icon>
             <div class="text">
               <h3>Ayuda</h3>
-              <p>Lorem ipsum dolor.</p>
+              <p>Contacta con soporte.</p>
             </div>
           </div>
         </li>
       </ul>
     </div>
   </aside>
+
+  <section>
+    <div class="user__list--profileUser" #profile>
+      <app-profile></app-profile>
+    </div>
+  </section>
 </div>

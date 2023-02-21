@@ -1,0 +1,96 @@
+<div class="container">
+  <div class="container__titleProfile heading">
+    <h2 *ngIf="content">perfil</h2>
+    <h2 *ngIf="!content">Actualizar Datos</h2>
+  </div>
+  <div class="container__infoUser" *ngIf="user">
+    <div class="container__infoUser--imgBox">
+      <img
+        [src]="user.img ? user.img : 'https://via.placeholder.com/150/ccc/000'"
+        alt="foto de {{ user.nombres }}"
+      />
+      <!-- <input
+        type="file"
+        name="foto"
+        id="foto"
+        accept="image/*"
+        (onchange)="this.previewImage($event)"
+      />
+      <label *ngIf="!content" for="foto">Cambiar Imagen</label> -->
+    </div>
+    <div class="container__infoUser--all">
+      <div class="container__infoUser--data">
+        <div class="container__infoUser--data_row">
+          <label for="nombres">Nombres: </label>
+          <span *ngIf="content">{{ user.nombres }}</span>
+          <input
+            type="text"
+            name="nombres"
+            id="nombres"
+            [(ngModel)]="user.nombres"
+            *ngIf="!content"
+          />
+        </div>
+        <div class="container__infoUser--data_row">
+          <label for="apellidos">Apellidos: </label>
+          <span *ngIf="content">{{ user.apellidos }}</span>
+          <input
+            type="text"
+            name="apellidos"
+            id="apellidos"
+            [(ngModel)]="user.apellidos"
+            *ngIf="!content"
+          />
+        </div>
+      </div>
+      <div class="container__infoUser--contact">
+        <div class="container__infoUser--contact_row">
+          <label for="numeroTelefono">Número de Telefono: </label>
+          <span *ngIf="content">{{ user.numeroTelefono }}</span>
+          <input
+            type="number"
+            name="numeroTelefono"
+            id="numeroTelefono"
+            [(ngModel)]="user.numeroTelefono"
+            *ngIf="!content"
+          />
+        </div>
+        <div class="container__infoUser--contact_row">
+          <label for="email">Email: </label>
+          <span id="email" *ngIf="content">{{ user.email }}</span>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            [(ngModel)]="user.email"
+            *ngIf="!content"
+          />
+        </div>
+        <div class="container__infoUser--contact_row">
+          <label for="direccion">Dirección: </label>
+          <span *ngIf="content">{{ user.direccion }}</span>
+          <input
+            type="text"
+            name="direccion"
+            id="direccion"
+            [(ngModel)]="user.direccion"
+            *ngIf="!content"
+          />
+        </div>
+      </div>
+      <div class="container__infoUser--all_btn">
+        <button type="button" class="btn" (click)="updateStatusSection()">
+          {{ content ? "Actualizar Datos" : "cancelar" }}
+        </button>
+        <button
+          *ngIf="!content"
+          type="submit"
+          class="btn invert"
+          (click)="updateUser()"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
